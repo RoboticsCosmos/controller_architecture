@@ -1,0 +1,117 @@
+{
+	"@context": {
+		"pid_controller": "https://controller.org/metamodels/controllers/PID/pid_controller#",
+
+		"PIDController": "pid_controller:PIDController",
+		"PDController": "pid_controller:PIDController",
+		"PIController": "pid_controller:PIDController",
+		"PController": "pid_controller:PIDController",
+		"ConstantGain": "pid_controller:ConstantGain",
+		"TrajectoryController": "pid_controller:TrajectoryController",
+		"RegulatingController": "pid_controller:RegulationController",
+		"ConditionalIntegrationWhenInControllableRange": "pid_controller:ConditionalIntegrationWhenInControllableRange",
+		"CleggIntegratorToResetWindup": "pid_controller:CleggIntegrator",
+		"PreventOvershoot": "pid_controller:PreventOvershoot",
+		"DeadbandActive": "pid_controller:DeadbandActive",
+		"BumplessOperation": "pid_controller:BumplessOperation",
+
+		
+		"output_signal": {
+			"@id": "pid_controller:output_signal",
+			"@type": "@id"
+		},
+		"p_error_term": {
+			"@id": "pid_controller:p_error_term",
+			"@type": "@id"
+		},
+		"i_error_term": {
+			"@id": "pid_controller:i_error_term",
+			"@type": "@id"
+		},
+		"d_error_term": {
+			"@id": "pid_controller:d_error_term",
+			"@type": "@id"
+		},
+
+		"deadband_value_absolute": {
+			"@id": "pid_controller:deadband_value_absolute",
+			"@type": "xsd:float"
+		},
+		"integral_windup_limit_absolute": {
+			"@id": "pid_controller:integral_windup_limit_absolute",
+			"@type": "xsd:float"
+		},
+		"controllable_region_error_absolute": {
+			"@id": "pid_controller:controllable_region_error_absolute",
+			"@type": "xsd:float"
+		},
+		"reset_windup_at_zero_crossing": {
+			"@id": "pid_controller:reset_windup_at_zero_crossing",
+			"@type": "xsd:boolean"
+		},
+		"bumpless_operation": {
+			"@id": "pid_controller:bumpless_operation",
+			"@type": "xsd:boolean"
+		},
+
+		"p_gain": {
+			"@id": "pid_controller:p_gain",
+			"@type": "@id"
+		},
+		"p_gain_upper_bound": {
+			"@id": "pid_controller:p_gain_upper_bound",
+			"@type": "xsd:float"
+		},
+		"p_gain_lower_bound": {
+			"@id": "pid_controller:p_gain_lower_bound",
+			"@type": "xsd:float"
+		},
+
+		"i_gain": {
+			"@id": "pid_controller:i_gain",
+			"@type": "@id"
+		},
+		"i_gain_upper_bound": {
+			"@id": "pid_controller:i_gain_upper_bound",
+			"@type": "xsd:float"
+		},
+		"i_gain_lower_bound": {
+			"@id": "pid_controller:i_gain_lower_bound",
+			"@type": "xsd:float"
+		},
+
+		"d_gain": {
+			"@id": "pid_controller:d_gain",
+			"@type": "@id"
+		},
+		"d_gain_upper_bound": {
+			"@id": "pid_controller:d_gain_upper_bound",
+			"@type": "xsd:float"
+		},
+		"d_gain_lower_bound": {
+			"@id": "pid_controller:d_gain_lower_bound",
+			"@type": "xsd:float"
+		},
+
+		"init_p_gain": {
+			"@id": "pid_controller:init_p_gain",
+			"@type": "xsd:float"		
+		},
+		"init_i_gain": {
+			"@id": "pid_controller:init_i_gain",
+			"@type": "xsd:float"		
+		},
+		"init_d_gain": {
+			"@id": "pid_controller:init_d_gain",
+			"@type": "xsd:float"		
+		},
+        "time_instance": {
+            "@id": "pid_controller:time_instance",
+            "@type": "@id"
+        },
+        "time_period": {
+            "@id": "pid_controller:time_period",
+            "@type": "@id"
+        }		
+	}
+}

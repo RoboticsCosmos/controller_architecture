@@ -1,0 +1,22 @@
+{
+    "@context": {
+        "algorithm": "https://controller.org/metamodels/algorithm#",
+
+        "Algorithm": "algorithm:Algorithm",
+        "Data": "algorithm:Data",
+
+        "data_block": {
+            "@id": "algorithm:data_block",
+            "@type": "@id"
+        },
+        "initial_value_float": {
+            "@id": "algorithm:initial_value_float",
+            "@type": "xsd:float"
+        },
+        "initial_value_string": {
+            "@id": "algorithm:initial_value_string",
+            "@type": "xsd:string"
+        }
+
+    }
+}

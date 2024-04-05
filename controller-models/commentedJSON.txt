@@ -1,0 +1,37 @@
+{
+	"@context":{
+		// term PController is assigned an IRI; it helps to represent in shortform
+		"PController": "http://controller.org/PID/PController",
+
+		"error":{
+			"@id": "http://controller.org/error",
+			"@type": "@id" 
+			// symbollic pointer; type of 'error' value is @id; without namespace, the error definition (the value of property error) is tried to find in this document or locally or over web
+			// We added a new property called vechicles with a typed value of "@type": "@id", which tells that the property 
+			// associated with the vehicles should be interpreted as an IRI. It means that the value of the property vechicles 
+			// is a "symbolic pointer to another model that exists locally or over the web and can be resolved by the JSON-LD interpreter".
+			// [DBT] what is the significance of value "error_definition"? Will it 
+		},
+
+      	"output": {
+          "@id": "http://controller.org/PID/PController/output",
+          "@type": "@id"
+      	},
+
+        "gain": {
+          "@id": "http://controller.org/gain",
+          "@type": "@id"
+        },
+
+		"@base": "http://controller.org/"
+	},
+	
+	"@id": "http://controller.org/PID/#myPController", // URI(I:identifier; need not be existing), URL(L: locator; has to exist), IRI(similar to URI, but allows additional caharacters; this one); this IRI is for the entire model
+	"@type": "PController", // (interpreted as IRI in JSON-LD) space not allowed 
+	"error": "error_definition", // property_name: 
+	"output": "output_definition",
+	"gain": 0.5	// property_name: value
+	// if gains of different values should be instantiated, then @graph can be used instead of cresting separate documents for each
+	
+
+}

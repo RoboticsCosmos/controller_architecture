@@ -1,0 +1,47 @@
+{
+    "@context": 
+    {
+        "abag_controller": "https://controller.org/metamodels/controllers/ABAG/abag#",
+
+        "ABAG": "abag_controller:ABAG",
+
+        "adaptive_bias": {
+            "@id": "abag_controller:adaptive_bias",
+            "@type": "xsd:float"
+        },
+        "adaptive_gain": {
+            "@id": "abag_controller:adaptive_gain",
+            "@type": "xsd:float"
+        },
+		"output_signal": {
+			"@id": "abag_controller:output_signal",
+			"@type": "xsd:float"
+		},
+        "bias_adaptation_threshold": {
+            "@id": "abag_controller:bias_adaptation_threshold",
+            "@type": "xsd:float"
+        },
+        "bias_adaptation_step_delta": {
+            "@id": "abag_controller:bias_adaptation_step_delta",
+            "@type": "xsd:float"
+        },
+        "adaptive_bias_limits": {
+            "@id": "abag_controller:adaptive_bias_limits",
+            "@type": "xsd:float",
+            "@container": "@list"
+        },
+        "gain_adaptation_threshold": {
+            "@id": "abag_controller:gain_adaptation_threshold",
+            "@type": "xsd:float"
+        },
+        "gain_adaptation_step_delta": {
+            "@id": "abag_controller:gain_adaptation_step_delta",
+            "@type": "xsd:float"
+        },
+        "adaptive_gain_limits": {
+            "@id": "abag_controller:adaptive_gain_limits",
+            "@type": "xsd:float",
+            "@container": "@list"
+        }
+    }
+}

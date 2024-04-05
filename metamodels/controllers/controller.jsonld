@@ -1,0 +1,46 @@
+{
+    "@context": {
+        "controller": "https://controller.org/metamodels/controllers/controller#",
+
+        "Controller": "controller:Controller",
+        "Plant": "controller:Plant",
+
+        "setpoint_pos": {
+            "@id": "controller:setpoint_pos",
+            "@type": "xsd:float"
+        },
+        "setpoint_vel": {
+            "@id": "controller:setpoint_vel",
+            "@type": "xsd:float"
+        },
+        "output": {
+            "@id": "controller:output",
+            "@type": "@id"
+        },
+        "initial_val": {
+            "@id": "controller:initial_val",
+            "@type": "xsd:float"
+        },
+        "time_instance": {
+            "@id": "controller:time_instance",
+            "@type": "xsd:float"
+        },
+        "time_period": {
+            "@id": "controller:time_period",
+            "@type": "xsd:float"
+        },
+
+        "plant_name": {
+            "@id": "controller:name",
+            "@type": "xsd:string"
+        },
+        "measured_variable_pos": {
+            "@id": "controller:measured_variable_pos",
+            "@type": "xsd:float"
+        },
+        "measured_variable_vel": {
+            "@id": "controller:measured_variable_vel",
+            "@type": "xsd:float"
+        }        
+    }
+}

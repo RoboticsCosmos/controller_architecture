@@ -1,0 +1,4 @@
+
+p_controller(constant) ::= <<
+void p_controller(current, target, <constant>)
+>>

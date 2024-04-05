@@ -1,0 +1,21 @@
+{
+	"@context":{
+		"error": "http://controller.org/error#",
+
+      	"desired_value": {
+          "@id": "error:d_val",
+          "@type": "xsd:string"
+      	},
+        "measured_value": {
+          "@id": "error:m_val",
+          "@type": "xsd:string"
+        },
+
+		"error_ns": "http://controller.org/error_ns#"
+	},
+	
+	"@id": "error_ns:controller_error",
+	"@type": "difference",
+	"desired_value": "d_value",
+	"measured_value": "m_value"
+}

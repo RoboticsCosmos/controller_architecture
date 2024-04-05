@@ -1,0 +1,36 @@
+application(functions, state_machine, data_structure) ::= <<
+
+//script starts from here
+
+#include \<matplot/matplot.h>
+#include \<vector>
+#include \<iostream>
+
+#include \<stdio.h>
+#include \<math.h>
+#include \<stdbool.h>
+
+#include "controllers.h"
+#include "monitor.h"
+
+int main(void){
+
+  <data_structure:{p|<data_structure.(p).d_type> <p><if(data_structure.(p).init_val)> = <data_structure.(p).init_val>;<else>;<endif>};separator="\n">
+
+  <state_machine.states:{p|bool <p> = <state_machine.states.(p).init_val>;};separator="\n">
+
+  for (int i = 0; i \< 200; i++){
+    <state_machine.states:{p| if(<p>)
+      {
+        <state_machine.schedule.(p).schedule: {q| <q>(<functions.(q).arguments: {s|  &<s>};separator=",">);};separator="\n">
+        if(detection_flag)
+        {
+          <p> = false;
+          <state_machine.schedule.(p).on_detection: {r| <r> = <state_machine.schedule.(p).on_detection.(r)>;};separator="\n">
+        \}
+      \}
+    };separator="\n">
+  \}
+\}
+
+>>

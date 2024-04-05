@@ -1,0 +1,38 @@
+{
+    "@context": {
+        "error_signal": "https://controller.org/metamodels/controllers/error_signal#",
+
+        "ErrorSignal": "error_signal:ErrorSignal",
+        "InstantaneousErrorSignalPosition": "error_signal:InstantaneousErrorSignalPosition",
+        "InstantaneousErrorSignalVelocity": "error_signal:InstantaneousErrorSignalVelocity",
+        "PredictFromErrorSignal": "error_signal:PredictFromErrorSignal",
+        "PredictFromProcessVariableSignal": "error_signal:PredictFromProcessVariableSignal",
+        "HistoryFromStartErrorSignal": "error_signal:HistoryFromStartErrorSignal",
+        "HistoryFromRecentTimeWindowErrorSignal": "error_signal:HistoryFromRecentTimeWindowErrorSignal",
+
+        "setpoint": {
+            "@id": "error_signal:setpoint",
+            "@type": "@id"
+        },
+        "measured_value": {
+            "@id": "error_signal:measured_value",
+            "@type": "@id"
+        },
+        "error": {
+            "@id": "error_signal:error",
+            "@type": "xsd:float"
+        },
+        "prev_error": {
+            "@id": "error_signal:prev_error",
+            "@type": "xsd:float"
+        },        
+        "history_time_window_length": {
+            "@id": "error_signal:history_time_window_length",
+            "@type": "xsd:float"
+        },
+        "time_period": {
+            "@id": "error_signal:time_period",
+            "@type": "@id"
+        }
+    }
+}

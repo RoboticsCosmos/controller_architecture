@@ -1,0 +1,18 @@
+
+{
+	"@context":[
+		"https://controller.org/metamodels/controllers/PID/p_controller.jsonld",
+		{
+			"@base": "https://controller.org/metamodels/controllers/PID/"
+		}
+	],
+	"@graph":[
+		{
+			"@id": "p_controller:p_controller",
+			"@type": ["PController", "ConstantGain"],
+			"error": "error_definition",
+			"output": "output_definition",
+			"gain": "kp"
+		}			
+	]
+}

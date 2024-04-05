@@ -1,0 +1,45 @@
+{
+    "@context":{
+        "functions": "https://controller.org/metamodels/controllers/functions#",
+
+        "Functions": "functions:Functions",
+        "LowPassFilteredErrorSignal": "functions:LowPassFilteredErrorSignal",
+        "GetSign": "functions:GetSign",
+        "Saturation": "functions:Saturation",
+        "HeavisideStepFunction": "functions:HeavisideStepFunction",
+        "Modulus": "functions:Modulus",
+        "MapOutputToActuationSignal": "functions:MapToActuationSignal",
+    
+        "low_pass_filter_factor_alpha": {
+            "@id": "error_signal:low_pass_filter_factor_alpha",
+            "@type": "xsd:float"
+        },
+        "low_pass_filter_factor_alpha_limits": {
+            "@id": "error_signal:low_pass_filter_factor_alpha_limits",
+            "@type": "xsd:float",
+            "@container": "@list"
+        },
+        "low_pass_filter_factor_alpha_limits_inclusive": {
+            "@id": "error_signal:low_pass_filter_factor_alpha_limits_inclusive",
+            "@type": "xsd:boolean"
+        },
+        "saturation_bool": {
+            "@id": "functions:saturation_bool",
+            "@type": "xsd:boolean"
+        },
+        "saturation_limits": {
+            "@id": "functions:saturation_limit",
+            "@type": "xsd:float",
+            "@container": "@list"
+        },
+        "saturation_limits_inclusive": {
+            "@id": "functions:saturation_limits_inclusive",
+            "@type": "xsd:boolean"
+        },
+        "map_output_to_actuation_scaling_limits": {
+            "@id": "functions:map_scaling_limits",
+            "@type": "xsd:float",
+            "@container": "@list"
+        }
+    }
+}

@@ -1,0 +1,50 @@
+{
+    "@context": {
+        "monitor": "https://controller.org/metamodels/architecture_components/monitor#",
+
+        "Monitor": "monitor:Monitor",
+        "Event": "monitor:Event",
+        "LessThanMonitor": "monitor:LessThanMonitor",
+        "GreaterThanMonitor": "monitor:GreaterThanMonitor",
+        "InIntervalMonitor": "monitor:InIntervalMonitor",
+        "EqualMonitor": "monitor:EqualMonitor",
+
+        "time_instance_start_log": {
+            "@id": "monitor:time_instance_start_log",
+            "@type": "xsd:float"
+        },
+        "time_instance_end_log": {
+            "@id": "monitor:time_instance_end_log",
+            "@type": "xsd:float"
+        },
+        "in_interval_lower_bound": {
+            "@id": "monitor:in_interval_lower_bound",
+            "@type": "xsd:float"
+        },
+        "in_interval_upper_bound": {
+            "@id": "monitor:in_interval_upper_bound",
+            "@type": "xsd:float"
+        },
+        "in_interval_epsilon": {
+            "@id": "monitor:in_interval_epsilon",
+            "@type": "xsd:float"
+        },
+        "value_to_monitor": {
+            "@id": "monitor:value_to_monitor",
+            "@type": "@id"
+        },
+        "reference_value": {
+            "@id": "monitor:reference_value",
+            "@type": "@id"
+        },
+        "desired_bool_value": {
+            "@id": "monitor:desired_value",
+            "@type": "xsd:string"
+        },
+        "flags": {
+            "@id": "monitor:flags",
+            "@type": "@id",
+            "@container": "@set"
+        }
+    }
+}

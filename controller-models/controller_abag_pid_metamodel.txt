@@ -1,0 +1,155 @@
+References
+==========
+
+Concepts/ideas originate from:
+* <https://en.wikipedia.org/wiki/Proportional%E2%80%93integral%E2%80%93derivative_controller>
+* Wan Kyun Chung, Li-Chen Fu and Torsten Kröger, "Motion Control" in
+  Siciliano, Bruno and Khatib, Oussama (Eds.), "Springer Handbook of Robotics",
+  Chapter 8, 2016.
+* Franchi, Antonio and Mallet, Anthony, "Adaptive closed-loop speed control of
+  BLDC motors with applications to multi-rotor aerial vehicles", in Proc.
+  IEEE International Conference on Robotics and Automation (ICRA), 2017.
+
+
+Features
+========
+
+Objective:
+* Trajectory tracking: desired "velocity" is given
+* Regulation: desired "velocity" is zero (special case of trajectory tracking)
+
+Error:
+* Type of error based on "time":
+  - present/instantaneous:
+    > P:    Kp * e(t)  = Kp  * (des - cur)
+    > Gain: Kp * e'(t) = Kp' * (des - cur), but Kp'=g_k is adapted based on error
+      Note: for control in the frequency domain, as in the original paper, it's "(cur - des)"
+  - predicted/expected/trend/"projected" (D)
+    > Estimated from error signal (potentially "discontinuous"): de(t)/dt = d(des - cur)/dt
+    > Derived from process variable's derivative (always continuous): dcur(t)/dt
+      e.g. velocity measurement "vel_{msr,t}" or "dpos_{msr}/dt ~ pos_{msr,t} - pos_{msr,t-1}"
+  - experience/historical
+    > Time to consider: from beginning of time (cf. "IIR") vs. recent time window (cf. "FIR")
+    > Type of filter
+    > I:    g(Ki * \int f(e(t))  dt) = g(Ki * \int f(des - cur) dt)
+            where "f" can represent any pre-processing (e.g. deadband) and "g" any post-processing (e.g. saturation)
+    > Bias: g(     \int f(e'(t)) dt)
+            where "f" is the composition of (i) error sign filter (lerp); (ii) decision map (hside * sign); (iii) bias adaptation step (\delta_b)
+            and "g" is the saturation
+* Dimensionality:
+  - Dimensional vs. adimensional/trend (improving, deteriorating)
+  - Reciprocal gain/proportional band (100%/Kp)
+* Tolerances
+* Reaction to error: immediate vs. delayed
+  - Note: this is orthogonal to type of error based on "time". The system can
+    choose to react to any of these types either now or in the future.
+
+Signal "pre/post-processing":
+* Saturation: limit (magnitude) of some signals (e.g. on I -> windup protection, various places in ABAG)
+* Deadband: don't react to "small" changes in error (e.g. decision maps)
+  > steps (e.g. Heaviside/unit step) vs. continuous (e.g. any sigmoid function)
+
+Structural composition:
+* Components in hierarchical control diagram:
+  feed-forward ("solver"), feedback (PID, ~ABAG, ...), adaptor, monitor, estimator
+* Scheduling ("changing control flow"):
+  - based on time: e.g. cascade control
+  - based on monitors: e.g. disable/freeze integration until process variable is in "valid" region (windup protection)
+* Included terms in PID-based controllers:
+  - PID:   Kp e(t) + Kv \dot{e(t)} + Ki \int e(\tau) dtau
+  - PI^2D: Kp e(t) + Kv \dot{e(t)} + Ki \int e(t) dtau + Ki \int \dot{e(t)} dt
+* Maps between (i) state space; (ii) measurement/sensor space; and (iii) control/actuation space
+
+Parameter adapation:
+* Basis for adaptation: only historical error?
+* Learning control (for repetitive motions)
+* Gain scheduling (dependent on operation region)
+* Handling setpoint step changes:
+  > Setpoint ramping (gradually transition from old to new setpoint, cf. error filtering in ABAG)
+  > Derivative of process variable (see above "predicted error")
+  > Setpoint weighing (only proportional & derivative term get extra weight parameter, not integral term)
+* "Bumpless operation": prevent discontinuity when parameters are adapted
+
+Type of system:
+* Linear vs. non-linear
+* Symmetric (control in both "directions", e.g. heat & cool or accelerate & decelerate)
+  vs. asymmetric (control in one "direction", e.g. only heat or only accelerate)
+
+
+Computations in the PID+ABAG family: commonalities (mechanism) and variation points (policies)
+==============================================================================================
+
+Errors
+------
+
+e_inst = f(cur - des)
+PID:  f = id(.)
+ABAG: f = sgn(.)
+
+e_pred = f(e)
+PID:  e = e_inst                                        [Regulation (to setpoint)]
+      f = d(.)/dt
+PID': e = e_{inst,t} - e_{inst,t-1}                     [First-order finite difference]
+      f = (.)/dt
+PID': e = cur                                           ["Derivative of process variable"]
+      f = d(.)/dt
+PID': e = cur - des                                     [Tracking control (e.g. trajectory)]
+      f = d(.)/dt
+ABAG: ---
+
+e_hist = f(e)
+PID:  e = e_inst
+      f = id(.)
+PIID: e = e_inst + e_pred
+      f = id(.)
+ABAG: e = e_inst
+      f = low-pass(\alpha)(.)
+
+
+Control terms
+-------------
+
+ctrl_inst = k_inst * e_inst
+PID:  k_inst = kp                                       [Proportional]
+ABAG: k_inst = sat(\int{\delta_g * dec_g(e_hist))} dt)  [Gain]
+
+ctrl_pred = f(k_pred * e_pred)
+PID:  k_pred = kd                                       [Derivative]
+      f = id
+PID': k_pred = kd                                       [Filtered derivative]
+      f = low-pass(\alpha)(.)
+ABAG: ---
+
+ctrl_hist = g(k_hist * \int{f(e_hist)} dt)
+PID:  k_hist = ki                                       [Integral]
+      f = id
+      g = id
+PID': k_hist = ki                                       [Integral with windup protection]
+      f = id
+      g = sat
+PID': k_hist = ki                                       ["PD + nonlinear integral control"]
+      f = tanh
+      g = id
+ABAG: k_hist = id                                       [Bias]
+      f = \int{\delta_b * dec_b(e_hist)} dt
+      g = sat
+
+ctrl_init
+PID:  ctrl_init = 0
+PID': ctrl_init = const                                 [PID with constant bias]
+ABAG: ctrl_init = 0
+
+
+Composition
+------------
+
+ctrl = f(ctrl_inst + ctrl_pred + ctrl_hist + ctrl_init)
+PID:  f = id
+ABAG: f = sat
+
+
+Open questions
+==============
+* How does this relate to?
+  - Optimal control (incl. linear-quadratic control) & model-predictive control
+  - Robust control, sliding mode control

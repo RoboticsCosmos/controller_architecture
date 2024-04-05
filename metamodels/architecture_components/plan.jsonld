@@ -1,0 +1,37 @@
+{
+    "@context": {
+        "plan": "https://controller.org/metamodels/architecture_components/plan#",
+        
+        "Plan": "plan:Plan",
+        "State": "plan:State",
+        "Transition": "plan:Transition",
+
+        "states_set": {
+            "@id": "plan:states_set",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "controller_to_activate": {
+            "@id": "plan:controller_to_activate",
+            "@type": "@id"
+        },
+        "transitions": {
+            "@id": "plan:transition",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "transition_state": {
+            "@id": "plan:transition_state",
+            "@type": "@id"
+        },
+        "start_state": {
+            "@id": "plan:start_state",
+            "@type": "@id"
+        },
+        "events": {
+            "@id": "plan:events",
+            "@type": "@id",
+            "@container": "@set"
+        }
+    }
+}

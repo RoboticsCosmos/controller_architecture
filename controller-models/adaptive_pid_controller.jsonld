@@ -1,0 +1,185 @@
+{
+    "@context": [
+        "https://controller.org/metamodels/architecture_components/monitor.jsonld",
+        "https://controller.org/metamodels/architecture_components/plan.jsonld",
+        "https://controller.org/metamodels/controllers/controller.jsonld",
+        "https://controller.org/metamodels/controllers/error_signal.jsonld",
+        "https://controller.org/metamodels/controllers/functions.jsonld",
+        "https://controller.org/metamodels/controllers/PID/pid_controller.jsonld",
+        "https://controller.org/metamodels/controllers/ForceControl/impedance_controller.jsonld",
+        {
+            "adap_ctr": "https://controller.org/models/adap_ctr#"
+        }
+    ],
+    "@graph": [
+        {
+            "@id": "adap_ctr:plan",
+            "@type": "Plan",
+            "states_set": [
+                "adap_ctr:move_downwards",
+                "adap_ctr:within_uncertainty_range",
+                "adap_ctr:slide_along_surface"
+            ],
+            "start_state": "adap_ctr:move_downwards"
+        },
+        {
+            "@id": "adap_ctr:move_downwards",
+            "@type": "State",
+            "controller_to_activate": "adap_ctr:pid_controller1",
+            "transitions": ["adap_ctr:transition1"]
+        },
+        {
+            "@id": "adap_ctr:transition1",
+            "@type": "Transition",
+            "events": [
+                "adap_ctr:in_contact_uncertain_space_event"
+            ],
+            "transition_state": "adap_ctr:within_uncertainty_range"
+        },
+        {
+            "@id": "adap_ctr:within_uncertainty_range",
+            "@type": "State",
+            "controller_to_activate": "adap_ctr:impedance_controller1",
+            "transitions": ["adap_ctr:transition2"]
+        },
+        {
+            "@id": "adap_ctr:transition2",
+            "@type": "Transition",
+            "events": [
+                "adap_ctr:in_contact_event"
+            ],
+            "transition_state": "adap_ctr:slide_along_surface"
+        },
+        {
+            "@id": "adap_ctr:slide_along_surface",
+            "@type": "State",
+            "controller_to_activate": "adap_ctr:pd_controller1"
+        },
+        {
+            "@id": "adap_ctr:in_contact_uncertain_space_event",
+            "@type": "Event",
+            "flags": ["adap_ctr:less_than_flag1"]
+        },
+        {
+            "@id": "adap_ctr:less_than_flag1",
+            "@type": "LessThanMonitor",
+            "value_to_monitor": "adap_ctr:plant:measured_variable_pos",
+            "reference_value": "adap_ctr:controller:setpoint_pos",
+            "desired_bool_value": "true"            
+        },
+        {
+            "@id": "adap_ctr:in_contact_event",
+            "@type": "Event",
+            "flags": ["adap_ctr:in_interval_flag1"]
+        },        
+        {
+            "@id": "adap_ctr:in_interval_flag1",
+            "@type": "InIntervalMonitor",
+            "value_to_monitor": "adap_ctr:plant:measured_variable_vel",
+            "reference_value": "adap_ctr:controller:setpoint_vel",
+            "in_interval_epsilon": 0.1,
+            "desired_bool_value": "true"
+        },
+        {
+            "@id": "adap_ctr:error_signal_pos",
+            "@type": [
+                "ErrorSignal",
+                "InstantaneousErrorSignalPosition"
+            ]
+        },
+        {
+            "@id": "adap_ctr:error_signal_vel",
+            "@type": [
+                "ErrorSignal",
+                "InstantaneousErrorSignalVelocity"
+            ]
+        },
+        {
+            "@id": "adap_ctr:error_signal_predicted",
+            "@type": [
+                "ErrorSignal",
+                "PredictFromErrorSignal"
+            ],
+            "time_period": "adap_ctr:controller:time_period"
+        },
+        {
+            "@id": "adap_ctr:error_signal_history",
+            "@type": [
+                "ErrorSignal",
+                "HistoryFromStartErrorSignal"
+            ],
+            "time_period": "adap_ctr:controller:time_period"
+        },
+        {
+            "@id": "adap_ctr:plant",
+            "@type": "Plant",
+            "plant_name": "plant1",
+            "measured_variable_pos": 20.0,
+            "measured_variable_vel": 2.0
+        },
+        {
+            "@id": "adap_ctr:controller",
+            "@type": "Controller",
+            "setpoint_pos": 4.0,
+            "setpoint_vel": 0.0,
+            "output": "adap_ctr:actuation_signal",
+            "time_instance": 0.0,
+            "time_period": 0.1
+        },
+        {
+            "@id": "adap_ctr:actuation_signal",
+            "@type": "Signal",
+            "initial_val": 0.0
+        },
+        {
+            "@id": "adap_ctr:pid_controller1",
+            "@type": ["PIDController","ConstantGain"],
+            "name": "pid_controller1",
+            "output_signal": "adap_ctr:controller:actuation_signal",
+            "p_error_term": "adap_ctr:error_signal_pos",
+            "d_error_term": "adap_ctr:error_signal_predicted",
+            "i_error_term": "adap_ctr:error_signal_history",
+            "init_p_gain": 0.5,
+            "init_i_gain": 0.01,
+            "init_d_gain": 0.1,
+            "p_gain_upper_bound": 1.0,
+            "p_gain_lower_bound": 0.0,
+            "i_gain_upper_bound": 0.1,
+            "i_gain_lower_bound": 0.0,
+            "d_gain_upper_bound": 0.2,
+            "d_gain_lower_bound": 0.0,
+            "time_instance": "adap_ctr:controller:time_instance",
+            "time_period": "adap_ctr:controller:time_period"
+        },
+        {
+            "@id": "adap_ctr:impedance_controller1",
+            "@type": ["ImpedanceController", "Controller"],
+            "setpoint_pos": 2.0,
+            "init_stiffness_param": 0.05,
+            "stiffness_param_upper_bound": 0.1,
+            "stiffness_param_lower_bound": 0.0,
+            "init_damping_param": 0.05,
+            "damping_param_upper_bound": 0.1,
+            "damping_param_lower_bound": 0.0,
+            "output_torque_signal": "adap_ctr:controller:actuation_signal",
+            "pos_error": "adap_ctr:error_signal_pos",
+            "vel_error": "adap_ctr:error_signal_vel"
+        },
+        {
+            "@id": "adap_ctr:pd_controller1",
+            "@type": ["PDController","ConstantGain"],
+            "name": "pd_controller1",
+            "output_signal": "adap_ctr:controller:actuation_signal",
+            "p_error_term": "adap_ctr:error_signal_pos",
+            "d_error_term": "adap_ctr:error_signal_predicted",
+            "init_p_gain": 0.05,
+            "init_d_gain": 0.05,
+            "p_gain_upper_bound": 0.1,
+            "p_gain_lower_bound": 0.0,
+            "d_gain_upper_bound": 0.2,
+            "d_gain_lower_bound": 0.0,
+            "time_instance": "adap_ctr:controller:time_instance",
+            "time_period": "adap_ctr:controller:time_period"
+        }
+    ]
+}
