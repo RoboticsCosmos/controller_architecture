@@ -76,7 +76,6 @@ def pyld_loader(url_map):
                     "documentUrl": url_str,
                     "document": json.load(fp)
                 }
-
                 return doc
 
         # Fail and print the URL that caused the problem

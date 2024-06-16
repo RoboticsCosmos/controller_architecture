@@ -1,37 +1,117 @@
 {
     "@context": {
         "plan": "https://controller.org/metamodels/architecture_components/plan#",
-        
         "Plan": "plan:Plan",
         "State": "plan:State",
         "Transition": "plan:Transition",
+        "Timeout": "plan:Timeout",
+        "EmergencyStop": "plan:EmergencyStop",
+        "StateParameters": "plan:StateParameters",
+        "Action": "plan:Action",
+        "Behavior": "plan:Behavior",
+        "ConstraintBasedScheduleSequenceCall": "plan:ConstraintBasedScheduleSequenceCall",
+        "MonitorBasedScheduleSequenceCall": "plan:MonitorBasedScheduleSequenceCall",
 
-        "states_set": {
-            "@id": "plan:states_set",
-            "@type": "@id",
-            "@container": "@set"
-        },
-        "controller_to_activate": {
-            "@id": "plan:controller_to_activate",
+        "pre_condition": {
+            "@id": "plan:pre_condition",
             "@type": "@id"
         },
-        "transitions": {
-            "@id": "plan:transition",
+        "post_condition": {
+            "@id": "plan:post_condition",
+            "@type": "@id"
+        },
+        "per_condition": {
+            "@id": "plan:per_condition",
+            "@type": "@id"
+        },
+        "constraint_for_schedule": {
+            "@id": "plan:constraint_for_schedule",
             "@type": "@id",
             "@container": "@set"
         },
-        "transition_state": {
-            "@id": "plan:transition_state",
+        "schedule": {
+            "@id": "plan:schedule",
+            "@type": "@id"
+        },
+        "monitors": {
+            "@id": "plan:monitors",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "action": {
+            "@id": "plan:action",
+            "@type": "@id"
+        },
+        "set_of_states": {
+            "@id": "plan:set_of_states",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "state_parameters": {
+            "@id": "plan:state_parameters",
             "@type": "@id"
         },
         "start_state": {
             "@id": "plan:start_state",
             "@type": "@id"
         },
-        "events": {
-            "@id": "plan:events",
+        "transitions": {
+            "@id": "plan:transitions",
             "@type": "@id",
             "@container": "@set"
+        },
+        "termination": {
+            "@id": "plan:termination",
+            "@type": "@id"
+        },
+        "triggering_events": {
+            "@id": "plan:triggering_events",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "state_to_transit_to": {
+            "@id": "plan:state_to_transit_to",
+            "@type": "@id"
+        },
+        "timeout_period": {
+            "@id": "plan:timeout_period",
+            "@type": "xsd:float"
+        },
+        "emergency_stop_flag_init": {
+            "@id": "plan:emergency_stop_flag_init",
+            "@type": "xsd:boolean"
+        },
+        "setpoint_pos": {
+            "@id": "plan:setpoint_pos",
+            "@type": "@id"
+        },
+        "setpoint_vel": {
+            "@id": "plan:setpoint_vel",
+            "@type": "@id"
+        },
+        "init_setpoint_value": {
+            "@id": "plan:init_setpoint_value",
+            "@type": "xsd:float"
+        },
+        "setpoint_function": {
+            "@id": "plan:setpoint_function",
+            "@type": "@id"
+        },
+        "setpoint_signal": {
+            "@id": "plan:setpoint_signal",
+            "@type": "@id"
+        },
+        "controller_output_composition": {
+            "@id": "plan:controller_output_composition",
+            "@type": "@id"
+        },
+        "arm_name": {
+            "@id": "plan:arm_name",
+            "@type": "xsd:string"
+        },
+        "direction_of_specification": {
+            "@id": "plan:direction_of_specification",
+            "@type": "xsd:string"
         }
     }
 }

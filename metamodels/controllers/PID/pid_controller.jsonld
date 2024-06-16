@@ -3,23 +3,19 @@
 		"pid_controller": "https://controller.org/metamodels/controllers/PID/pid_controller#",
 
 		"PIDController": "pid_controller:PIDController",
-		"PDController": "pid_controller:PIDController",
-		"PIController": "pid_controller:PIDController",
-		"PController": "pid_controller:PIDController",
+		"DController": "pid_controller:DController",
+		"IController": "pid_controller:IController",
+		"PController": "pid_controller:PController",
 		"ConstantGain": "pid_controller:ConstantGain",
 		"TrajectoryController": "pid_controller:TrajectoryController",
-		"RegulatingController": "pid_controller:RegulationController",
+		"RegulatingController": "pid_controller:RegulatingController",
+		"LimitIntegralTerm": "pid_controller:LimitIntegralTerm",
 		"ConditionalIntegrationWhenInControllableRange": "pid_controller:ConditionalIntegrationWhenInControllableRange",
-		"CleggIntegratorToResetWindup": "pid_controller:CleggIntegrator",
-		"PreventOvershoot": "pid_controller:PreventOvershoot",
+		"CleggIntegratorToResetWindup": "pid_controller:CleggIntegratorToResetWindup",
 		"DeadbandActive": "pid_controller:DeadbandActive",
 		"BumplessOperation": "pid_controller:BumplessOperation",
+		"GainSignal": "pid_controller:GainSignal",
 
-		
-		"output_signal": {
-			"@id": "pid_controller:output_signal",
-			"@type": "@id"
-		},
 		"p_error_term": {
 			"@id": "pid_controller:p_error_term",
 			"@type": "@id"
@@ -33,8 +29,8 @@
 			"@type": "@id"
 		},
 
-		"deadband_value_absolute": {
-			"@id": "pid_controller:deadband_value_absolute",
+		"deadband_range_absolute": {
+			"@id": "pid_controller:deadband_range_absolute",
 			"@type": "xsd:float"
 		},
 		"integral_windup_limit_absolute": {
@@ -54,64 +50,62 @@
 			"@type": "xsd:boolean"
 		},
 
-		"p_gain": {
-			"@id": "pid_controller:p_gain",
+		"gain_calculator": {
+			"@id": "pid_controller:gain_calculator",
 			"@type": "@id"
 		},
-		"p_gain_upper_bound": {
-			"@id": "pid_controller:p_gain_upper_bound",
-			"@type": "xsd:float"
-		},
-		"p_gain_lower_bound": {
-			"@id": "pid_controller:p_gain_lower_bound",
-			"@type": "xsd:float"
-		},
-
-		"i_gain": {
-			"@id": "pid_controller:i_gain",
+		"p_gain_function": {
+			"@id": "pid_controller:p_gain_function",
 			"@type": "@id"
 		},
-		"i_gain_upper_bound": {
-			"@id": "pid_controller:i_gain_upper_bound",
-			"@type": "xsd:float"
-		},
-		"i_gain_lower_bound": {
-			"@id": "pid_controller:i_gain_lower_bound",
-			"@type": "xsd:float"
-		},
-
-		"d_gain": {
-			"@id": "pid_controller:d_gain",
+		"i_gain_function": {
+			"@id": "pid_controller:i_gain_function",
 			"@type": "@id"
 		},
-		"d_gain_upper_bound": {
-			"@id": "pid_controller:d_gain_upper_bound",
-			"@type": "xsd:float"
-		},
-		"d_gain_lower_bound": {
-			"@id": "pid_controller:d_gain_lower_bound",
-			"@type": "xsd:float"
+		"d_gain_function": {
+			"@id": "pid_controller:d_gain_function",
+			"@type": "@id"
 		},
 
 		"init_p_gain": {
 			"@id": "pid_controller:init_p_gain",
-			"@type": "xsd:float"		
+			"@type": "@id"		
 		},
 		"init_i_gain": {
 			"@id": "pid_controller:init_i_gain",
-			"@type": "xsd:float"		
+			"@type": "@id"
 		},
 		"init_d_gain": {
 			"@id": "pid_controller:init_d_gain",
-			"@type": "xsd:float"		
+			"@type": "@id"
 		},
-        "time_instance": {
-            "@id": "pid_controller:time_instance",
-            "@type": "@id"
-        },
-        "time_period": {
-            "@id": "pid_controller:time_period",
-            "@type": "@id"
-        }		
+		"p_gain_signal": {
+			"@id": "pid_controller:p_gain_signal",
+			"@type": "@id"
+		},
+		"i_gain_signal": {
+			"@id": "pid_controller:i_gain_signal",
+			"@type": "@id"
+		},
+		"d_gain_signal": {
+			"@id": "pid_controller:d_gain_signal",
+			"@type": "@id"
+		},
+		"gain_value": {
+			"@id": "pid_controller:gain_value",
+			"@type": "xsd:float"
+		},
+		"p_error_signal_calculator": {
+			"@id": "pid_controller:p_error_signal_calculator",
+			"@type": "@id"
+		},
+		"i_error_signal_calculator": {
+			"@id": "pid_controller:i_error_signal_calculator",
+			"@type": "@id"
+		},
+		"d_error_signal_calculator": {
+			"@id": "pid_controller:d_error_signal_calculator",
+			"@type": "@id"
+		}
 	}
 }

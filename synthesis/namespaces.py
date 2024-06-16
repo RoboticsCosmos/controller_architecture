@@ -2,74 +2,43 @@ from rdflib.namespace import DefinedNamespace, Namespace
 from rdflib.term import URIRef
 
 
-class PID_CONTROLLER(DefinedNamespace):
-            
-    PIDController: URIRef
-    PDController: URIRef
-    PIController: URIRef
-    PController: URIRef
-    ConstantGain: URIRef
-    TrajectoryController: URIRef
-    RegulationController: URIRef
-    ConditionalIntegrationWhenInControllableRange: URIRef
-    CleggIntegratorToResetWindup: URIRef
-    PreventOvershoot: URIRef
-    DeadbandActive: URIRef
-    BumplessOperation: URIRef
+class ALGORITHM(DefinedNamespace):
 
-    output_signal: URIRef
-    p_error_term: URIRef
-    i_error_term: URIRef
-    d_error_term: URIRef
-    deadband_value_absolute: URIRef
-    integral_windup_limit_absolute: URIRef
-    controllable_region_error_absolute: URIRef
-    reset_windup_at_zero_crossing: URIRef
-    prevent_overshoot: URIRef
-    bumpless_operation: URIRef
-    p_gain: URIRef
-    p_gain_upper_bound: URIRef
-    p_gain_lower_bound: URIRef
-    i_gain: URIRef
-    i_gain_upper_bound: URIRef
-    i_gain_lower_bound: URIRef
-    d_gain: URIRef
-    d_gain_upper_bound: URIRef
-    d_gain_lower_bound: URIRef
-    init_p_gain: URIRef
-    init_i_gain: URIRef
-    init_d_gain: URIRef
-    time_instance: URIRef
+    Algorithm: URIRef
+    Data: URIRef
+    UncertainQuantity: URIRef
+    Schedule: URIRef
+    FunctionCall: URIRef
+    data_type: URIRef
+    data_name: URIRef
+    uncertainty_data: URIRef
+    init_value: URIRef
+    trigger_chain: URIRef
+
+    _NS = Namespace("https://controller.org/metamodels/algorithm#")
+
+
+class ERROR(DefinedNamespace):
+
+    ErrorSignal: URIRef
+    InstantaneousError: URIRef
+    DerivativeFromError: URIRef
+    DerivativeFromProcessVariable: URIRef
+    IntegralFromStartError: URIRef
+    IntegralFromRecentTimeWindowError: URIRef
+    ErrorBasedOnConstraint: URIRef
+    measured_value: URIRef
+    value_to_compare_with: URIRef
+    integral_time_window_length: URIRef
     time_period: URIRef
+    quantity_to_differentiate: URIRef
+    quantity_to_integrate: URIRef
+    differentiated_data: URIRef
+    integrated_data: URIRef
+    error_data: URIRef
 
-    _NS = Namespace(
-        "https://controller.org/metamodels/controllers/PID/pid_controller#"
-    )
+    _NS = Namespace("https://controller.org/metamodels/controllers/error#")
 
-class IMPEDANCE_CONTROLLER(DefinedNamespace):
-
-    ImpedanceController: URIRef
-
-    output_torque_signal: URIRef
-    pos_error: URIRef
-    vel_error: URIRef
-    acceleration_error: URIRef
-    stiffness_param: URIRef
-    stiffness_param_upper_bound: URIRef
-    stiffness_param_lower_bound: URIRef
-    inertia_param: URIRef
-    inertia_param_upper_bound: URIRef
-    inertia_param_lower_bound: URIRef
-    damping_param: URIRef
-    damping_param_upper_bound: URIRef
-    damping_param_lower_bound: URIRef
-    init_stiffness_param: URIRef
-    init_inertia_param: URIRef
-    init_damping_param: URIRef
-    
-    _NS = Namespace(
-        "https://controller.org/metamodels/controllers/ForceControl/impedance_controller#"
-    )
 
 class FUNCTIONS(DefinedNamespace):
 
@@ -78,88 +47,200 @@ class FUNCTIONS(DefinedNamespace):
     GetSign: URIRef
     Saturation: URIRef
     HeavisideStepFunction: URIRef
-    Modulus: URIRef
+    Absolute: URIRef
     MapOutputToActuationSignal: URIRef
-
+    Sum: URIRef
+    Subtract: URIRef
+    Multiply: URIRef
+    Scale: URIRef
+    Divide: URIRef
+    GetCurrentTime: URIRef
+    filtered_data: URIRef
+    sign_data: URIRef
+    saturated_data: URIRef
+    stepped_data: URIRef
+    absolute_data: URIRef
+    summed_data: URIRef
+    difference_data: URIRef
+    product_data: URIRef
+    divided_data: URIRef
+    mapped_data: URIRef
+    input_signal: URIRef
+    signal_to_map: URIRef
+    signal_to_process: URIRef
+    signal_to_saturate: URIRef
+    arguments_list: URIRef
     low_pass_filter_factor_alpha: URIRef
     low_pass_filter_factor_alpha_limits: URIRef
     low_pass_filter_factor_alpha_limits_inclusive: URIRef
-    saturation_bool: URIRef
     saturation_limits: URIRef
-    saturation_limits_inclusive: URIRef
-    map_output_to_actuation_scaling_limits: URIRef
+    actuation_scaling_limits: URIRef
+    current_time_data: URIRef
 
     _NS = Namespace("https://controller.org/metamodels/controllers/functions#")
 
-class ERROR_SIGNAL(DefinedNamespace):
-
-    ErrorSignal: URIRef
-    InstantaneousErrorSignalPosition: URIRef
-    InstantaneousErrorSignalVelocity: URIRef
-    PredictFromErrorSignal: URIRef
-    PredictFromProcessVariableSignal: URIRef
-    HistoryFromStartErrorSignal: URIRef
-    HistoryFromRecentTimeWindowErrorSignal: URIRef
-
-    setpoint: URIRef
-    measured_value: URIRef
-    error: URIRef
-    prev_error: URIRef
-    history_time_window_length: URIRef
-    time_period: URIRef
-
-    _NS = Namespace(
-        "https://controller.org/metamodels/controllers/error_signal#"
-    )
 
 class CONTROLLER(DefinedNamespace):
 
     Controller: URIRef
     Plant: URIRef
-
-    setpoint_pos: URIRef
-    setpoint_vel: URIRef
-    measured_variable_pos: URIRef
-    measured_variable_vel: URIRef
+    Signal: URIRef
+    ControllerCommand: URIRef
+    Setpoint: URIRef
+    Feedback: URIRef
+    TimePeriod: URIRef
+    controller_name: URIRef
+    controller_output: URIRef
+    desired_time_period_val: URIRef
+    measured_time_period_val: URIRef
+    measured_pos: URIRef
+    measured_vel: URIRef
+    control_mode: URIRef
+    servoing_mode: URIRef
     actuation_signal: URIRef
-    time_instance: URIRef
-    time_period: URIRef
-    plant_name: URIRef
 
     _NS = Namespace("https://controller.org/metamodels/controllers/controller#")
+
+
+class ABAG(DefinedNamespace):
+
+    ABAG: URIRef
+    adaptive_bias: URIRef
+    adaptive_gain: URIRef
+    output_signal: URIRef
+    bias_adaptation_threshold: URIRef
+    bias_adaptation_step_delta: URIRef
+    adaptive_bias_limits: URIRef
+    gain_adaptation_threshold: URIRef
+    gain_adaptation_step_delta: URIRef
+    adaptive_gain_limits: URIRef
+
+    _NS = Namespace("https://controller.org/metamodels/controllers/ABAG/abag#")
+
+
+class PID_CONTROLLER(DefinedNamespace):
+
+    PIDController: URIRef
+    DController: URIRef
+    IController: URIRef
+    PController: URIRef
+    ConstantGain: URIRef
+    TrajectoryController: URIRef
+    RegulatingController: URIRef
+    LimitIntegralTerm: URIRef
+    ConditionalIntegrationWhenInControllableRange: URIRef
+    CleggIntegratorToResetWindup: URIRef
+    DeadbandActive: URIRef
+    BumplessOperation: URIRef
+    GainSignal: URIRef
+    p_error_term: URIRef
+    i_error_term: URIRef
+    d_error_term: URIRef
+    deadband_range_absolute: URIRef
+    integral_windup_limit_absolute: URIRef
+    controllable_region_error_absolute: URIRef
+    reset_windup_at_zero_crossing: URIRef
+    bumpless_operation: URIRef
+    gain_calculator: URIRef
+    p_gain_function: URIRef
+    i_gain_function: URIRef
+    d_gain_function: URIRef
+    init_p_gain: URIRef
+    init_i_gain: URIRef
+    init_d_gain: URIRef
+    p_gain_signal: URIRef
+    i_gain_signal: URIRef
+    d_gain_signal: URIRef
+    gain_value: URIRef
+    p_error_signal_calculator: URIRef
+    i_error_signal_calculator: URIRef
+    d_error_signal_calculator: URIRef
+
+    _NS = Namespace("https://controller.org/metamodels/controllers/PID/pid_controller#")
+
+
+class IMPEDANCE_CONTROLLER(DefinedNamespace):
+
+    ImpedanceController: URIRef
+    ConstantImpedanceParameters: URIRef
+    pos_error: URIRef
+    vel_error: URIRef
+    acceleration_error: URIRef
+    stiffness_param: URIRef
+    inertia_param: URIRef
+    damping_param: URIRef
+    init_stiffness_param: URIRef
+    init_inertia_param: URIRef
+    init_damping_param: URIRef
+
+    _NS = Namespace(
+        "https://controller.org/metamodels/controllers/ForceControl/impedance_controller#"
+    )
+
+
+class MONITOR(DefinedNamespace):
+
+    Monitor: URIRef
+    LessThanConstraint: URIRef
+    LessThanEqualToConstraint: URIRef
+    GreaterThanConstraint: URIRef
+    GreaterThanEqualToConstraint: URIRef
+    InIntervalConstraint: URIRef
+    EqualConstraint: URIRef
+    Event: URIRef
+    Constraint: URIRef
+    in_interval_lower_bound: URIRef
+    in_interval_upper_bound: URIRef
+    equality_tolerance: URIRef
+    constraint_to_monitor: URIRef
+    quantity_to_compare: URIRef
+    reference_quantity: URIRef
+    flag_or_event_to_check: URIRef
+    flag: URIRef
+    flag_value_change_from: URIRef
+    flag_value_change_to: URIRef
+    event_name: URIRef
+
+    _NS = Namespace(
+        "https://controller.org/metamodels/architecture_components/monitor#"
+    )
+
 
 class PLAN(DefinedNamespace):
 
     Plan: URIRef
     State: URIRef
     Transition: URIRef
-    
-    states_set: URIRef
-    controller_to_activate: URIRef
-    transitions: URIRef
-    transition_state: URIRef
+    Timeout: URIRef
+    EmergencyStop: URIRef
+    StateParameters: URIRef
+    Action: URIRef
+    Behavior: URIRef
+    ConstraintBasedScheduleSequenceCall: URIRef
+    MonitorBasedScheduleSequenceCall: URIRef
+    pre_condition: URIRef
+    post_condition: URIRef
+    per_condition: URIRef
+    constraint_for_schedule: URIRef
+    schedule: URIRef
+    monitors: URIRef
+    action: URIRef
+    set_of_states: URIRef
+    state_parameters: URIRef
     start_state: URIRef
-    events: URIRef
-    
+    transitions: URIRef
+    termination: URIRef
+    triggering_events: URIRef
+    state_to_transit_to: URIRef
+    timeout_period: URIRef
+    emergency_stop_flag_init: URIRef
+    setpoint_pos: URIRef
+    setpoint_vel: URIRef
+    init_setpoint_value: URIRef
+    setpoint_function: URIRef
+    setpoint_signal: URIRef
+    controller_output_composition: URIRef
+    arm_name: URIRef
+    direction_of_specification: URIRef
+
     _NS = Namespace("https://controller.org/metamodels/architecture_components/plan#")
-
-class MONITOR(DefinedNamespace):
-
-    Monitor: URIRef
-    Event: URIRef
-    LessThanMonitor: URIRef
-    GreaterThanMonitor: URIRef
-    InIntervalMonitor: URIRef
-    EqualMonitor: URIRef
-
-    time_instance_start_log: URIRef
-    time_instance_end_log: URIRef
-    in_interval_lower_bound: URIRef
-    in_interval_upper_bound: URIRef
-    in_interval_epsilon: URIRef
-    value_to_monitor: URIRef
-    reference_value: URIRef
-    desired_bool_value: URIRef
-    flags: URIRef
-
-    _NS = Namespace("https://controller.org/metamodels/architecture_components/monitor#")    

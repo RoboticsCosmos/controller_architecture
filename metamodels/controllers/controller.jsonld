@@ -4,43 +4,47 @@
 
         "Controller": "controller:Controller",
         "Plant": "controller:Plant",
+        "Signal": "controller:Signal",
+        "ControllerCommand": "controller:ControllerCommand",
+        "Setpoint": "controller:Setpoint",
+        "Feedback": "controller:Feedback",
+        "TimePeriod": "controller:TimePeriod",
 
-        "setpoint_pos": {
-            "@id": "controller:setpoint_pos",
-            "@type": "xsd:float"
-        },
-        "setpoint_vel": {
-            "@id": "controller:setpoint_vel",
-            "@type": "xsd:float"
-        },
-        "output": {
-            "@id": "controller:output",
-            "@type": "@id"
-        },
-        "initial_val": {
-            "@id": "controller:initial_val",
-            "@type": "xsd:float"
-        },
-        "time_instance": {
-            "@id": "controller:time_instance",
-            "@type": "xsd:float"
-        },
-        "time_period": {
-            "@id": "controller:time_period",
-            "@type": "xsd:float"
-        },
-
-        "plant_name": {
-            "@id": "controller:name",
+        "controller_name": {
+            "@id": "controller:controller_name",
             "@type": "xsd:string"
         },
-        "measured_variable_pos": {
-            "@id": "controller:measured_variable_pos",
-            "@type": "xsd:float"
+        "controller_output": {
+            "@id": "controller:controller_output",
+            "@type": "@id"
         },
-        "measured_variable_vel": {
-            "@id": "controller:measured_variable_vel",
-            "@type": "xsd:float"
-        }        
+        "desired_time_period_val": {
+            "@id": "controller:desired_time_period_val",
+            "@type": "@id"
+        },
+        "measured_time_period_val": {
+            "@id": "controller:measured_time_period_val",
+            "@type": "@id"
+        },
+        "measured_pos": {
+            "@id": "controller:measured_pos",
+            "@type": "@id"
+        },
+        "measured_vel": {
+            "@id": "controller:measured_vel",
+            "@type": "@id"
+        },
+        "control_mode": {
+            "@id": "controller:control_mode",
+            "@type": "@id"
+        },
+        "servoing_mode": {
+            "@id": "controller:servoing_mode",
+            "@type": "@id"
+        },
+        "actuation_signal": {
+            "@id": "controller:actuation_signal",
+            "@type": "@id"
+        }
     }
 }

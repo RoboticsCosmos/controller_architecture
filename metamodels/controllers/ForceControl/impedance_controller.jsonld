@@ -3,11 +3,8 @@
 		"impedance_controller": "https://controller.org/metamodels/controllers/ForceControl/impedance_controller#",
 
 		"ImpedanceController": "impedance_controller:ImpedanceController",
+		"ConstantImpedanceParameters": "impedance_controller:ConstantImpedanceParameters",
 
-		"output_torque_signal": {
-			"@id": "impedance_controller:output_torque_signal",
-			"@type": "xsd:float"
-		},
 		"pos_error": {
 			"@id": "impedance_controller:pos_error",
 			"@type": "@id"
@@ -25,41 +22,14 @@
 			"@id": "impedance_controller:stiffness_param",
 			"@type": "@id"
 		},
-		"stiffness_param_upper_bound": {
-			"@id": "impedance_controller:stiffness_param_upper_bound",
-			"@type": "xsd:float"
-		},
-		"stiffness_param_lower_bound": {
-			"@id": "impedance_controller:stiffness_param_lower_bound",
-			"@type": "xsd:float"
-		},
-
 		"inertia_param": {
 			"@id": "impedance_controller:inertia_param",
 			"@type": "@id"
 		},
-		"inertia_param_upper_bound": {
-			"@id": "impedance_controller:inertia_param_upper_bound",
-			"@type": "xsd:float"
-		},
-		"inertia_param_lower_bound": {
-			"@id": "impedance_controller:inertia_param_lower_bound",
-			"@type": "xsd:float"
-		},
-
 		"damping_param": {
 			"@id": "impedance_controller:damping_param",
 			"@type": "@id"
 		},
-		"damping_param_upper_bound": {
-			"@id": "impedance_controller:damping_param_upper_bound",
-			"@type": "xsd:float"
-		},
-		"damping_param_lower_bound": {
-			"@id": "impedance_controller:damping_param_lower_bound",
-			"@type": "xsd:float"
-		},
-
 		"init_stiffness_param": {
 			"@id": "impedance_controller:init_stiffness_param",
 			"@type": "xsd:float"		

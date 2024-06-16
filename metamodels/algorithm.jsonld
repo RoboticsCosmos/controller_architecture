@@ -1,22 +1,33 @@
 {
-    "@context": {
-        "algorithm": "https://controller.org/metamodels/algorithm#",
+  "@context": {
+    "algorithm": "https://controller.org/metamodels/algorithm#",
+    
+    "Algorithm": "algorithm:Algorithm",
+    "Data": "algorithm:Data",
+    "UncertainQuantity": "algorithm:UncertainQuantity",
+    "Schedule": "algorithm:Schedule",
+    "FunctionCall": "algorithm:FunctionCall",
 
-        "Algorithm": "algorithm:Algorithm",
-        "Data": "algorithm:Data",
-
-        "data_block": {
-            "@id": "algorithm:data_block",
-            "@type": "@id"
-        },
-        "initial_value_float": {
-            "@id": "algorithm:initial_value_float",
-            "@type": "xsd:float"
-        },
-        "initial_value_string": {
-            "@id": "algorithm:initial_value_string",
-            "@type": "xsd:string"
-        }
-
+    "data_type": {
+      "@id": "algorithm:data_type",
+      "@type": "xsd:string"
+    },
+    "data_name": {
+      "@id": "algorithm:data_name",
+      "@type": "xsd:string"
+    },
+    "uncertainty_data": {
+      "@id": "algorithm:uncertainty_data",
+      "@type": "@id"
+    },
+    "init_value": {
+      "@id": "algorithm:init_value",
+      "@type": "xsd:string"
+    },
+    "trigger_chain": {
+      "@id": "algorithm:trigger_chain",
+      "@type": "@id",
+      "@container": "@list"
     }
+  }
 }

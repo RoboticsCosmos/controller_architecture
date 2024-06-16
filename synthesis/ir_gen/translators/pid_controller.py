@@ -3,13 +3,15 @@ from namespaces import PID_CONTROLLER
 from utility import resolver
 
 class PIDControllerTranslator:
-
+    """
+    currently not used
+    """
     def translate(self, g: rdflib.Graph, node) -> dict:
 
         functions = dict()
         data_structures = dict()
         for a in g.subjects(rdflib.RDF.type, PID_CONTROLLER.PIDController):
-            controller = a.split("#")[-1]
+            controller = g.compute_qname(a)[-1] #a.split("#")[-1]
             prefix = controller.split("_")[0]+controller[-1]+"_"
             # print(controller)
             functions[controller] = dict()
@@ -33,6 +35,7 @@ class PIDControllerTranslator:
                 #     data_structures[functions[controller][key]] = dict()
 
             for key in functions[controller]:
+                pass
                 # print(key)
                 # if key != "name":
                 #     data_structures[controller][functions[controller][key]]["name"] = functions[controller][key]

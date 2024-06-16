@@ -1,5 +1,5 @@
 {
-    "@context":{
+    "@context": {
         "functions": "https://controller.org/metamodels/controllers/functions#",
 
         "Functions": "functions:Functions",
@@ -7,39 +7,102 @@
         "GetSign": "functions:GetSign",
         "Saturation": "functions:Saturation",
         "HeavisideStepFunction": "functions:HeavisideStepFunction",
-        "Modulus": "functions:Modulus",
-        "MapOutputToActuationSignal": "functions:MapToActuationSignal",
-    
+        "Absolute": "functions:Absolute",
+        "MapOutputToActuationSignal": "functions:MapOutputToActuationSignal",
+        "Sum": "functions:Sum",
+        "Subtract": "functions:Subtract",
+        "Multiply": "functions:Multiply",
+        "Scale": "functions:Scale",
+        "Divide": "functions:Divide",
+        "GetCurrentTime": "functions:GetCurrentTime",
+
+        "filtered_data": {
+            "@id": "functions:filtered_data",
+            "@type": "@id"
+        },
+        "sign_data": {
+            "@id": "functions:sign_data",
+            "@type": "@id"
+        },
+        "saturated_data": {
+            "@id": "functions:saturated_data",
+            "@type": "@id"
+        },
+        "stepped_data": {
+            "@id": "functions:stepped_data",
+            "@type": "@id"
+        },
+        "absolute_data": {
+            "@id": "functions:absolute_data",
+            "@type": "@id"
+        },
+        "summed_data": {
+            "@id": "functions:summed_data",
+            "@type": "@id"
+        },
+        "difference_data": {
+            "@id": "functions:difference_data",
+            "@type": "@id"
+        },
+        "product_data": {
+            "@id": "functions:product_data",
+            "@type": "@id"
+        },
+        "divided_data": {
+            "@id": "functions:divided_data",
+            "@type": "@id"
+        },
+        "mapped_data": {
+            "@id": "functions:mapped_data",
+            "@type": "@id"
+        },
+        "input_signal": {
+            "@id": "functions:input_signal",
+            "@type": "@id"
+        },
+        "signal_to_map": {
+            "@id": "functions:signal_to_map",
+            "@type": "@id"
+        },
+        "signal_to_process": {
+            "@id": "functions:signal_to_process",
+            "@type": "@id"
+        },
+        "signal_to_saturate": {
+            "@id": "functions:signal_to_saturate",
+            "@type": "@id"
+        },
+        "arguments_list": {
+            "@id": "functions:arguments_list",
+            "@type": "@id",
+            "@container": "@list"
+        },
         "low_pass_filter_factor_alpha": {
-            "@id": "error_signal:low_pass_filter_factor_alpha",
-            "@type": "xsd:float"
+            "@id": "functions:low_pass_filter_factor_alpha",
+            "@type": "@id"
         },
         "low_pass_filter_factor_alpha_limits": {
-            "@id": "error_signal:low_pass_filter_factor_alpha_limits",
-            "@type": "xsd:float",
+            "@id": "functions:low_pass_filter_factor_alpha_limits",
+            "@type": "@id",
             "@container": "@list"
         },
         "low_pass_filter_factor_alpha_limits_inclusive": {
-            "@id": "error_signal:low_pass_filter_factor_alpha_limits_inclusive",
-            "@type": "xsd:boolean"
-        },
-        "saturation_bool": {
-            "@id": "functions:saturation_bool",
+            "@id": "functions:low_pass_filter_factor_alpha_limits_inclusive",
             "@type": "xsd:boolean"
         },
         "saturation_limits": {
-            "@id": "functions:saturation_limit",
-            "@type": "xsd:float",
+            "@id": "functions:saturation_limits",
+            "@type": "@id",
             "@container": "@list"
         },
-        "saturation_limits_inclusive": {
-            "@id": "functions:saturation_limits_inclusive",
-            "@type": "xsd:boolean"
-        },
-        "map_output_to_actuation_scaling_limits": {
-            "@id": "functions:map_scaling_limits",
-            "@type": "xsd:float",
+        "actuation_scaling_limits": {
+            "@id": "functions:actuation_scaling_limits",
+            "@type": "@id",
             "@container": "@list"
+        },
+        "current_time_data": {
+            "@id": "functions:current_time_data",
+            "@type": "@id"
         }
     }
 }
