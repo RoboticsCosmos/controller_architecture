@@ -1,0 +1,807 @@
+{
+    "functions": {
+        "measured_lin_pos_z_axis_left_arm_data_greaterthanconstraint_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_function": {
+            "type_of_function": "GreaterThanConstraint",
+            "function_call": "greater_than_monitor",
+            "quantity_to_compare": "measured_lin_pos_z_axis_left_arm_data",
+            "reference_quantity": "lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data",
+            "flag_name": "measured_lin_pos_z_axis_left_arm_data_greaterthanconstraint_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag"
+        },
+        "measured_lin_pos_z_axis_left_arm_data_greaterthanconstraint_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_function_2": {
+            "type_of_function": "GreaterThanConstraint",
+            "function_call": "greater_than_monitor",
+            "quantity_to_compare": "measured_lin_pos_z_axis_left_arm_data",
+            "reference_quantity": "lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data",
+            "flag_name": "measured_lin_pos_z_axis_left_arm_data_greaterthanconstraint_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag"
+        },
+        "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_function": {
+            "type_of_function": "InIntervalConstraint",
+            "function_call": "in_interval_monitor",
+            "quantity_to_compare": "measured_lin_pos_z_axis_left_arm_data",
+            "in_interval_lower_bound": "lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data",
+            "in_interval_upper_bound": "lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data",
+            "flag_name": "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag"
+        },
+        "integral_calculator_of_lin_vel_error_z_axis_left_arm_function": {
+            "function_call": "integrator",
+            "time_period": "time_period_of_complete_controller_cycle_data",
+            "quantity_to_integrate": "lin_vel_error_pid_z_axis_left_arm_data",
+            "integrated_data": "integral_of_vel_term_error_z_axis_left_arm_data"
+        },
+        "i_term_calculator_lin_vel_z_axis_left_arm_function": {
+            "function_call": "multiply2",
+            "arguments": [
+                "i_gain_lin_vel_z_axis_left_arm_data",
+                "integral_of_vel_term_error_z_axis_left_arm_data"
+            ],
+            "product_data": "i_term_lin_vel_z_axis_left_arm_data"
+        },
+        "saturate_i_term_lin_vel_z_axis_left_arm_function": {
+            "function_call": "saturation",
+            "signal_to_saturate": "i_term_lin_vel_z_axis_left_arm_data",
+            "saturated_data": "i_term_lin_vel_z_axis_left_arm_data",
+            "saturation_limits": [
+                "i_term_saturation_lower_limit_z_axis_left_arm_data",
+                "i_term_saturation_upper_limit_z_axis_left_arm_data"
+            ]
+        },
+        "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_function": {
+            "type_of_function": "InIntervalConstraint",
+            "function_call": "in_interval_monitor",
+            "quantity_to_compare": "measured_lin_vel_z_axis_left_arm_data",
+            "in_interval_lower_bound": "lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data",
+            "in_interval_upper_bound": "lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data",
+            "flag_name": "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag"
+        },
+        "error_calculation_lin_vel_pid_z_axis_left_arm_function": {
+            "function_call": "subtraction",
+            "arguments": [
+                "lin_vel_sp_z_axis_left_arm_data",
+                "measured_lin_vel_z_axis_left_arm_data"
+            ],
+            "difference_data": "lin_vel_error_pid_z_axis_left_arm_data"
+        },
+        "p_term_calculator_lin_vel_z_axis_left_arm_function": {
+            "function_call": "multiply2",
+            "arguments": [
+                "p_gain_z_axis_left_arm_data",
+                "lin_vel_error_pid_z_axis_left_arm_data"
+            ],
+            "product_data": "p_term_lin_vel_z_axis_left_arm_data"
+        },
+        "derivative_calculator_of_lin_vel_error_z_axis_left_arm_function": {
+            "function_call": "differentiator",
+            "time_period": "time_period_of_complete_controller_cycle_data",
+            "quantity_to_differentiate": "lin_vel_error_pid_z_axis_left_arm_data",
+            "differentiated_data": "d_term_lin_vel_error_z_axis_left_arm_data"
+        },
+        "d_term_calculator_lin_vel_z_axis_left_arm_function": {
+            "function_call": "multiply2",
+            "arguments": [
+                "d_gain_lin_vel_z_axis_left_arm_data",
+                "d_term_lin_vel_error_z_axis_left_arm_data"
+            ],
+            "product_data": "d_term_lin_vel_z_axis_left_arm_data"
+        },
+        "measured_lin_pos_z_axis_left_arm_data_lessthanequaltoconstraint_lin_pos_sp_z_axis_left_arm_data_function": {
+            "type_of_function": "LessThanEqualToConstraint",
+            "function_call": "less_than_equal_to_monitor",
+            "quantity_to_compare": "measured_lin_pos_z_axis_left_arm_data",
+            "reference_quantity": "lin_pos_sp_z_axis_left_arm_data",
+            "flag_name": "measured_lin_pos_z_axis_left_arm_data_lessthanequaltoconstraint_lin_pos_sp_z_axis_left_arm_data_flag"
+        },
+        "measured_lin_vel_z_axis_left_arm_data_equalconstraint_lin_zero_vel_z_axis_left_arm_data_function": {
+            "type_of_function": "EqualConstraint",
+            "function_call": "equality_monitor",
+            "quantity_to_compare": "measured_lin_vel_z_axis_left_arm_data",
+            "reference_quantity": "lin_zero_vel_z_axis_left_arm_data",
+            "flag_name": "measured_lin_vel_z_axis_left_arm_data_equalconstraint_lin_zero_vel_z_axis_left_arm_data_flag"
+        },
+        "impedance_controller_command_z_axis_left_arm_data_greaterthanconstraint_applied_force_threshold_impedance_controller_command_z_axis_left_arm_data_function": {
+            "type_of_function": "GreaterThanConstraint",
+            "function_call": "greater_than_monitor",
+            "quantity_to_compare": "impedance_controller_command_z_axis_left_arm_data",
+            "reference_quantity": "applied_force_threshold_impedance_controller_command_z_axis_left_arm_data",
+            "flag_name": "impedance_controller_command_z_axis_left_arm_data_greaterthanconstraint_applied_force_threshold_impedance_controller_command_z_axis_left_arm_data_flag"
+        },
+        "error_calculation_lin_pos_stiffness_z_axis_left_arm_function": {
+            "function_call": "subtraction",
+            "arguments": [
+                "lin_pos_sp_z_axis_left_arm_data",
+                "measured_lin_pos_z_axis_left_arm_data"
+            ],
+            "difference_data": "lin_pos_error_stiffness_z_axis_left_arm_data"
+        },
+        "stiffness_term_calculator_lin_z_axis_left_arm_function": {
+            "function_call": "multiply2",
+            "arguments": [
+                "stiffness_lin_z_axis_left_arm_data",
+                "lin_pos_error_stiffness_z_axis_left_arm_data"
+            ],
+            "product_data": "stiffness_term_lin_z_axis_left_arm_data"
+        },
+        "error_calculation_lin_vel_damping_z_axis_left_arm_function": {
+            "function_call": "subtraction",
+            "arguments": [
+                "lin_vel_sp_z_axis_left_arm_data",
+                "measured_lin_vel_z_axis_left_arm_data"
+            ],
+            "difference_data": "lin_vel_error_damping_z_axis_left_arm_data"
+        },
+        "damping_term_calculator_lin_z_axis_left_arm_function": {
+            "function_call": "multiply2",
+            "arguments": [
+                "damping_lin_z_axis_left_arm_data",
+                "lin_vel_error_damping_z_axis_left_arm_data"
+            ],
+            "product_data": "damping_term_z_axis_left_arm_data"
+        }
+    },
+    "data_structures": {
+        "motion_specification_x_axis_left_arm_is_active": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "motion_specification_z_axis_left_arm_is_active": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "motion_specification_x_axis_right_arm_is_active": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "motion_specification_z_axis_right_arm_is_active": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "measured_lin_pos_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "measured_lin_pos_z_axis_left_arm_data_greaterthanconstraint_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "time_period_of_complete_controller_cycle_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "lin_vel_error_pid_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "integral_of_vel_term_error_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "i_gain_lin_vel_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "i_term_lin_vel_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "i_term_saturation_lower_limit_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "-0.1"
+        },
+        "i_term_saturation_upper_limit_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.1"
+        },
+        "measured_lin_vel_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "lin_vel_sp_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "p_gain_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "p_term_lin_vel_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "d_term_lin_vel_error_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "d_gain_lin_vel_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "d_term_lin_vel_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "lin_pos_sp_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "measured_lin_pos_z_axis_left_arm_data_lessthanequaltoconstraint_lin_pos_sp_z_axis_left_arm_data_flag": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "lin_zero_vel_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "measured_lin_vel_z_axis_left_arm_data_equalconstraint_lin_zero_vel_z_axis_left_arm_data_flag": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "impedance_controller_command_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "applied_force_threshold_impedance_controller_command_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "5.0"
+        },
+        "impedance_controller_command_z_axis_left_arm_data_greaterthanconstraint_applied_force_threshold_impedance_controller_command_z_axis_left_arm_data_flag": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "lin_pos_error_stiffness_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "stiffness_lin_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "stiffness_term_lin_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "lin_vel_error_damping_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "damping_lin_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "damping_term_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        }
+    },
+    "controller_architecture": [
+        {
+            "robot_name": "left_arm",
+            "controller_architecture_specs": [
+                {
+                    "dimension": "lin_z_axis",
+                    "motion_specification_is_active": "motion_specification_z_axis_left_arm_is_active",
+                    "motion_spec": [
+                        {
+                            "pre_condition": {
+                                "function_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_greaterthanconstraint_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_function"
+                                ],
+                                "flag_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_greaterthanconstraint_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag",
+                                    "measured_lin_pos_z_axis_left_arm_data_greaterthanconstraint_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag_2"
+                                ]
+                            },
+                            "post_condition": {
+                                "function_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_function"
+                                ],
+                                "flag_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag"
+                                ]
+                            },
+                            "schedules": {
+                                "flags_based_controller_call_pid_i_z_axis_left_arm_1": {
+                                    "trigger_chain": [
+                                        "integral_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                        "i_term_calculator_lin_vel_z_axis_left_arm_function",
+                                        "saturate_i_term_lin_vel_z_axis_left_arm_function",
+                                        "integral_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                        "i_term_calculator_lin_vel_z_axis_left_arm_function",
+                                        "saturate_i_term_lin_vel_z_axis_left_arm_function"
+                                    ],
+                                    "monitors": {
+                                        "function_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_function"
+                                        ],
+                                        "flag_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag"
+                                        ],
+                                        "desired_flag_values": [
+                                            "true"
+                                        ]
+                                    }
+                                },
+                                "flags_based_controller_call_pid_i_z_axis_left_arm_2": {
+                                    "trigger_chain": [
+                                        "error_calculation_lin_vel_pid_z_axis_left_arm_function",
+                                        "p_term_calculator_lin_vel_z_axis_left_arm_function",
+                                        "derivative_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                        "d_term_calculator_lin_vel_z_axis_left_arm_function"
+                                    ],
+                                    "monitors": {
+                                        "function_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_function"
+                                        ],
+                                        "flag_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag"
+                                        ],
+                                        "desired_flag_values": [
+                                            "true"
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "pre_condition": {
+                                "function_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_function"
+                                ],
+                                "flag_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag"
+                                ]
+                            },
+                            "post_condition": {
+                                "function_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_lessthanequaltoconstraint_lin_pos_sp_z_axis_left_arm_data_function",
+                                    "measured_lin_vel_z_axis_left_arm_data_equalconstraint_lin_zero_vel_z_axis_left_arm_data_function",
+                                    "impedance_controller_command_z_axis_left_arm_data_greaterthanconstraint_applied_force_threshold_impedance_controller_command_z_axis_left_arm_data_function"
+                                ],
+                                "flag_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_lessthanequaltoconstraint_lin_pos_sp_z_axis_left_arm_data_flag",
+                                    "measured_lin_vel_z_axis_left_arm_data_equalconstraint_lin_zero_vel_z_axis_left_arm_data_flag",
+                                    "impedance_controller_command_z_axis_left_arm_data_greaterthanconstraint_applied_force_threshold_impedance_controller_command_z_axis_left_arm_data_flag"
+                                ]
+                            },
+                            "schedules": {
+                                "flags_based_controller_call_pid_i_z_axis_left_arm_1": {
+                                    "trigger_chain": [
+                                        "error_calculation_lin_pos_stiffness_z_axis_left_arm_function",
+                                        "stiffness_term_calculator_lin_z_axis_left_arm_function"
+                                    ],
+                                    "monitors": {
+                                        "function_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_function"
+                                        ],
+                                        "flag_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag"
+                                        ],
+                                        "desired_flag_values": [
+                                            "true"
+                                        ]
+                                    }
+                                },
+                                "flags_based_controller_call_pid_i_z_axis_left_arm_2": {
+                                    "trigger_chain": [
+                                        "error_calculation_lin_vel_damping_z_axis_left_arm_function",
+                                        "damping_term_calculator_lin_z_axis_left_arm_function"
+                                    ],
+                                    "monitors": {
+                                        "function_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_function"
+                                        ],
+                                        "flag_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag"
+                                        ],
+                                        "desired_flag_values": [
+                                            "true"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "dimension": "lin_x_axis",
+                    "motion_specification_is_active": "motion_specification_x_axis_left_arm_is_active",
+                    "motion_spec": [
+                        {
+                            "pre_condition": {
+                                "function_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_greaterthanconstraint_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_function"
+                                ],
+                                "flag_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_greaterthanconstraint_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag"
+                                ]
+                            },
+                            "post_condition": {
+                                "function_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_function"
+                                ],
+                                "flag_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag"
+                                ]
+                            },
+                            "schedules": {
+                                "flags_based_controller_call_pid_i_z_axis_left_arm_1": {
+                                    "trigger_chain": [
+                                        "integral_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                        "i_term_calculator_lin_vel_z_axis_left_arm_function",
+                                        "saturate_i_term_lin_vel_z_axis_left_arm_function",
+                                        "integral_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                        "i_term_calculator_lin_vel_z_axis_left_arm_function",
+                                        "saturate_i_term_lin_vel_z_axis_left_arm_function"
+                                    ],
+                                    "monitors": {
+                                        "function_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_function"
+                                        ],
+                                        "flag_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag"
+                                        ],
+                                        "desired_flag_values": [
+                                            "true"
+                                        ]
+                                    }
+                                },
+                                "flags_based_controller_call_pid_i_z_axis_left_arm_2": {
+                                    "trigger_chain": [
+                                        "error_calculation_lin_vel_pid_z_axis_left_arm_function",
+                                        "p_term_calculator_lin_vel_z_axis_left_arm_function",
+                                        "derivative_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                        "d_term_calculator_lin_vel_z_axis_left_arm_function"
+                                    ],
+                                    "monitors": {
+                                        "function_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_function"
+                                        ],
+                                        "flag_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag"
+                                        ],
+                                        "desired_flag_values": [
+                                            "true"
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "pre_condition": {
+                                "function_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_function"
+                                ],
+                                "flag_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag"
+                                ]
+                            },
+                            "post_condition": {
+                                "function_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_lessthanequaltoconstraint_lin_pos_sp_z_axis_left_arm_data_function",
+                                    "measured_lin_vel_z_axis_left_arm_data_equalconstraint_lin_zero_vel_z_axis_left_arm_data_function",
+                                    "impedance_controller_command_z_axis_left_arm_data_greaterthanconstraint_applied_force_threshold_impedance_controller_command_z_axis_left_arm_data_function"
+                                ],
+                                "flag_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_lessthanequaltoconstraint_lin_pos_sp_z_axis_left_arm_data_flag",
+                                    "measured_lin_vel_z_axis_left_arm_data_equalconstraint_lin_zero_vel_z_axis_left_arm_data_flag",
+                                    "impedance_controller_command_z_axis_left_arm_data_greaterthanconstraint_applied_force_threshold_impedance_controller_command_z_axis_left_arm_data_flag"
+                                ]
+                            },
+                            "schedules": {
+                                "flags_based_controller_call_pid_i_z_axis_left_arm_1": {
+                                    "trigger_chain": [
+                                        "error_calculation_lin_pos_stiffness_z_axis_left_arm_function",
+                                        "stiffness_term_calculator_lin_z_axis_left_arm_function"
+                                    ],
+                                    "monitors": {
+                                        "function_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_function"
+                                        ],
+                                        "flag_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag"
+                                        ],
+                                        "desired_flag_values": [
+                                            "true"
+                                        ]
+                                    }
+                                },
+                                "flags_based_controller_call_pid_i_z_axis_left_arm_2": {
+                                    "trigger_chain": [
+                                        "error_calculation_lin_vel_damping_z_axis_left_arm_function",
+                                        "damping_term_calculator_lin_z_axis_left_arm_function"
+                                    ],
+                                    "monitors": {
+                                        "function_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_function"
+                                        ],
+                                        "flag_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag"
+                                        ],
+                                        "desired_flag_values": [
+                                            "true"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "robot_name": "right_arm",
+            "controller_architecture_specs": [
+                {
+                    "dimension": "lin_z_axis",
+                    "motion_specification_is_active": "motion_specification_z_axis_right_arm_is_active",
+                    "motion_spec": [
+                        {
+                            "pre_condition": {
+                                "function_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_greaterthanconstraint_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_function"
+                                ],
+                                "flag_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_greaterthanconstraint_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag"
+                                ]
+                            },
+                            "post_condition": {
+                                "function_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_function"
+                                ],
+                                "flag_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag"
+                                ]
+                            },
+                            "schedules": {
+                                "flags_based_controller_call_pid_i_z_axis_left_arm_1": {
+                                    "trigger_chain": [
+                                        "integral_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                        "i_term_calculator_lin_vel_z_axis_left_arm_function",
+                                        "saturate_i_term_lin_vel_z_axis_left_arm_function",
+                                        "integral_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                        "i_term_calculator_lin_vel_z_axis_left_arm_function",
+                                        "saturate_i_term_lin_vel_z_axis_left_arm_function"
+                                    ],
+                                    "monitors": {
+                                        "function_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_function"
+                                        ],
+                                        "flag_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag"
+                                        ],
+                                        "desired_flag_values": [
+                                            "true"
+                                        ]
+                                    }
+                                },
+                                "flags_based_controller_call_pid_i_z_axis_left_arm_2": {
+                                    "trigger_chain": [
+                                        "error_calculation_lin_vel_pid_z_axis_left_arm_function",
+                                        "p_term_calculator_lin_vel_z_axis_left_arm_function",
+                                        "derivative_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                        "d_term_calculator_lin_vel_z_axis_left_arm_function"
+                                    ],
+                                    "monitors": {
+                                        "function_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_function"
+                                        ],
+                                        "flag_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag"
+                                        ],
+                                        "desired_flag_values": [
+                                            "true"
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "pre_condition": {
+                                "function_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_function"
+                                ],
+                                "flag_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag"
+                                ]
+                            },
+                            "post_condition": {
+                                "function_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_lessthanequaltoconstraint_lin_pos_sp_z_axis_left_arm_data_function",
+                                    "measured_lin_vel_z_axis_left_arm_data_equalconstraint_lin_zero_vel_z_axis_left_arm_data_function",
+                                    "impedance_controller_command_z_axis_left_arm_data_greaterthanconstraint_applied_force_threshold_impedance_controller_command_z_axis_left_arm_data_function"
+                                ],
+                                "flag_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_lessthanequaltoconstraint_lin_pos_sp_z_axis_left_arm_data_flag",
+                                    "measured_lin_vel_z_axis_left_arm_data_equalconstraint_lin_zero_vel_z_axis_left_arm_data_flag",
+                                    "impedance_controller_command_z_axis_left_arm_data_greaterthanconstraint_applied_force_threshold_impedance_controller_command_z_axis_left_arm_data_flag"
+                                ]
+                            },
+                            "schedules": {
+                                "flags_based_controller_call_pid_i_z_axis_left_arm_1": {
+                                    "trigger_chain": [
+                                        "error_calculation_lin_pos_stiffness_z_axis_left_arm_function",
+                                        "stiffness_term_calculator_lin_z_axis_left_arm_function"
+                                    ],
+                                    "monitors": {
+                                        "function_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_function"
+                                        ],
+                                        "flag_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag"
+                                        ],
+                                        "desired_flag_values": [
+                                            "true"
+                                        ]
+                                    }
+                                },
+                                "flags_based_controller_call_pid_i_z_axis_left_arm_2": {
+                                    "trigger_chain": [
+                                        "error_calculation_lin_vel_damping_z_axis_left_arm_function",
+                                        "damping_term_calculator_lin_z_axis_left_arm_function"
+                                    ],
+                                    "monitors": {
+                                        "function_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_function"
+                                        ],
+                                        "flag_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag"
+                                        ],
+                                        "desired_flag_values": [
+                                            "true"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "dimension": "lin_x_axis",
+                    "motion_specification_is_active": "motion_specification_x_axis_right_arm_is_active",
+                    "motion_spec": [
+                        {
+                            "pre_condition": {
+                                "function_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_greaterthanconstraint_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_function"
+                                ],
+                                "flag_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_greaterthanconstraint_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag"
+                                ]
+                            },
+                            "post_condition": {
+                                "function_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_function"
+                                ],
+                                "flag_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag"
+                                ]
+                            },
+                            "schedules": {
+                                "flags_based_controller_call_pid_i_z_axis_left_arm_1": {
+                                    "trigger_chain": [
+                                        "integral_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                        "i_term_calculator_lin_vel_z_axis_left_arm_function",
+                                        "saturate_i_term_lin_vel_z_axis_left_arm_function",
+                                        "integral_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                        "i_term_calculator_lin_vel_z_axis_left_arm_function",
+                                        "saturate_i_term_lin_vel_z_axis_left_arm_function"
+                                    ],
+                                    "monitors": {
+                                        "function_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_function"
+                                        ],
+                                        "flag_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag"
+                                        ],
+                                        "desired_flag_values": [
+                                            "true"
+                                        ]
+                                    }
+                                },
+                                "flags_based_controller_call_pid_i_z_axis_left_arm_2": {
+                                    "trigger_chain": [
+                                        "error_calculation_lin_vel_pid_z_axis_left_arm_function",
+                                        "p_term_calculator_lin_vel_z_axis_left_arm_function",
+                                        "derivative_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                        "d_term_calculator_lin_vel_z_axis_left_arm_function"
+                                    ],
+                                    "monitors": {
+                                        "function_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_function"
+                                        ],
+                                        "flag_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag"
+                                        ],
+                                        "desired_flag_values": [
+                                            "true"
+                                        ]
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            "pre_condition": {
+                                "function_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_function"
+                                ],
+                                "flag_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_minus_abs_uncertainty_range_data_and_lin_pos_sp_z_axis_left_arm_plus_abs_uncertainty_range_data_flag"
+                                ]
+                            },
+                            "post_condition": {
+                                "function_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_lessthanequaltoconstraint_lin_pos_sp_z_axis_left_arm_data_function",
+                                    "measured_lin_vel_z_axis_left_arm_data_equalconstraint_lin_zero_vel_z_axis_left_arm_data_function",
+                                    "impedance_controller_command_z_axis_left_arm_data_greaterthanconstraint_applied_force_threshold_impedance_controller_command_z_axis_left_arm_data_function"
+                                ],
+                                "flag_names": [
+                                    "measured_lin_pos_z_axis_left_arm_data_lessthanequaltoconstraint_lin_pos_sp_z_axis_left_arm_data_flag",
+                                    "measured_lin_vel_z_axis_left_arm_data_equalconstraint_lin_zero_vel_z_axis_left_arm_data_flag",
+                                    "impedance_controller_command_z_axis_left_arm_data_greaterthanconstraint_applied_force_threshold_impedance_controller_command_z_axis_left_arm_data_flag"
+                                ]
+                            },
+                            "schedules": {
+                                "flags_based_controller_call_pid_i_z_axis_left_arm_1": {
+                                    "trigger_chain": [
+                                        "error_calculation_lin_pos_stiffness_z_axis_left_arm_function",
+                                        "stiffness_term_calculator_lin_z_axis_left_arm_function"
+                                    ],
+                                    "monitors": {
+                                        "function_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_function"
+                                        ],
+                                        "flag_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag"
+                                        ],
+                                        "desired_flag_values": [
+                                            "true"
+                                        ]
+                                    }
+                                },
+                                "flags_based_controller_call_pid_i_z_axis_left_arm_2": {
+                                    "trigger_chain": [
+                                        "error_calculation_lin_vel_damping_z_axis_left_arm_function",
+                                        "damping_term_calculator_lin_z_axis_left_arm_function"
+                                    ],
+                                    "monitors": {
+                                        "function_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_function"
+                                        ],
+                                        "flag_names": [
+                                            "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_minus_threshold_to_activate_i_data_and_lin_vel_sp_z_axis_left_arm_plus_threshold_to_activate_i_data_flag"
+                                        ],
+                                        "desired_flag_values": [
+                                            "true"
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

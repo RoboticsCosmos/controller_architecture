@@ -1,0 +1,210 @@
+kinova_kdl_functions() ::= <<
+
+
+// extern "C"
+// {
+namespace k_api = Kinova::Api;
+
+void kinova_feedback(kinova_mediator &kinova_left,
+                     kinova_mediator &kinova_right,
+                     KDL::JntArray &jnt_positions_left,
+                     KDL::JntArray &jnt_velocities_left,
+                     KDL::JntArray &jnt_torques_left,
+                     KDL::JntArray &jnt_positions_right,
+                     KDL::JntArray &jnt_velocities_right,
+                     KDL::JntArray &jnt_torques_right)
+{
+    kinova_left.get_joint_state(jnt_positions_left,
+                                jnt_velocities_left,
+                                jnt_torques_left);
+    kinova_right.get_joint_state(jnt_positions_right,
+                                 jnt_velocities_right,
+                                 jnt_torques_right);
+}
+
+int64_t GetTickUs() // returns time in milliseconds
+{
+    struct timespec start;
+    clock_gettime(CLOCK_MONOTONIC, &start);                      // get current time and store it in start
+    return (start.tv_sec * 1000LLU) + (start.tv_nsec / 1000000); // start.tv_sec is in seconds, start.tv_nsec is in nanoseconds
+}
+
+double GetTimeSec()
+{
+    double time_sec = GetTickUs() / 1000.0;
+    return time_sec;
+}
+
+std::function\<void(k_api::Base::ActionNotification)>
+create_event_listener_by_promise(std::promise\<k_api::Base::ActionEvent> &promise)
+{
+    return [&promise](k_api::Base::ActionNotification notification)
+    {
+        const auto action_event = notification.action_event();
+        switch (action_event)
+        {
+        case k_api::Base::ActionEvent::ACTION_END:
+        case k_api::Base::ActionEvent::ACTION_ABORT:
+            promise.set_value(action_event);
+            break;
+        default:
+            break;
+        }
+    };
+}
+
+// reference https://github.com/Kinovarobotics/kortex/blob/efde48c867848b018d1580463562788150aaddae/api_cpp/examples/102-High_level_movement/02-sequence.cpp (line 85+)
+bool move_to_desired_jnt_config(std::shared_ptr\<Kinova::Api::Base::BaseClient> &base_1, std::shared_ptr\<Kinova::Api::Base::BaseClient> &base_2)
+{
+    YAML::Node config_file = YAML::LoadFile("../parameters.yaml");
+    constexpr auto TIMEOUT_DURATION = std::chrono::seconds{20};
+    std::cout \<\< "Moving to home position (pre-picking position) ..." \<\< std::endl;
+    std::vector\<float> arm1_home = config_file["arm_1"]["home"].as\<std::vector\<float>\>();
+    std::vector\<float> arm2_home = config_file["arm_2"]["home"].as\<std::vector\<float>\>();
+    auto actuator_count = base_1->GetActuatorCount();
+
+    // creating an action
+    auto action_1 = k_api::Base::Action();
+    auto action_2 = k_api::Base::Action();
+    action_1.set_name("kinova_1_move_to_desired_jnt_config");
+    action_1.set_application_data("");
+    action_2.set_name("kinova_2_move_to_desired_jnt_config");
+    action_2.set_application_data("");
+
+    auto reach_joint_angles_1 = action_1.mutable_reach_joint_angles();
+    auto joint_angles_1 = reach_joint_angles_1->mutable_joint_angles();
+    auto reach_joint_angles_2 = action_2.mutable_reach_joint_angles();
+    auto joint_angles_2 = reach_joint_angles_2->mutable_joint_angles();
+
+    // set the joint angles
+    for (size_t i = 0; i \< actuator_count.count(); ++i)
+    {
+        auto joint_angle_1 = joint_angles_1->add_joint_angles();
+        auto joint_angle_2 = joint_angles_2->add_joint_angles();
+        joint_angle_1->set_joint_identifier(i);
+        joint_angle_1->set_value(arm1_home[i]);
+        joint_angle_2->set_joint_identifier(i);
+        joint_angle_2->set_value(arm2_home[i]);
+    }
+
+    // Connect to notification action topic
+    std::promise\<k_api::Base::ActionEvent> promise_1;
+    auto future_1 = promise_1.get_future();
+    auto promise_notification_handle_1 = base_1->OnNotificationActionTopic(
+        create_event_listener_by_promise(promise_1),
+        k_api::Common::NotificationOptions());
+
+    std::promise\<k_api::Base::ActionEvent> promise_2;
+    auto future_2 = promise_2.get_future();
+    auto promise_notification_handle_2 = base_2->OnNotificationActionTopic(
+        create_event_listener_by_promise(promise_2),
+        k_api::Common::NotificationOptions());
+
+    std::cout \<\< "Executing move_to_desired_jnt_config action" \<\< std::endl;
+    base_1->ExecuteAction(action_1);
+    base_2->ExecuteAction(action_2);
+
+    std::cout \<\< "Waiting until the position is reached ..." \<\< std::endl;
+
+    // Wait for future value from promise
+    const auto status_1 = future_1.wait_for(TIMEOUT_DURATION);
+    const auto status_2 = future_2.wait_for(TIMEOUT_DURATION);
+    base_1->Unsubscribe(promise_notification_handle_1);
+    base_2->Unsubscribe(promise_notification_handle_2);
+
+    if (status_1 != std::future_status::ready || status_2 != std::future_status::ready)
+    {
+        std::cout \<\< "Timeout on action notification wait" \<\< std::endl;
+        return false;
+    }
+    const auto promise_event_1 = future_1.get();
+    const auto promise_event_2 = future_2.get();
+
+    std::cout \<\< "move_to_desired_jnt_config completed sucessfully" \<\< std::endl;
+    std::cout \<\< "Promise value (Kinova 1) : " \<\< k_api::Base::ActionEvent_Name(promise_event_1) \<\< std::endl;
+    std::cout \<\< "Promise value (Kinova 2): " \<\< k_api::Base::ActionEvent_Name(promise_event_2) \<\< std::endl;
+
+    return true;
+}
+
+void get_end_effector_pose_and_twist(KDL::JntArrayVel &jnt_velocity_left,
+                                     KDL::JntArrayVel &jnt_velocity_right,
+                                     const KDL::JntArray &jnt_positions_left,
+                                     const KDL::JntArray &jnt_velocities_left,
+                                     const KDL::JntArray &jnt_positions_right,
+                                     const KDL::JntArray &jnt_velocities_right,
+                                     KDL::Frame &measured_endEffPose_BL_left_arm,
+                                     KDL::FrameVel &measured_endEffTwist_BL_left_arm,
+                                     KDL::Frame &measured_endEffPose_GF_left_arm,
+                                     KDL::FrameVel &measured_endEffTwist_GF_left_arm,
+                                     KDL::Frame &measured_endEffPose_BL_right_arm,
+                                     KDL::FrameVel &measured_endEffTwist_BL_right_arm,
+                                     KDL::Frame &measured_endEffPose_GF_right_arm,
+                                     KDL::FrameVel &measured_endEffTwist_GF_right_arm,
+                                     std::shared_ptr\<KDL::ChainFkSolverPos_recursive> &fkSolverPos,
+                                     std::shared_ptr\<KDL::ChainFkSolverVel_recursive> &fkSolverVel,
+                                     const KDL::Frame &BL_wrt_GF_frame_left, const KDL::Frame &BL_wrt_GF_frame_right)
+{
+
+    // getting the end effector pose and twist
+    jnt_velocity_left.q = jnt_positions_left;
+    jnt_velocity_left.qdot = jnt_velocities_left;
+
+    jnt_velocity_right.q = jnt_positions_right;
+    jnt_velocity_right.qdot = jnt_velocities_right;
+
+    fkSolverPos->JntToCart(jnt_positions_left, measured_endEffPose_BL_left_arm);
+    fkSolverPos->JntToCart(jnt_positions_right, measured_endEffPose_BL_right_arm);
+    fkSolverVel->JntToCart(jnt_velocity_left, measured_endEffTwist_BL_left_arm);
+    fkSolverVel->JntToCart(jnt_velocity_right, measured_endEffTwist_BL_right_arm);
+
+    measured_endEffPose_GF_left_arm = BL_wrt_GF_frame_left * measured_endEffPose_BL_left_arm;
+    measured_endEffTwist_GF_left_arm = BL_wrt_GF_frame_left * measured_endEffTwist_BL_left_arm;
+
+    measured_endEffPose_GF_right_arm = BL_wrt_GF_frame_right * measured_endEffPose_BL_right_arm;
+    measured_endEffTwist_GF_right_arm = BL_wrt_GF_frame_right * measured_endEffTwist_BL_right_arm;
+}
+
+void calculate_joint_torques_RNEA(
+    std::shared_ptr\<KDL::ChainJntToJacDotSolver> &jacobDotSolver,
+    std::shared_ptr\<KDL::ChainIkSolverVel_pinv> &ikSolverAcc,
+    std::shared_ptr\<KDL::ChainIdSolver_RNE> &idSolver_left,
+    std::shared_ptr\<KDL::ChainIdSolver_RNE> &idSolver_right,
+    KDL::JntArrayVel &jnt_velocity_left,
+    KDL::JntArrayVel &jnt_velocity_right,
+    KDL::Twist &jd_qd_left,
+    KDL::Twist &jd_qd_right,
+    KDL::Twist &xdd_left,
+    KDL::Twist &xdd_right,
+    KDL::Twist &xdd_minus_jd_qd_left,
+    KDL::Twist &xdd_minus_jd_qd_right,
+    KDL::JntArray &jnt_accelerations_left,
+    KDL::JntArray &jnt_accelerations_right,
+    KDL::JntArray &jnt_positions_left,
+    KDL::JntArray &jnt_positions_right,
+    KDL::JntArray &jnt_velocities_left,
+    KDL::JntArray &jnt_velocities_right,
+    KDL::Wrenches &linkWrenches_EE_left,
+    KDL::Wrenches &linkWrenches_EE_right,
+    KDL::JntArray &jnt_torques_left,
+    KDL::JntArray &jnt_torques_right)
+{
+    // get joint torques
+    jacobDotSolver->JntToJacDot(jnt_velocity_left, jd_qd_left);
+    xdd_minus_jd_qd_left = xdd_left - jd_qd_left;
+    ikSolverAcc->CartToJnt(jnt_positions_left, xdd_minus_jd_qd_left, jnt_accelerations_left);
+    idSolver_left->CartToJnt(jnt_positions_left, jnt_velocities_left, jnt_accelerations_left, linkWrenches_EE_left, jnt_torques_left);
+
+    jacobDotSolver->JntToJacDot(jnt_velocity_right, jd_qd_right);
+    xdd_minus_jd_qd_right = xdd_right - jd_qd_right;
+    ikSolverAcc->CartToJnt(jnt_positions_right, xdd_minus_jd_qd_right, jnt_accelerations_right);
+    idSolver_right->CartToJnt(jnt_positions_right, jnt_velocities_right, jnt_accelerations_right, linkWrenches_EE_right, jnt_torques_right);
+}
+
+enum control_command_type
+{
+    TWIST_CONTROL = 0,
+    WRENCH_CONTROL = 1,
+};
+
+>>

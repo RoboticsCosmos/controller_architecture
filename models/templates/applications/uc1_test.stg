@@ -1,0 +1,61 @@
+/*
+Comment outside the template:
+Logic:
+
+<!for each robot!>
+  <!for each dimension!>
+
+    <!if motion_specification_is_active is false!>
+      <!execute pre-condition functions of all motion specifications!>
+      <!if desired flag combination fro pre-cond are satisfying, set motion_specification_is_active to true!>
+
+    <!if motion_specification_is_active is true!>
+      <!for each motion specification!>
+        <!if pre-cond flags are active!>
+          <!execute all post-condition functions!>
+          <!check if post-condition flags are true!>
+        <!if post-cond flags are true!>
+          <!set motion_specification_is_active as false!>
+          <!break!>
+        <!else!>
+          <!for each schedule!>
+            <!execute all functions from function_names in the monitors!>
+            <!if events or set of events are received!>
+              <!execute all functions from trigger chain!>
+              <!set all event flags to false!>
+  <!use KDL solvers to perform desired transformations and solve for joint commands!>
+<!now send the joint commands to all robots!>
+*/
+
+
+import "algorithm.stg"
+import "kinova_kdl_imports.stg"
+import "kinova_kdl_functions.stg"
+import "templates.stg"
+
+
+application(controller_architecture, functions, data_structures) ::= <<
+
+// script starts from here ... (not a comment for template, but for c/cpp)
+<!initialising cpp related headers!>
+<other_headers()>
+
+<!kdl_init()!>
+<!kinova_kdl_functions()!>
+
+int main() {
+
+// initialise all data structures (done)
+<initialise_data_structures(data_structures)>
+
+  while(true) {
+
+  <controller_architecture:
+  {controller_of_a_robot|
+  <loop_through_each_dimension_of_control(controller_of_a_robot.controller_architecture_specs, functions)>
+  }; separator="\n">
+  }
+
+  return 0;
+}
+>>

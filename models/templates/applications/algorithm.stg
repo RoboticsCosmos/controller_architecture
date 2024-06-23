@@ -1,0 +1,44 @@
+
+greater_than_monitor(function_node) ::= <<
+greater_than_monitor(&<function_node.quantity_to_compare>, &<function_node.reference_quantity>, &<function_node.flag_name>);
+>>
+
+in_interval_monitor(function_node) ::= <<
+in_interval_monitor(&<function_node.quantity_to_compare>, &<function_node.in_interval_lower_bound>, &<function_node.in_interval_upper_bound>, &<function_node.flag_name>);
+>>
+
+subtraction(function_node) ::= <<
+subtraction(&<function_node.arguments; separator=", &">, &<function_node.difference_data>);
+>>
+
+multiply2(function_node) ::= <<
+multiply2(&<function_node.arguments; separator=", &">, &<function_node.product_data>);
+>>
+
+differentiator(function_node) ::= <<
+differentiator(&<function_node.time_period>, &<function_node.quantity_to_differentiate>, &<function_node.differentiated_data>);
+>>
+
+integrator(function_node) ::= <<
+integrator(&<function_node.time_period>, &<function_node.quantity_to_integrate>, &<function_node.integrated_data>);
+>>
+
+saturation(function_node) ::= <<
+saturation(&<function_node.signal_to_saturate>, &<function_node.saturation_limits; separator=", &">);
+>>
+
+less_than_equal_to_monitor(function_node) ::= <<
+less_than_equal_to_monitor(&<function_node.quantity_to_compare>, &<function_node.reference_quantity>, &<function_node.flag_name>);
+>>
+
+equality_monitor(function_node) ::= <<
+equality_monitor(&<function_node.quantity_to_compare>, &<function_node.reference_quantity>, &<function_node.flag_name>);
+>>
+
+data_block(data_id) ::= <<
+<data_id.data_type> <data_id> = <data_id.initial_value>;
+>>
+
+greater_than_monitor2() ::= <<
+tesitng!!!!!!!!!!!!!!!!!
+>>
