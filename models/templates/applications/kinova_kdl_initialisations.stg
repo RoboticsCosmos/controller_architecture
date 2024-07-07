@@ -1,0 +1,205 @@
+
+
+kdl_imports() ::= <<
+#include \<Eigen/Core>
+#include \<chrono>
+#include \<controllers/control_blocks.h>
+#include \<functions/monitors.h>
+#include \<iostream>
+#include \<kinova_mediator/mediator.hpp>
+#include \<math.h>
+#include \<vector>
+#include \<yaml-cpp/yaml.h>
+
+// KDL libraries
+#include \<kdl/chain.hpp>
+#include \<kdl/chainfksolver.hpp>
+#include \<kdl/chainfksolverpos_recursive.hpp>
+#include \<kdl/chainfksolvervel_recursive.hpp>
+#include \<kdl/chainidsolver_recursive_newton_euler.hpp>
+#include \<kdl/chainiksolvervel_pinv.hpp>
+#include \<kdl/chainjnttojacdotsolver.hpp>
+#include \<kdl/chainjnttojacsolver.hpp>
+#include \<kdl/frames.hpp>
+#include \<kdl/frames_io.hpp>
+#include \<kdl_parser/kdl_parser.hpp>
+
+// handling signals: referred from https://github.com/RoboticsCosmos/motion_spec_gen/blob/0b48adc779ae6d6d593c1d7bcdb87e5535482fc3/gen/freddy_uc1_ref_log.cpp
+#include \<csignal>
+
+volatile sig_atomic_t flag = 0;
+
+void handle_signal(int sig)
+{
+    flag = 1;
+    std::cout \<\< "Received signal: " \<\< sig \<\< std::endl;
+}
+>>
+
+
+set_kinematic_tree() ::= <<
+    // urdf and KDL
+    KDL::Tree kinematic_tree;
+    KDL::Chain chain_urdf;
+
+    kdl_parser::treeFromFile("urdf/Kinova_1.urdf", kinematic_tree);
+    kinematic_tree.getChain("base_link", "EndEffector_Link", chain_urdf);
+    const unsigned int NUM_LINKS = chain_urdf.getNrOfSegments();
+>>
+
+
+set_kdl_solvers_and_data_structures() ::= <<
+
+    /* KDL solvers */
+    std::shared_ptr\<KDL::ChainJntToJacDotSolver> jacobDotSolver;
+    std::shared_ptr\<KDL::ChainFkSolverPos_recursive> fkSolverPos;
+    std::shared_ptr\<KDL::ChainFkSolverVel_recursive> fkSolverVel;
+    std::shared_ptr\<KDL::ChainIkSolverVel_pinv> ikSolverAcc;
+    std::shared_ptr\<KDL::ChainIdSolver_RNE> idSolver_left;
+    std::shared_ptr\<KDL::ChainIdSolver_RNE> idSolver_right;
+
+    const KDL::Vector GRAVITY_left(0., 0.0, -9.81);  // [in BL] the negative of this gravity vector is considered as input acceleration for the force controller
+    const KDL::Vector GRAVITY_right(0., 0.0, -9.81); // [in BL] the negative of this gravity vector is considered as input acceleration for the force controller
+
+    jacobDotSolver = std::make_shared\<KDL::ChainJntToJacDotSolver>(chain_urdf);
+    fkSolverPos = std::make_shared\<KDL::ChainFkSolverPos_recursive>(chain_urdf);
+    fkSolverVel = std::make_shared\<KDL::ChainFkSolverVel_recursive>(chain_urdf);
+    ikSolverAcc = std::make_shared\<KDL::ChainIkSolverVel_pinv>(chain_urdf);
+    idSolver_left = std::make_shared\<KDL::ChainIdSolver_RNE>(chain_urdf, GRAVITY_left);
+    idSolver_right = std::make_shared\<KDL::ChainIdSolver_RNE>(chain_urdf, GRAVITY_right);
+
+    // transformations
+    const KDL::Vector BL_x_axis_wrt_GF_left(1.0, 0.0, 0.0);
+    const KDL::Vector BL_y_axis_wrt_GF_left(0.0, 1.0, 0.0);
+    const KDL::Vector BL_z_axis_wrt_GF_left(0.0, 0.0, 1.0);
+    const KDL::Vector BL_position_wrt_GF_left(0., 0.5, 0.0); // left
+    const KDL::Vector BL_x_axis_wrt_GF_right(1.0, 0.0, 0.0);
+    const KDL::Vector BL_y_axis_wrt_GF_right(0.0, 1.0, 0.0);
+    const KDL::Vector BL_z_axis_wrt_GF_right(0.0, 0.0, 1.0);
+    const KDL::Vector BL_position_wrt_GF_right(0.0, -0.5, 0.0);                                                  // right
+    const KDL::Rotation BL_wrt_GF_left(BL_x_axis_wrt_GF_left, BL_y_axis_wrt_GF_left, BL_z_axis_wrt_GF_left);     // added as columns
+    const KDL::Rotation BL_wrt_GF_right(BL_x_axis_wrt_GF_right, BL_y_axis_wrt_GF_right, BL_z_axis_wrt_GF_right); // added as columns
+    const KDL::Frame BL_wrt_GF_frame_left(BL_wrt_GF_left, BL_position_wrt_GF_left);
+    const KDL::Frame BL_wrt_GF_frame_right(BL_wrt_GF_right, BL_position_wrt_GF_right);
+
+    // end effector Pose
+    KDL::Frame measured_endEffPose_BL_left_arm;
+    KDL::Frame measured_endEffPose_GF_left_arm;
+    KDL::FrameVel measured_endEffTwist_BL_left_arm;
+    KDL::FrameVel measured_endEffTwist_GF_left_arm;
+    KDL::Frame measured_endEffPose_BL_right_arm;
+    KDL::Frame measured_endEffPose_GF_right_arm;
+    KDL::FrameVel measured_endEffTwist_BL_right_arm;
+    KDL::FrameVel measured_endEffTwist_GF_right_arm;
+
+    // Joint variables
+    KDL::JntArray jnt_positions_left(kinova_constants::NUMBER_OF_JOINTS);
+    KDL::JntArray jnt_velocities_left(kinova_constants::NUMBER_OF_JOINTS);   // has only joint velocities of all joints
+    KDL::JntArray jnt_torques_left_read(kinova_constants::NUMBER_OF_JOINTS); // to read from the robot
+    KDL::JntArray jnt_positions_right(kinova_constants::NUMBER_OF_JOINTS);
+    KDL::JntArray jnt_velocities_right(kinova_constants::NUMBER_OF_JOINTS);
+    KDL::JntArray jnt_torques_right_read(kinova_constants::NUMBER_OF_JOINTS); // to read from the robot
+
+    KDL::JntArray jnt_torques_left_cmd(kinova_constants::NUMBER_OF_JOINTS);  // to send to the robot
+    KDL::JntArray jnt_torques_right_cmd(kinova_constants::NUMBER_OF_JOINTS); // to send to the robot
+    KDL::JntArrayVel jnt_velocity_left(kinova_constants::NUMBER_OF_JOINTS);  // has both joint position and joint velocity of all joints
+    KDL::JntArrayVel jnt_velocity_right(kinova_constants::NUMBER_OF_JOINTS); // has both joint position and joint velocity of all joints
+
+    KDL::JntArray jnt_accelerations_left(kinova_constants::NUMBER_OF_JOINTS);
+    KDL::JntArray jnt_accelerations_right(kinova_constants::NUMBER_OF_JOINTS);
+
+    KDL::JntArray zero_jnt_velocities(kinova_constants::NUMBER_OF_JOINTS);
+    zero_jnt_velocities.data.setZero();
+
+    // Link wrenches
+    KDL::Wrenches linkWrenches_GF_left(NUM_LINKS, KDL::Wrench::Zero());
+    KDL::Wrenches linkWrenches_EE_left(NUM_LINKS, KDL::Wrench::Zero());
+    KDL::Wrenches linkWrenches_GF_right(NUM_LINKS, KDL::Wrench::Zero());
+    KDL::Wrenches linkWrenches_EE_right(NUM_LINKS, KDL::Wrench::Zero());
+
+    // cartesian acceleration
+    KDL::Twist xdd_left;
+    KDL::Twist xdd_minus_jd_qd_left;
+    KDL::Twist jd_qd_left;
+    KDL::Twist xdd_right;
+    KDL::Twist xdd_minus_jd_qd_right;
+    KDL::Twist jd_qd_right;
+
+    // joint torques that will be calculated before setting the control mode
+    std::vector\<double> rne_output_jnt_torques_vector_to_set_control_mode_left(kinova_constants::NUMBER_OF_JOINTS);
+    std::vector\<double> rne_output_jnt_torques_vector_to_set_control_mode_right(kinova_constants::NUMBER_OF_JOINTS);
+
+>>
+
+
+initialise_robot_to_control_and_set_torque_control_mode() ::= <<
+
+    kinova_mediator kinova_left;  // 192.168.1.10 (KINOVA_GEN3_1)
+    kinova_mediator kinova_right; // 192.168.1.12 (KINOVA_GEN3_2)
+
+    // robot communication
+    if (robots_to_control == robot_controlled::DUAL_KINOVA_GEN3_ARMS || robots_to_control == robot_controlled::KINOVA_GEN3_1_LEFT)
+    {
+        kinova_left.kinova_id = KINOVA_GEN3_1;
+        kinova_left.initialize(kinova_environment::REAL, robot_id::KINOVA_GEN3_1,
+                               0.0);
+
+        kinova_feedback(kinova_left, jnt_positions_left, jnt_velocities_left,
+                        jnt_torques_left_read);
+
+        get_end_effector_pose_and_twist(
+            jnt_velocity_left, jnt_positions_left, jnt_velocities_left,
+            measured_endEffPose_BL_left_arm, measured_endEffTwist_BL_left_arm,
+            measured_endEffPose_GF_left_arm, measured_endEffTwist_GF_left_arm,
+            fkSolverPos, fkSolverVel, BL_wrt_GF_frame_left);
+
+        calculate_joint_torques_RNEA(jacobDotSolver, ikSolverAcc, idSolver_left,
+                                     jnt_velocity_left, jd_qd_left, xdd_left,
+                                     xdd_minus_jd_qd_left, jnt_accelerations_left,
+                                     jnt_positions_left, jnt_velocities_left,
+                                     linkWrenches_EE_left, jnt_torques_left_cmd);
+
+        // convert JntArray to double array
+        for (int i = 0; i \< kinova_constants::NUMBER_OF_JOINTS; i++)
+        {
+            rne_output_jnt_torques_vector_to_set_control_mode_left[i] =
+                jnt_torques_left_cmd(i);
+            std::cout \<\< "jnt_torques_left_cmd: [" \<\< i \<\< "]  " \<\< rne_output_jnt_torques_vector_to_set_control_mode_left[i] \<\< std::endl;
+        }
+        kinova_left.set_control_mode(control_mode::TORQUE, rne_output_jnt_torques_vector_to_set_control_mode_left.data());
+    }
+
+    if (robots_to_control == robot_controlled::DUAL_KINOVA_GEN3_ARMS || robots_to_control == robot_controlled::KINOVA_GEN3_2_RIGHT)
+    {
+        kinova_right.kinova_id = KINOVA_GEN3_2;
+        kinova_right.initialize(kinova_environment::REAL, robot_id::KINOVA_GEN3_2,
+                                0.0);
+
+        kinova_feedback(kinova_right, jnt_positions_right, jnt_velocities_right,
+                        jnt_torques_right_read);
+
+        get_end_effector_pose_and_twist(
+            jnt_velocity_right, jnt_positions_right, jnt_velocities_right,
+            measured_endEffPose_BL_right_arm, measured_endEffTwist_BL_right_arm,
+            measured_endEffPose_GF_right_arm, measured_endEffTwist_GF_right_arm,
+            fkSolverPos, fkSolverVel, BL_wrt_GF_frame_right);
+
+        calculate_joint_torques_RNEA(jacobDotSolver, ikSolverAcc, idSolver_right,
+                                     jnt_velocity_right, jd_qd_right, xdd_right,
+                                     xdd_minus_jd_qd_right, jnt_accelerations_right,
+                                     jnt_positions_right, jnt_velocities_right,
+                                     linkWrenches_EE_right, jnt_torques_right_cmd);
+
+        // convert JntArray to double array
+        for (int i = 0; i \< kinova_constants::NUMBER_OF_JOINTS; i++)
+        {
+            rne_output_jnt_torques_vector_to_set_control_mode_right[i] =
+                jnt_torques_right_cmd(i);
+            std::cout \<\< "jnt_torques_right_cmd: [" \<\< i \<\< "]  " \<\< rne_output_jnt_torques_vector_to_set_control_mode_right[i] \<\< std::endl;
+        }
+        kinova_right.set_control_mode(control_mode::TORQUE, rne_output_jnt_torques_vector_to_set_control_mode_right.data());
+    }
+
+
+>>
+

@@ -1,0 +1,53 @@
+{
+    "@context": {
+        "error": "https://controller.org/metamodels/controllers/error#",
+        "ErrorSignal": "error:ErrorSignal",
+        "ErrorFunction": "error:ErrorFunction",
+        "InstantaneousError": "error:InstantaneousError",
+        "DerivativeFromError": "error:DerivativeFromError",
+        "DerivativeFromProcessVariable": "error:DerivativeFromProcessVariable",
+        "IntegralFromStartError": "error:IntegralFromStartError",
+        "IntegralFromRecentTimeWindowError": "error:IntegralFromRecentTimeWindowError",
+        "ErrorBasedOnConstraint": "error:ErrorBasedOnConstraint",
+        "measured_quantity": {
+            "@id": "error:measured_quantity",
+            "@type": "@id"
+        },
+        "reference_quantity": {
+            "@id": "error:reference_quantity",
+            "@type": "@id"
+        },
+        "integral_time_window_length": {
+            "@id": "error:integral_time_window_length",
+            "@type": "@id"
+        },
+        "time_period": {
+            "@id": "error:time_period",
+            "@type": "@id"
+        },
+        "quantity_to_integrate": {
+            "@id": "error:quantity_to_integrate",
+            "@type": "@id"
+        },
+        "differentiated_data": {
+            "@id": "error:differentiated_data",
+            "@type": "@id"
+        },
+        "integrated_data": {
+            "@id": "error:integrated_data",
+            "@type": "@id"
+        },
+        "error_data": {
+            "@id": "error:error_data",
+            "@type": "@id"
+        },
+        "current_value": {
+            "@id": "error:current_value",
+            "@type": "@id"
+        },
+        "previous_value": {
+            "@id": "error:previous_value",
+            "@type": "@id"
+        }
+    }
+}

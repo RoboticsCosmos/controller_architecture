@@ -16,8 +16,8 @@ void less_than_monitor(const double *value_to_compare,
 }
 
 void less_than_equal_to_monitor(const double *value_to_compare,
-                       const double *target_value,
-                       bool *detection_flag)
+                                const double *target_value,
+                                bool *detection_flag)
 {
     if (*value_to_compare <= *target_value)
     {
@@ -44,8 +44,8 @@ void greater_than_monitor(const double *value_to_compare,
 }
 
 void greater_than_equal_to_monitor(const double *value_to_compare,
-                          const double *target_value,
-                          bool *detection_flag)
+                                   const double *target_value,
+                                   bool *detection_flag)
 {
     if (*value_to_compare >= *target_value)
     {
@@ -58,11 +58,26 @@ void greater_than_equal_to_monitor(const double *value_to_compare,
 }
 
 void in_interval_monitor(const double *value_to_compare,
-                         const double *in_interval_upper_bound,
-                         const double *in_interval_lower_bound,
+                         const double *target_value,
+                         const double *tolerance,
                          bool *detection_flag)
 {
-    if (*value_to_compare < *in_interval_upper_bound && *value_to_compare > *in_interval_lower_bound)
+    if (*value_to_compare > *target_value - *tolerance && *value_to_compare < *target_value + *tolerance)
+    {
+        *detection_flag = true;
+    }
+    else
+    {
+        *detection_flag = false;
+    }
+}
+
+void out_of_interval_monitor(const double *value_to_compare,
+                               const double *target_value,
+                               const double *tolerance,
+                               bool *detection_flag)
+{
+    if (*value_to_compare < *target_value - *tolerance || *value_to_compare > *target_value + *tolerance)
     {
         *detection_flag = true;
     }
@@ -74,10 +89,69 @@ void in_interval_monitor(const double *value_to_compare,
 
 void equality_monitor(const double *value_to_compare,
                       const double *target_value,
-                      const double *epsilon,
                       bool *detection_flag)
 {
-    if (fabs(*value_to_compare - *target_value) < *epsilon)
+    if (fabs(*value_to_compare - *target_value) == 0)
+    {
+        *detection_flag = true;
+    }
+    else
+    {
+        *detection_flag = false;
+    }
+}
+
+void greater_than_upper_limit_monitor(const double *value_to_compare,
+                                      const double *target_value,
+                                      const double *tolerance,
+                                      bool *detection_flag)
+{
+    if (*value_to_compare > *target_value + *tolerance)
+    {
+        *detection_flag = true;
+    }
+    else
+    {
+        *detection_flag = false;
+    }
+}
+
+void greater_than_lower_limit_monitor(const double *value_to_compare,
+                                      const double *target_value,
+                                      const double *tolerance,
+                                      bool *detection_flag)
+{
+    if (*value_to_compare > *target_value - *tolerance)
+    {
+        *detection_flag = true;
+    }
+    else
+    {
+        *detection_flag = false;
+    }
+}
+
+void lower_than_lower_limit_monitor(const double *value_to_compare,
+                                    const double *target_value,
+                                    const double *tolerance,
+                                    bool *detection_flag)
+{
+    if (*value_to_compare < *target_value - *tolerance)
+    {
+        *detection_flag = true;
+    }
+    else
+    {
+        *detection_flag = false;
+    }
+}
+
+void lower_than_upper_limit_monitor(const double *value_to_compare,
+                                    const double *target_value,
+                                    const double *tolerance,
+                                    bool *detection_flag)
+{
+    if (*value_to_compare < *target_value + *tolerance)
     {
         *detection_flag = true;
     }

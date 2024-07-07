@@ -8,9 +8,7 @@
         "EmergencyStop": "plan:EmergencyStop",
         "StateParameters": "plan:StateParameters",
         "Action": "plan:Action",
-        "Behavior": "plan:Behavior",
-        "ConstraintBasedScheduleSequenceCall": "plan:ConstraintBasedScheduleSequenceCall",
-        "MonitorBasedScheduleSequenceCall": "plan:MonitorBasedScheduleSequenceCall",
+        "MotionSpecification": "plan:MotionSpecification",
 
         "pre_condition": {
             "@id": "plan:pre_condition",
@@ -24,13 +22,8 @@
             "@id": "plan:per_condition",
             "@type": "@id"
         },
-        "constraint_for_schedule": {
-            "@id": "plan:constraint_for_schedule",
-            "@type": "@id",
-            "@container": "@set"
-        },
-        "schedule": {
-            "@id": "plan:schedule",
+        "motion_specification": {
+            "@id": "plan:motion_specification",
             "@type": "@id"
         },
         "monitors": {

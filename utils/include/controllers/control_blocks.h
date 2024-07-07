@@ -85,11 +85,12 @@ extern "C"
     /**
      * @brief differentiate a value
      *
-     * @param input: value to differentiate
+     * @param current_value: value to differentiate
+     * @param previous_value: previous value
      * @param dt: time step
      * @param output: differentiated value
      */
-    void differentiator(const double *input, const double *dt, double *output);
+    void differentiator(const double *current_value, const double *previous_value, const double *dt, double *output);
 
     /**
      * @brief saturate a value
@@ -100,7 +101,6 @@ extern "C"
      */
     void saturation(double *input, const double *lower_limit, const double *upper_limit);
 
-
     /**
      * @brief integrate a value when it is in a desired interval (Clegg integrator)
      *
@@ -109,13 +109,13 @@ extern "C"
      * @param upper_limit: upper limit of the interval
      * @param dt: time step
      * @param output: integrated value
-    */
+     */
     void integrate_when_in_desired_interval(const double *input,
                                             const double *lower_limit,
                                             const double *upper_limit,
                                             const double *dt,
                                             double *output);
-    
+
     /**
      * @brief map a control command to a new range
      *
@@ -157,6 +157,13 @@ extern "C"
      */
     void get_abs(const double *value, double *abs_value);
 
+    /**
+     * @brief set the value of the first variable as the value of the second variable
+     *
+     * @param first: first variable which is constant
+     * @param second: second variable which is updated
+     */
+    void set_value_of_first_to_second_variable(const double *first, double *second);
 
     // /**
     //  * @brief get the proportional term of a PID controller

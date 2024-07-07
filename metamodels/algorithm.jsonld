@@ -1,13 +1,30 @@
 {
   "@context": {
     "algorithm": "https://controller.org/metamodels/algorithm#",
-    
     "Algorithm": "algorithm:Algorithm",
     "Data": "algorithm:Data",
     "UncertainQuantity": "algorithm:UncertainQuantity",
     "Schedule": "algorithm:Schedule",
+    "ScheduleCall": "algorithm:ScheduleCall",
+    "EventBasedScheduleCall": "algorithm:EventBasedScheduleCall",
     "FunctionCall": "algorithm:FunctionCall",
+    "ConstraintController": "algorithm:ConstraintController",
+    "Activity": "algorithm:Activity",
 
+    "algorithm_details": {
+      "@id": "algorithm:algorithm_details",
+      "@type": "@id"
+    },
+    "schedules_of_algorithm": {
+      "@id": "algorithm:schedules_of_algorithm",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "schedule_event_associations": {
+      "@id": "algorithm:schedule_event_associations",
+      "@type": "@id",
+      "@container": "@set"
+    },
     "data_type": {
       "@id": "algorithm:data_type",
       "@type": "xsd:string"
@@ -28,6 +45,28 @@
       "@id": "algorithm:trigger_chain",
       "@type": "@id",
       "@container": "@list"
+    },
+    "associated_controller": {
+      "@id": "algorithm:associated_controller",
+      "@type": "@id"
+    },
+    "constraints_controlled": {
+      "@id": "algorithm:constraints_controlled",
+      "@type": "@id",
+      "@container": "@set"
+    },
+    "constraint_controller": {
+      "@id": "algorithm:constraint_controller",
+      "@type": "@id"
+    },
+    "schedule_to_call": {
+      "@id": "algorithm:schedule_to_call",
+      "@type": "@id"
+    },
+    "desired_events": {
+      "@id": "algorithm:desired_events",
+      "@type": "@id",
+      "@container": "@set"
     }
   }
 }

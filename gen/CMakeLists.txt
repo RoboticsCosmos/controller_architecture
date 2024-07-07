@@ -9,10 +9,13 @@ target_link_libraries(
     orocos-kdl
     control_blocks_binary
     monitors_binary
-    kinova_mediator
-    # ${CMAKE_CURRENT_SOURCE_DIR}/../kinova_mediator/kinova_api/lib/release/libKortexApiCpp.a
+    yaml-cpp
+    kdl_parser
+    ${CMAKE_CURRENT_SOURCE_DIR}/../kinova_mediator/kinova_api/lib/release/libKortexApiCpp.a
+    ${CMAKE_CURRENT_SOURCE_DIR}/../kinova_mediator/build/libkinova_mediator.so
     )
 
+    target_include_directories(use_case_1_binary PUBLIC)
 # set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "output_name")
 
 # set compiler version to c++17

@@ -8,37 +8,49 @@ class ALGORITHM(DefinedNamespace):
     Data: URIRef
     UncertainQuantity: URIRef
     Schedule: URIRef
+    ScheduleCall: URIRef
+    EventBasedScheduleCall: URIRef
     FunctionCall: URIRef
+    ConstraintController: URIRef
+    Activity: URIRef
+    algorithm_details: URIRef
+    schedules_of_algorithm: URIRef
+    schedule_event_associations: URIRef
     data_type: URIRef
     data_name: URIRef
     uncertainty_data: URIRef
     init_value: URIRef
     trigger_chain: URIRef
+    associated_controller: URIRef
+    constraints_controlled: URIRef
+    constraint_controller: URIRef
+    schedule_to_call: URIRef
+    desired_events: URIRef
 
     _NS = Namespace("https://controller.org/metamodels/algorithm#")
-
 
 class ERROR(DefinedNamespace):
 
     ErrorSignal: URIRef
+    ErrorFunction: URIRef
     InstantaneousError: URIRef
     DerivativeFromError: URIRef
     DerivativeFromProcessVariable: URIRef
     IntegralFromStartError: URIRef
     IntegralFromRecentTimeWindowError: URIRef
     ErrorBasedOnConstraint: URIRef
-    measured_value: URIRef
-    value_to_compare_with: URIRef
+    measured_quantity: URIRef
+    reference_quantity: URIRef
     integral_time_window_length: URIRef
     time_period: URIRef
-    quantity_to_differentiate: URIRef
     quantity_to_integrate: URIRef
     differentiated_data: URIRef
     integrated_data: URIRef
     error_data: URIRef
+    current_value: URIRef
+    previous_value: URIRef
 
     _NS = Namespace("https://controller.org/metamodels/controllers/error#")
-
 
 class FUNCTIONS(DefinedNamespace):
 
@@ -48,6 +60,7 @@ class FUNCTIONS(DefinedNamespace):
     Saturation: URIRef
     HeavisideStepFunction: URIRef
     Absolute: URIRef
+    CopyVariableValue: URIRef
     MapOutputToActuationSignal: URIRef
     Sum: URIRef
     Subtract: URIRef
@@ -55,6 +68,8 @@ class FUNCTIONS(DefinedNamespace):
     Scale: URIRef
     Divide: URIRef
     GetCurrentTime: URIRef
+    variable_to_copy_to: URIRef
+    variable_to_copy_from: URIRef
     filtered_data: URIRef
     sign_data: URIRef
     saturated_data: URIRef
@@ -79,16 +94,17 @@ class FUNCTIONS(DefinedNamespace):
 
     _NS = Namespace("https://controller.org/metamodels/controllers/functions#")
 
-
 class CONTROLLER(DefinedNamespace):
 
     Controller: URIRef
     Plant: URIRef
     Signal: URIRef
-    ControllerCommand: URIRef
+    ControlCommand: URIRef
     Setpoint: URIRef
     Feedback: URIRef
     TimePeriod: URIRef
+    ctr_functions: URIRef
+    ctr_data_structures: URIRef
     controller_name: URIRef
     controller_output: URIRef
     desired_time_period_val: URIRef
@@ -100,7 +116,6 @@ class CONTROLLER(DefinedNamespace):
     actuation_signal: URIRef
 
     _NS = Namespace("https://controller.org/metamodels/controllers/controller#")
-
 
 class ABAG(DefinedNamespace):
 
@@ -116,7 +131,6 @@ class ABAG(DefinedNamespace):
     adaptive_gain_limits: URIRef
 
     _NS = Namespace("https://controller.org/metamodels/controllers/ABAG/abag#")
-
 
 class PID_CONTROLLER(DefinedNamespace):
 
@@ -158,7 +172,6 @@ class PID_CONTROLLER(DefinedNamespace):
 
     _NS = Namespace("https://controller.org/metamodels/controllers/PID/pid_controller#")
 
-
 class IMPEDANCE_CONTROLLER(DefinedNamespace):
 
     ImpedanceController: URIRef
@@ -173,38 +186,39 @@ class IMPEDANCE_CONTROLLER(DefinedNamespace):
     init_inertia_param: URIRef
     init_damping_param: URIRef
 
-    _NS = Namespace(
-        "https://controller.org/metamodels/controllers/ForceControl/impedance_controller#"
-    )
-
+    _NS = Namespace("https://controller.org/metamodels/controllers/ForceControl/impedance_controller#")
 
 class MONITOR(DefinedNamespace):
 
     Monitor: URIRef
+    Constraint: URIRef
     LessThanConstraint: URIRef
     LessThanEqualToConstraint: URIRef
     GreaterThanConstraint: URIRef
     GreaterThanEqualToConstraint: URIRef
     InIntervalConstraint: URIRef
+    OutOfIntervalConstraint: URIRef
     EqualConstraint: URIRef
-    Event: URIRef
-    Constraint: URIRef
+    ConstraintMonitor: URIRef
+    GreaterThanUpperLimitConstraint: URIRef
+    GreaterThanLowerLimitConstraint: URIRef
+    LowerThanLowerLimitConstraint: URIRef
+    LowerThanUpperLimitConstraint: URIRef
+    ConstraintToEvent: URIRef
+    ConstraintToFlag: URIRef
+    EventMonitor: URIRef
     in_interval_lower_bound: URIRef
     in_interval_upper_bound: URIRef
-    equality_tolerance: URIRef
+    tolerance: URIRef
     constraint_to_monitor: URIRef
     quantity_to_compare: URIRef
-    reference_quantity: URIRef
+    quantity_to_compare_with: URIRef
     flag_or_event_to_check: URIRef
-    flag: URIRef
-    flag_value_change_from: URIRef
-    flag_value_change_to: URIRef
-    event_name: URIRef
+    flag_set_by_monitor: URIRef
+    event_emitted_by_monitor: URIRef
+    operator: URIRef
 
-    _NS = Namespace(
-        "https://controller.org/metamodels/architecture_components/monitor#"
-    )
-
+    _NS = Namespace("https://controller.org/metamodels/architecture_components/monitor#")
 
 class PLAN(DefinedNamespace):
 
@@ -215,14 +229,11 @@ class PLAN(DefinedNamespace):
     EmergencyStop: URIRef
     StateParameters: URIRef
     Action: URIRef
-    Behavior: URIRef
-    ConstraintBasedScheduleSequenceCall: URIRef
-    MonitorBasedScheduleSequenceCall: URIRef
+    MotionSpecification: URIRef
     pre_condition: URIRef
     post_condition: URIRef
     per_condition: URIRef
-    constraint_for_schedule: URIRef
-    schedule: URIRef
+    motion_specification: URIRef
     monitors: URIRef
     action: URIRef
     set_of_states: URIRef

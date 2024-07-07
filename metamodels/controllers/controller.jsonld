@@ -5,11 +5,21 @@
         "Controller": "controller:Controller",
         "Plant": "controller:Plant",
         "Signal": "controller:Signal",
-        "ControllerCommand": "controller:ControllerCommand",
+        "ControlCommand": "controller:ControlCommand",
         "Setpoint": "controller:Setpoint",
         "Feedback": "controller:Feedback",
         "TimePeriod": "controller:TimePeriod",
 
+        "ctr_functions": {
+            "@id": "controller:ctr_functions",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "ctr_data_structures": {
+            "@id": "controller:ctr_data_structures",
+            "@type": "@id",
+            "@container": "@set"
+        },
         "controller_name": {
             "@id": "controller:controller_name",
             "@type": "xsd:string"

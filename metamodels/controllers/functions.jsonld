@@ -8,6 +8,7 @@
         "Saturation": "functions:Saturation",
         "HeavisideStepFunction": "functions:HeavisideStepFunction",
         "Absolute": "functions:Absolute",
+        "CopyVariableValue": "functions:CopyVariableValue",
         "MapOutputToActuationSignal": "functions:MapOutputToActuationSignal",
         "Sum": "functions:Sum",
         "Subtract": "functions:Subtract",
@@ -16,6 +17,14 @@
         "Divide": "functions:Divide",
         "GetCurrentTime": "functions:GetCurrentTime",
 
+        "variable_to_copy_to": {
+            "@id": "functions:variable_to_copy_to",
+            "@type": "@id"
+        },
+        "variable_to_copy_from": {
+            "@id": "functions:variable_to_copy_from",
+            "@type": "@id"
+        },
         "filtered_data": {
             "@id": "functions:filtered_data",
             "@type": "@id"

@@ -2,15 +2,22 @@
     "@context": {
         "monitor": "https://controller.org/metamodels/architecture_components/monitor#",
         "Monitor": "monitor:Monitor",
+        "Constraint": "monitor:Constraint",
         "LessThanConstraint": "monitor:LessThanConstraint",
         "LessThanEqualToConstraint": "monitor:LessThanEqualToConstraint",
         "GreaterThanConstraint": "monitor:GreaterThanConstraint",
         "GreaterThanEqualToConstraint": "monitor:GreaterThanEqualToConstraint",
         "InIntervalConstraint": "monitor:InIntervalConstraint",
+        "OutOfIntervalConstraint": "monitor:OutOfIntervalConstraint",
         "EqualConstraint": "monitor:EqualConstraint",
-        "Event": "monitor:Event",
-        "Constraint": "monitor:Constraint",
-
+        "ConstraintMonitor": "monitor:ConstraintMonitor",
+        "GreaterThanUpperLimitConstraint": "monitor:GreaterThanUpperLimitConstraint",
+        "GreaterThanLowerLimitConstraint": "monitor:GreaterThanLowerLimitConstraint",
+        "LowerThanLowerLimitConstraint": "monitor:LowerThanLowerLimitConstraint",
+        "LowerThanUpperLimitConstraint": "monitor:LowerThanUpperLimitConstraint",
+        "ConstraintToEvent": "monitor:ConstraintToEvent",
+        "ConstraintToFlag": "monitor:ConstraintToFlag",
+        "EventMonitor": "monitor:EventMonitor",
 
         "in_interval_lower_bound": {
             "@id": "monitor:in_interval_lower_bound",
@@ -20,8 +27,8 @@
             "@id": "monitor:in_interval_upper_bound",
             "@type": "@id"
         },
-        "equality_tolerance": {
-            "@id": "monitor:equality_tolerance",
+        "tolerance": {
+            "@id": "monitor:tolerance",
             "@type": "@id"
         },
         "constraint_to_monitor": {
@@ -32,28 +39,24 @@
             "@id": "monitor:quantity_to_compare",
             "@type": "@id"
         },
-        "reference_quantity": {
-            "@id": "monitor:reference_quantity",
+        "quantity_to_compare_with": {
+            "@id": "monitor:quantity_to_compare_with",
             "@type": "@id"
         },
         "flag_or_event_to_check": {
             "@id": "monitor:flag_or_event_to_check",
             "@type": "@id"
         },
-        "flag": {
-            "@id": "monitor:flag",
+        "flag_set_by_monitor": {
+            "@id": "monitor:flag_set_by_monitor",
             "@type": "@id"
         },
-        "flag_value_change_from": {
-            "@id": "monitor:flag_value_change_from",
-            "@type": "xsd:string"
+        "event_emitted_by_monitor": {
+            "@id": "monitor:event_emitted_by_monitor",
+            "@type": "@id"
         },
-        "flag_value_change_to": {
-            "@id": "monitor:flag_value_change_to",
-            "@type": "xsd:string"
-        },
-        "event_name": {
-            "@id": "monitor:event_name",
+        "operator": {
+            "@id": "monitor:operator",
             "@type": "xsd:string"
         }
     }

@@ -1,10 +1,10 @@
 
-
 execute_functions_from_list(func_array, functions) ::= <<
 <func_array: {f_name| 
 <({<functions.(f_name).function_call>})(functions.(f_name))>
 }; separator="\n">
 >>
+
 
 initialise_data_structures(data_structures) ::= <<
 <data_structures: {data_id |
@@ -15,28 +15,28 @@ initialise_data_structures(data_structures) ::= <<
 
 handle_dimension_of_control(ctr_arch_specs_node, functions) ::= <<
   // check if any motion specification satisfies pre condition
-  if (!<ctr_arch_specs_node.motion_specification_is_active>)
+  if (!<ctr_arch_specs_node.pre_condition_satisfied>)
   {
   <!execute all functions in pre-condition!>
-  <ctr_arch_specs_node.motion_spec: {motion_spec_node |
+  <ctr_arch_specs_node.motion_specification_states: {motion_spec_node |
   // executing all functions of the pre-condition and checking if any set of flags are true
   <execute_functions_from_list(motion_spec_node.pre_condition.function_names, functions)>
-  if (<motion_spec_node.pre_condition.flag_names:
-    {flag_name | <flag_name>} ; separator=" == true && "> == true)
+
+  if (<if(strip(motion_spec_node.pre_condition.flag_names))><motion_spec_node.pre_condition.flag_names: {flag_name | <flag_name>} ; separator=" && ">) <else>true)<endif>
   {
-    <ctr_arch_specs_node.motion_specification_is_active> = true;
+    <ctr_arch_specs_node.pre_condition_satisfied> = true;
   \}
   }>  }
   // if a pre-condition is satisfied, then execute the motion specification
-  if (<ctr_arch_specs_node.motion_specification_is_active>)
+  if (<ctr_arch_specs_node.pre_condition_satisfied>)
   {
-    <ctr_arch_specs_node.motion_spec: {motion_spec_node |
+    <ctr_arch_specs_node.motion_specification_states: {motion_spec_node |
 // for each motion spec node ...
       <!if pre-cond flags are active!>
         <!execute all post-condition functions!>
         <!check if post-condition flags are true!>
       <!if post-cond flags are true!>
-        <!set motion_specification_is_active as false!>
+        <!set pre_condition_satisfied as false!>
         <!break!>
       <!else!>
         <!for each schedule!>
@@ -45,26 +45,26 @@ handle_dimension_of_control(ctr_arch_specs_node, functions) ::= <<
             <!execute all functions from trigger chain!>
             <!set all event flags to false!>
 // if combination of pre-cond flags are true
-if (<motion_spec_node.pre_condition.flag_names:{flag_name | <flag_name>} ; separator=" == true && "> == true)
+if (<if(strip(motion_spec_node.pre_condition.flag_names))><motion_spec_node.pre_condition.flag_names: {flag_name | <flag_name>} ; separator=" && "> && states_z_axis_left_arm_is_active) <else>true && states_z_axis_left_arm_is_active)<endif>
 {
   // execute all functions in post condition
   <execute_functions_from_list(motion_spec_node.post_condition.function_names, functions)>
   // check if post condition flags are true
-  if (<motion_spec_node.post_condition.flag_names: {flag_name | <flag_name>} ; separator=" == true && "> == true)
+  if (<if(strip(motion_spec_node.post_condition.flag_names))><motion_spec_node.post_condition.flag_names: {flag_name | <flag_name>} ; separator=" && ">) <else>false)<endif>
   {
-    <ctr_arch_specs_node.motion_specification_is_active> = false; <!This is currently allowing one iteration after post condition is satisfied!>
+    <ctr_arch_specs_node.pre_condition_satisfied> = false; <!This is currently allowing one iteration after post condition is satisfied!>
   \}
   else {
     // loop through each schedule and execute corresponding function names in monitors key
   <motion_spec_node.schedules: {schedule_node |
   <execute_functions_from_list(motion_spec_node.schedules.(schedule_node).monitors.function_names, functions)>
   // check if all flags in the schedule are true
-  if (<motion_spec_node.schedules.(schedule_node).monitors.flag_names:
-    {flag_name | <flag_name>} ; separator=" == true && "> == true){
+
+  if (<if(strip(motion_spec_node.schedules.(schedule_node).monitors.event_data))><motion_spec_node.schedules.(schedule_node).monitors.event_data: {flag_name | <flag_name>} ; separator=" && ">) <else>true)<endif>{
     // execute all functions in the trigger chain
     <execute_functions_from_list(motion_spec_node.schedules.(schedule_node).trigger_chain, functions)>
     // set all flags in the schedule to false
-    <motion_spec_node.schedules.(schedule_node).monitors.flag_names: {flag_name | <flag_name> = false;}; separator="\n">
+    <motion_spec_node.schedules.(schedule_node).monitors.event_data: {flag_name | <flag_name> = false;}; separator="\n">
   \}
   }>
   \}
@@ -76,22 +76,8 @@ if (<motion_spec_node.pre_condition.flag_names:{flag_name | <flag_name>} ; separ
 
 loop_through_each_dimension_of_control(ctr_arch_specs_node, functions) ::= <<
 <! <ctr_arch_specs_node.dimension>!>
-// for individual robot
 <ctr_arch_specs_node: {ctr_arch_in_a_dim|
   // for every new dimension in the robot
 <handle_dimension_of_control(ctr_arch_in_a_dim, functions)>
 }>
->>
-
-other_headers() ::= <<
-#include \<matplot/matplot.h>
-#include \<vector>
-#include \<iostream>
-
-#include \<stdio.h>
-#include \<math.h>
-#include \<stdbool.h>
-
-#include "controllers/control_blocks.h"
-#include "functions/monitors.h"
 >>

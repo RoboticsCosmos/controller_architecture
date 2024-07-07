@@ -9,9 +9,6 @@ class FunctionsTranslator:
         self,
         g: rdflib.Graph,
         function_id,
-        arm_name: str,
-        direction_of_specification: str,
-        constraint_id=None,
     ) -> dict:
         from ir_gen.translators import (
             DataTranslator,
@@ -45,7 +42,7 @@ class FunctionsTranslator:
             for argument_id in input_arguments_id:
                 argument_name = g.compute_qname(argument_id)[-1]
                 ir["data_structures"][argument_name] = DataTranslator().translate(
-                    g=g, data_id=input_arguments_id
+                    g=g, data_id=argument_id
                 )
 
             summed_data_id = g.value(
@@ -69,9 +66,9 @@ class FunctionsTranslator:
             ir["functions"][function_name] = dict()
             ir["functions"][function_name]["function_call"] = function_call_name
             ir["functions"][function_name]["arguments"] = input_arguments_names
-            ir["functions"][function_name]["output"] = g.compute_qname(summed_data_id)[
-                -1
-            ]
+            ir["functions"][function_name]["summed_data"] = g.compute_qname(
+                summed_data_id
+            )[-1]
 
         # SUBTRACT: arguments_list, difference_data
         # subtraction(const double *start_value, const double *reduction_value, double *difference)
@@ -103,58 +100,23 @@ class FunctionsTranslator:
             ir["functions"][function_name] = dict()
             ir["functions"][function_name]["function_call"] = function_call_name
             ir["functions"][function_name]["arguments"] = input_arguments_names
-            ir["functions"][function_name]["output"] = g.compute_qname(
+            ir["functions"][function_name]["difference_data"] = g.compute_qname(
                 difference_data_id
             )[-1]
 
         # ErrorBasedOnConstraint, InstantaneousError: error_data
         # subtraction(const double *start_value, const double *reduction_value, double *difference)
-        if "ErrorBasedOnConstraint" in types_of_function_node:
+        if "ErrorFunction" in types_of_function_node:
             if "InstantaneousError" in types_of_function_node:
                 function_call_name = "subtraction"
 
-                # getting associated constraint
-                subject_with_schedule_type_gen = g.subjects(
-                    predicate=rdflib.RDF.type, object=ALGORITHM.Schedule
-                )
-                for subject in subject_with_schedule_type_gen:
-                    objects, _ = helper.get_from_container(
-                        subject_node=subject,
-                        predicate_value=ALGORITHM.trigger_chain,
-                        graph=g
-                    )
-                    if function_id in objects:
-                        schedule_id = subject
-                        break
-
-                controller_call_id = g.value(
-                    predicate=PLAN.schedule, object=schedule_id
-                )
-                constraint_id = g.value(
-                    subject=controller_call_id, predicate=PLAN.constraint_for_schedule
-                )
-
-                # checking if the constraint is of the right type
-                type_of_constraint, _ = helper.get_from_container(
-                    subject_node=constraint_id,
-                    predicate_value=rdflib.RDF.type,
-                    graph=g,
-                    return_just_id_after_hash=True,
-                )
-
-                if "EqualConstraint" not in type_of_constraint:
-                    print(
-                        "[functions.py] [Possible Error] InstantaneousError function only works with EqualConstraint"
-                    )
-                    return None
-
                 # getting attributes of the constraint
                 quantity_to_compare_id = g.value(
-                    subject=constraint_id, predicate=MONITOR.quantity_to_compare
+                    subject=function_id, predicate=ERROR.measured_quantity
                 )
                 quantity_to_compare_name = g.compute_qname(quantity_to_compare_id)[-1]
                 reference_quantity_id = g.value(
-                    subject=constraint_id, predicate=MONITOR.reference_quantity
+                    subject=function_id, predicate=ERROR.reference_quantity
                 )
                 reference_quantity_name = g.compute_qname(reference_quantity_id)[-1]
 
@@ -233,12 +195,12 @@ class FunctionsTranslator:
             ir["functions"][function_name] = dict()
             ir["functions"][function_name]["function_call"] = function_call_name
             ir["functions"][function_name]["arguments"] = input_arguments_names
-            ir["functions"][function_name]["output"] = g.compute_qname(product_data_id)[
-                -1
-            ]
+            ir["functions"][function_name]["product_data"] = g.compute_qname(
+                product_data_id
+            )[-1]
 
-        # DerivativeFromError: time_period, quantity_to_differentiate, differentiated_data
-        # differentiator(const double *input, const double *dt, double *output)
+        # DerivativeFromError: time_period, current_value, previous_value, differentiated_data
+        # void differentiator(const double *current_value, const double *previous_value, const double *dt, double *output)
         if "DerivativeFromError" in types_of_function_node:
             function_call_name = "differentiator"
 
@@ -246,12 +208,16 @@ class FunctionsTranslator:
             time_period_id = g.value(subject=function_id, predicate=ERROR.time_period)
             time_period_name = g.compute_qname(time_period_id)[-1]
 
-            quantity_to_differentiate_id = g.value(
-                subject=function_id, predicate=ERROR.quantity_to_differentiate
+            current_value_id = g.value(
+                subject=function_id, predicate=ERROR.current_value
             )
-            quantity_to_differentiate_name = g.compute_qname(
-                quantity_to_differentiate_id
-            )[-1]
+
+            previous_value_id = g.value(
+                subject=function_id, predicate=ERROR.previous_value
+            )
+
+            current_value_name = g.compute_qname(current_value_id)[-1]
+            previous_value_name = g.compute_qname(previous_value_id)[-1]
 
             differentiated_data_id = g.value(
                 subject=function_id, predicate=ERROR.differentiated_data
@@ -262,9 +228,12 @@ class FunctionsTranslator:
             ir["data_structures"][time_period_name] = DataTranslator().translate(
                 g=g, data_id=time_period_id
             )
-            ir["data_structures"][
-                quantity_to_differentiate_name
-            ] = DataTranslator().translate(g=g, data_id=quantity_to_differentiate_id)
+            ir["data_structures"][current_value_name] = DataTranslator().translate(
+                g=g, data_id=current_value_id
+            )
+            ir["data_structures"][previous_value_name] = DataTranslator().translate(
+                g=g, data_id=previous_value_id
+            )
             ir["data_structures"][
                 differentiated_data_name
             ] = DataTranslator().translate(g=g, data_id=differentiated_data_id)
@@ -274,9 +243,8 @@ class FunctionsTranslator:
             ir["functions"][function_name] = dict()
             ir["functions"][function_name]["function_call"] = function_call_name
             ir["functions"][function_name]["time_period"] = time_period_name
-            ir["functions"][function_name][
-                "quantity_to_differentiate"
-            ] = quantity_to_differentiate_name
+            ir["functions"][function_name]["current_value"] = current_value_name
+            ir["functions"][function_name]["previous_value"] = previous_value_name
             ir["functions"][function_name][
                 "differentiated_data"
             ] = differentiated_data_name
@@ -338,11 +306,17 @@ class FunctionsTranslator:
             saturated_data_name = g.compute_qname(saturated_data_id)[-1]
 
             saturation_limits_ids, _ = helper.get_from_container(
-                subject_node=function_id, predicate_value=FUNCTIONS.saturation_limits, graph=g
+                subject_node=function_id,
+                predicate_value=FUNCTIONS.saturation_limits,
+                graph=g,
             )
 
-            [saturation_lower_limit_id, saturation_upper_limit_id] = saturation_limits_ids
-            saturation_limit_names = [g.compute_qname(x)[-1] for x in saturation_limits_ids]
+            [saturation_lower_limit_id, saturation_upper_limit_id] = (
+                saturation_limits_ids
+            )
+            saturation_limit_names = [
+                g.compute_qname(x)[-1] for x in saturation_limits_ids
+            ]
             saturation_lower_limit_name = saturation_limit_names[0]
             saturation_upper_limit_name = saturation_limit_names[1]
 
@@ -452,5 +426,40 @@ class FunctionsTranslator:
             ir["functions"][function_name]["function_call"] = function_call_name
             ir["functions"][function_name]["input_signal"] = input_signal_name
             ir["functions"][function_name]["absolute_data"] = absolute_data_name
+
+        # CopyVariableValue: variable_to_copy_from, variable_to_copy_to
+        # set_value_of_first_to_second_variable(const double *first, double *second)
+        if "CopyVariableValue" in types_of_function_node:
+            function_call_name = "set_value_of_first_to_second_variable"
+
+            # getting all attributes
+            first_variable_to_copy_from_id = g.value(
+                subject=function_id, predicate=FUNCTIONS.variable_to_copy_from
+            )
+            first_variable_name = g.compute_qname(first_variable_to_copy_from_id)[-1]
+
+            second_variable_to_copy_to_id = g.value(
+                subject=function_id, predicate=FUNCTIONS.variable_to_copy_to
+            )
+            second_variable_name = g.compute_qname(second_variable_to_copy_to_id)[-1]
+
+            # updating the data structures
+            ir["data_structures"][first_variable_name] = DataTranslator().translate(
+                g=g, data_id=first_variable_to_copy_from_id
+            )
+            ir["data_structures"][second_variable_name] = DataTranslator().translate(
+                g=g, data_id=second_variable_to_copy_to_id
+            )
+
+            # updating the functions
+
+            ir["functions"][function_name] = dict()
+            ir["functions"][function_name]["function_call"] = function_call_name
+            ir["functions"][function_name][
+                "first_variable_to_copy_from"
+            ] = first_variable_name
+            ir["functions"][function_name][
+                "second_variable_to_copy_to"
+            ] = second_variable_name
 
         return ir

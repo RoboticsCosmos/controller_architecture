@@ -37,9 +37,9 @@ void integrator(const double *input, const double *dt, double *output)
     *output += *input * *dt;
 }
 
-void differentiator(const double *input, const double *dt, double *output)
+void differentiator(const double *current_value, const double *previous_value, const double *dt, double *output)
 {
-    *output = *input / *dt;
+    *output = (*current_value - *previous_value) / *dt;
 }
 
 void saturation(double *input, const double *lower_limit, const double *upper_limit)
@@ -129,89 +129,94 @@ void get_abs(const double *value, double *abs_value)
         *abs_value = *value;
     }
 }
-    // void get_p_term(const double *kp,
-    //                 const double *error,
-    //                 double *output)
-    // {
-    //     multiply(kp, error, output);
-    // }
 
-    // void get_i_term(const double *ki,
-    //                 const double *error,
-    //                 double *integral_term,
-    //                 const double *dt,
-    //                 double *output)
-    // {
-    //     integrator(error, dt, integral_term);
-    //     multiply(ki, integral_term, output);
-    // }
+void set_value_of_first_to_second_variable(const double *first, double *second)
+{
+    *second = *first;
+}
+// void get_p_term(const double *kp,
+//                 const double *error,
+//                 double *output)
+// {
+//     multiply(kp, error, output);
+// }
 
-    // void get_d_term(const double *kd,
-    //                 const double *error,
-    //                 const double *prev_error,
-    //                 const double *dt,
-    //                 double *output)
-    // {
-    //     // *output = *kd * (*error - *prev_error) / *dt;
-    //     subtraction(error, prev_error, output);
-    //     division(output, dt, output);
-    //     multiply(kd, output, output);
-    // }
+// void get_i_term(const double *ki,
+//                 const double *error,
+//                 double *integral_term,
+//                 const double *dt,
+//                 double *output)
+// {
+//     integrator(error, dt, integral_term);
+//     multiply(ki, integral_term, output);
+// }
 
-    // void pid_controller(const double *kp,
-    //                     const double *ki,
-    //                     const double *kd,
-    //                     const double *setpoint,
-    //                     const double *measured_x,
-    //                     double *prev_error_x,
-    //                     double *error,
-    //                     double *integral_term,
-    //                     const double *dt,
-    //                     double *output)
-    // {
-    //     // initialization
-    //     double p_out, i_out, d_out;
-    //     subtraction(setpoint, measured_x, error);
-    //     get_p_term(kp, error, &p_out);
-    //     integrator(error, dt, integral_term);
-    //     get_i_term(ki, error, integral_term, dt, &i_out);
-    //     get_d_term(kd, error, prev_error_x, dt, &d_out);
+// void get_d_term(const double *kd,
+//                 const double *error,
+//                 const double *prev_error,
+//                 const double *dt,
+//                 double *output)
+// {
+//     // *output = *kd * (*error - *prev_error) / *dt;
+//     subtraction(error, prev_error, output);
+//     division(output, dt, output);
+//     multiply(kd, output, output);
+// }
 
-    //     *prev_error_x = *error;
-    //     summation(&p_out, &i_out, output);
-    //     summation(output, &d_out, output);
-    // }
+// void pid_controller(const double *kp,
+//                     const double *ki,
+//                     const double *kd,
+//                     const double *setpoint,
+//                     const double *measured_x,
+//                     double *prev_error_x,
+//                     double *error,
+//                     double *integral_term,
+//                     const double *dt,
+//                     double *output)
+// {
+//     // initialization
+//     double p_out, i_out, d_out;
+//     subtraction(setpoint, measured_x, error);
+//     get_p_term(kp, error, &p_out);
+//     integrator(error, dt, integral_term);
+//     get_i_term(ki, error, integral_term, dt, &i_out);
+//     get_d_term(kd, error, prev_error_x, dt, &d_out);
 
-    // void pd_controller(double *kp,
-    //                    double *kd,
-    //                    double *setpoint,
-    //                    double *measured_x,
-    //                    double *prev_error_x,
-    //                    double *error,
-    //                    double *dt,
-    //                    double *output)
-    // {
-    //     // initialization
-    //     double p_out, d_out;
-    //     subtraction(setpoint, measured_x, error);
-    //     get_p_term(kp, error, &p_out);
-    //     get_d_term(kd, error, prev_error_x, dt, &d_out);
+//     *prev_error_x = *error;
+//     summation(&p_out, &i_out, output);
+//     summation(output, &d_out, output);
+// }
 
-    //     *prev_error_x = *error;
-    //     summation(&p_out, &d_out, output);
-    // }
+// void pd_controller(double *kp,
+//                    double *kd,
+//                    double *setpoint,
+//                    double *measured_x,
+//                    double *prev_error_x,
+//                    double *error,
+//                    double *dt,
+//                    double *output)
+// {
+//     // initialization
+//     double p_out, d_out;
+//     subtraction(setpoint, measured_x, error);
+//     get_p_term(kp, error, &p_out);
+//     get_d_term(kd, error, prev_error_x, dt, &d_out);
 
-    // void impedance_controller(double *kp,
-    //                           double *kd,
-    //                           double *pos_error,
-    //                           double *vel_setpoint,
-    //                           double *vel_measurement,
-    //                           double *output)
-    // {
-    //     // initialization
-    //     double p_out, d_out, vel_error;
-    //     multiply(kp, pos_error, &p_out);
-    //     subtraction(vel_setpoint, vel_measurement, &vel_error);
-    //     multiply(kd, &vel_error, &d_out);
-    //     summation(&p_out, &d_out, output);
-    // }
+//     *prev_error_x = *error;
+//     summation(&p_out, &d_out, output);
+// }
+
+// void impedance_controller(double *kp,
+//                           double *kd,
+//                           double *pos_error,
+//                           double *vel_setpoint,
+//                           double *vel_measurement,
+//                           double *output)
+// {
+//     // initialization
+//     double p_out, d_out, vel_error;
+//     multiply(kp, pos_error, &p_out);
+//     subtraction(vel_setpoint, vel_measurement, &vel_error);
+//     multiply(kd, &vel_error, &d_out);
+//     summation(&p_out, &d_out, output);
+// }
