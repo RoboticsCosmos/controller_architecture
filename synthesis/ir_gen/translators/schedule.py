@@ -44,7 +44,7 @@ class ScheduleTranslator:
                 return_just_id_after_hash=True,
             )
 
-            if "EventBasedScheduleCall" in types_of_schedule_call_node:
+            if "EventBasedScheduleCallback" in types_of_schedule_call_node:
                 ir["schedules"][schedule_call_node_name] = dict()
                 ir["schedules"][schedule_call_node_name]["trigger_chain"] = []
                 ir["schedules"][schedule_call_node_name]["monitors"] = dict()
@@ -120,7 +120,7 @@ class ScheduleTranslator:
 
             # elif len(types_of_schedule_call_node) == 2:
             #     if (
-            #         "FlagsBasedScheduleCall" in types_of_schedule_call_node
+            #         "FlagsBasedScheduleCallback" in types_of_schedule_call_node
             #         and "MonitorBasedScheduleSequenceCall"
             #         in types_of_schedule_call_node
             #     ):
@@ -204,7 +204,7 @@ class ScheduleTranslator:
             #         "[Possible Error] [schedule.py] more than two types of schedule call node found"
             #     )
 
-        # for given per condition, get all the nodes with "FlagsBasedScheduleCall"
+        # for given per condition, get all the nodes with "FlagsBasedScheduleCallback"
         # and if the condition is a predicate "monitor", then get all nodes with "MonitorBasedScheduleSequenceCall"
         # as the type and corersponding constraint associated with it
 

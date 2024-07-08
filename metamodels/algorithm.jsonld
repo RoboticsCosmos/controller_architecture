@@ -5,12 +5,12 @@
     "Data": "algorithm:Data",
     "UncertainQuantity": "algorithm:UncertainQuantity",
     "Schedule": "algorithm:Schedule",
-    "ScheduleCall": "algorithm:ScheduleCall",
-    "EventBasedScheduleCall": "algorithm:EventBasedScheduleCall",
+    "ScheduleCallback": "algorithm:ScheduleCallback",
+    "EventBasedScheduleCallback": "algorithm:EventBasedScheduleCallback",
     "FunctionCall": "algorithm:FunctionCall",
     "ConstraintController": "algorithm:ConstraintController",
     "Activity": "algorithm:Activity",
-
+    
     "algorithm_details": {
       "@id": "algorithm:algorithm_details",
       "@type": "@id"

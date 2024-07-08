@@ -1,4 +1,3 @@
-from .controller import *
 from .pid_controller import *
 from .functions import *
 from .monitor import *

@@ -235,29 +235,55 @@ def main():
 
                 schedule_node_ids = set()
                 controller_call_node_ids = set()
+                activity_for_the_controller_ids = set()
+
                 # for each per condition
                 for per_condition in per_conditions:
-
-                    node_generator_for_controller_call = g.subjects(
+                    # get the constraint controller associated with the per condition (constraint_controlled). Assumption: one or more controller can be associated with a per condition, but in differernt nodes
+                    node_generator_for_constraint_controller = g.subjects(
                         predicate=ALGORITHM.constraints_controlled, object=per_condition
                     )
 
+                    # new section from here
                     # if generator is empty, then it doesn't enter the for loop
-                    for node_id in node_generator_for_controller_call:
+                    for node_id in node_generator_for_constraint_controller:
 
-                        if node_id not in controller_call_node_ids:
-                            constraint_controller = g.value(
-                                subject=node_id,
-                                predicate=ALGORITHM.constraint_controller,
+                        controller_id = g.value(
+                            subject=node_id,
+                            predicate=ALGORITHM.constraint_controller,
+                        )
+                        # get the activities associated with the controller
+                        activity_for_the_controller_id = g.value(
+                            predicate=ALGORITHM.algorithm_details,
+                            object=controller_id,
+                        )
+
+                        if activity_for_the_controller_id not in activity_for_the_controller_ids:
+                            activity_for_the_controller_ids.add(activity_for_the_controller_id)
+
+                            schedules_id_list, _ = helper.get_from_container(
+                                subject_node=activity_for_the_controller_id,
+                                predicate_value=ALGORITHM.schedules_of_algorithm,
+                                graph=g,
                             )
-                            schedule_of_controller = g.value(
-                                predicate=ALGORITHM.associated_controller,
-                                object=constraint_controller,
-                            )
 
-                            schedule_node_ids.add(schedule_of_controller)
+                            for schedule_id in schedules_id_list:
+                                schedule_node_ids.add(schedule_id)
+                    # until here
 
-                        controller_call_node_ids.add(node_id)
+                    # if generator is empty, then it doesn't enter the for loop
+                    # for node_id in node_generator_for_constraint_controller:
+                    #     if node_id not in controller_call_node_ids:
+                    #         constraint_controller = g.value(
+                    #             subject=node_id,
+                    #             predicate=ALGORITHM.constraint_controller,
+                    #         )
+                    #         schedule_of_controller = g.value(
+                    #             predicate=ALGORITHM.associated_controller,
+                    #             object=constraint_controller,
+                    #         )
+                    #         schedule_node_ids.add(schedule_of_controller)
+                    #     controller_call_node_ids.add(node_id)
 
                 print("[runner.py] schedule_node_ids: ", schedule_node_ids)
                 ir = ScheduleTranslator().translate(
