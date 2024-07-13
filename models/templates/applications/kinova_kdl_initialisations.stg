@@ -136,6 +136,8 @@ initialise_robot_to_control_and_set_torque_control_mode() ::= <<
 
     kinova_mediator kinova_left;  // 192.168.1.10 (KINOVA_GEN3_1)
     kinova_mediator kinova_right; // 192.168.1.12 (KINOVA_GEN3_2)
+    controller_name controller_name_data_right_z = controller_name::PID_CONTROLLER;
+    controller_name controller_name_data_left_z = controller_name::PID_CONTROLLER;
 
     // robot communication
     if (robots_to_control == robot_controlled::DUAL_KINOVA_GEN3_ARMS || robots_to_control == robot_controlled::KINOVA_GEN3_1_LEFT)

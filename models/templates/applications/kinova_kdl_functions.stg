@@ -65,6 +65,14 @@ enum robot_controlled
     KINOVA_GEN3_2_RIGHT = 2,
 };
 
+enum controller_name
+{
+    PD_CONTROLLER = 0,
+    PID_CONTROLLER = 1,
+    FORCE_CONTROLLER = 2,
+    IMPEDANCE_CONTROLLER = 3,
+    P_CONTROLLER = 4,
+};
 >>
 
 

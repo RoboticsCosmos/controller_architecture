@@ -66,20 +66,28 @@ read_from_config_file_and_set_variables() ::= <<
 initialise_logging_file_and_headers() ::= <<
 
     // logging
-    std::string log_file_pid_investigation = "log_files/log_file_pid_investigation.csv";
-    std::ofstream file_pid_investigation(log_file_pid_investigation);
+    std::string log_file_left = "log_files/log_file_left.csv";
+    std::string log_file_right = "log_files/log_file_right.csv";
+    std::ofstream data_stream_log_left(log_file_left);
+    std::ofstream data_stream_log_right(log_file_right);
 
-    if (!file_pid_investigation.is_open())
+    if (!data_stream_log_left.is_open())
     {
-        std::cerr \<\< "Failed to open file: " \<\< log_file_pid_investigation \<\< std::endl;
+        std::cerr \<\< "Failed to open file: " \<\< log_file_left \<\< std::endl;
+        return 0;
+    }
+    if (!data_stream_log_right.is_open())
+    {
+        std::cerr \<\< "Failed to open file: " \<\< log_file_right \<\< std::endl;
         return 0;
     }
     // adding header
-    file_pid_investigation \<\< "time_period_of_complete_controller_cycle_data,measured_lin_pos_z_axis_left_arm_data,measured_lin_vel_z_axis_left_arm_data,lin_vel_error_pid_z_axis_left_arm_data,p_term_lin_vel_z_axis_left_arm_data,d_term_lin_vel_error_z_axis_left_arm_data,d_term_lin_vel_z_axis_left_arm_data,integral_of_vel_term_error_z_axis_left_arm_data,i_term_lin_vel_z_axis_left_arm_data,apply_ee_force_z_axis_left_arm_data\n"; // header
+    data_stream_log_left \<\< "controller_name_data_left_z,time_period_of_complete_controller_cycle_data,measured_lin_pos_z_axis_left_arm_data,measured_lin_vel_z_axis_left_arm_data,lin_vel_error_pid_z_axis_left_arm_data,lin_vel_error_damping_z_axis_left_arm_data,lin_pos_error_stiffness_z_axis_left_arm_data,p_term_lin_vel_z_axis_left_arm_data,d_term_lin_vel_error_z_axis_left_arm_data,d_term_lin_vel_z_axis_left_arm_data,integral_of_vel_term_error_z_axis_left_arm_data,i_term_lin_vel_z_axis_left_arm_data,stiffness_term_lin_z_axis_left_arm_data,damping_term_z_axis_left_arm_data,apply_ee_force_z_axis_left_arm_data\n";
+    data_stream_log_right \<\< "controller_name_data_right_z,time_period_of_complete_controller_cycle_data,measured_lin_pos_z_axis_right_arm_data,measured_lin_vel_z_axis_right_arm_data,lin_vel_error_pid_z_axis_right_arm_data,lin_vel_error_damping_z_axis_right_arm_data,lin_pos_error_stiffness_z_axis_right_arm_data,p_term_lin_vel_z_axis_right_arm_data,d_term_lin_vel_error_z_axis_right_arm_data,d_term_lin_vel_z_axis_right_arm_data,integral_of_vel_term_error_z_axis_right_arm_data,i_term_lin_vel_z_axis_right_arm_data,stiffness_term_lin_z_axis_right_arm_data,damping_term_z_axis_right_arm_data,apply_ee_force_z_axis_right_arm_data\n";
 
-    std::vector\<double> dataArray; // Vector to store data temporarily
     // initialise multi-dimensional array to store data
-    std::vector\<std::array\<double, 10>\> data_pid_investigation;
+    std::vector\<std::array\<double, 15>\> data_array_log_left;
+    std::vector\<std::array\<double, 15>\> data_array_log_right;
     int iterationCount = 0;
 >>
 
@@ -100,16 +108,20 @@ if_interrupt_signal_detected_write_rest_of_data_and_close_files() ::= <<
         {
             // logging
             // Write remaining data to file
-            if (!dataArray.empty())
+            if (!data_array_log_left.empty())
             {
-                // appendDataToFile(file, dataArray);
-                appendDataToFile_dynamic_size(file_pid_investigation, data_pid_investigation);
-                data_pid_investigation.clear();
+                appendDataToFile_dynamic_size(data_stream_log_left, data_array_log_left);
+                data_array_log_left.clear();
             }
 
-            // file.close();
-            // file_ee_pose.close();
-            file_pid_investigation.close();
+            if (!data_array_log_right.empty())
+            {
+                appendDataToFile_dynamic_size(data_stream_log_right, data_array_log_right);
+                data_array_log_right.clear();
+            }
+
+            data_stream_log_left.close();
+            data_stream_log_right.close();
             std::cout \<\< "Data collection completed.\n";
             break;
         }
@@ -155,25 +167,33 @@ set_robot_feedback_to_corresponding_variables() ::= <<
 
 
 update_logging_arrays_and_add_to_file_if_sufficient_data_collected() ::= <<
-        data_pid_investigation.push_back({time_period_of_complete_controller_cycle_data, measured_lin_pos_z_axis_left_arm_data, measured_lin_vel_z_axis_left_arm_data, lin_vel_error_pid_z_axis_left_arm_data, p_term_lin_vel_z_axis_left_arm_data, d_term_lin_vel_error_z_axis_left_arm_data, d_term_lin_vel_z_axis_left_arm_data, integral_of_vel_term_error_z_axis_left_arm_data, i_term_lin_vel_z_axis_left_arm_data, apply_ee_force_z_axis_left_arm_data});
+        data_array_log_left.push_back({controller_name_data_left_z, time_period_of_complete_controller_cycle_data, measured_lin_pos_z_axis_left_arm_data, measured_lin_vel_z_axis_left_arm_data, lin_vel_error_pid_z_axis_left_arm_data, lin_vel_error_damping_z_axis_left_arm_data, lin_pos_error_stiffness_z_axis_left_arm_data, p_term_lin_vel_z_axis_left_arm_data, d_term_lin_vel_error_z_axis_left_arm_data, d_term_lin_vel_z_axis_left_arm_data, integral_of_vel_term_error_z_axis_left_arm_data, i_term_lin_vel_z_axis_left_arm_data, stiffness_term_lin_z_axis_left_arm_data, damping_term_z_axis_left_arm_data, apply_ee_force_z_axis_left_arm_data});
+        data_array_log_right.push_back({controller_name_data_right_z, time_period_of_complete_controller_cycle_data, measured_lin_pos_z_axis_right_arm_data, measured_lin_vel_z_axis_right_arm_data, lin_vel_error_pid_z_axis_right_arm_data, lin_vel_error_damping_z_axis_right_arm_data, lin_pos_error_stiffness_z_axis_right_arm_data, p_term_lin_vel_z_axis_right_arm_data, d_term_lin_vel_error_z_axis_right_arm_data, d_term_lin_vel_z_axis_right_arm_data, integral_of_vel_term_error_z_axis_right_arm_data, i_term_lin_vel_z_axis_right_arm_data, stiffness_term_lin_z_axis_right_arm_data, damping_term_z_axis_right_arm_data, apply_ee_force_z_axis_right_arm_data});
         iterationCount++;
         // Check if we should write to file (every 100 iterations)
         if (iterationCount % SAVE_LOG_EVERY_NTH_STEP == 0)
         {
-            appendDataToFile_dynamic_size(file_pid_investigation, data_pid_investigation);
-            data_pid_investigation.clear();
+            appendDataToFile_dynamic_size(data_stream_log_left, data_array_log_left);
+            appendDataToFile_dynamic_size(data_stream_log_right, data_array_log_right);
+            data_array_log_left.clear();
+            data_array_log_right.clear();
         }
 >>
 
 
 save_remaining_data_before_exiting_the_program() ::= <<
 
-    if (!dataArray.empty())
+    if (!data_array_log_left.empty())
     {
-        appendDataToFile_dynamic_size(file_pid_investigation, data_pid_investigation);
-        data_pid_investigation.clear();
+        appendDataToFile_dynamic_size(data_stream_log_left, data_array_log_left);
+        data_array_log_left.clear();
     }
-    
-    file_pid_investigation.close();
+    if (!data_array_log_right.empty())
+    {
+        appendDataToFile_dynamic_size(data_stream_log_right, data_array_log_right);
+        data_array_log_right.clear();
+    }
+
+    data_stream_log_left.close();
     std::cout \<\< "Data collection completed.\n";
 >>

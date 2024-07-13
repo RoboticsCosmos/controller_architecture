@@ -97,6 +97,15 @@ enum robot_controlled
     KINOVA_GEN3_2_RIGHT = 2,
 };
 
+enum controller_name
+{
+    PD_CONTROLLER = 0,
+    PID_CONTROLLER = 1,
+    FORCE_CONTROLLER = 2,
+    IMPEDANCE_CONTROLLER = 3,
+    P_CONTROLLER = 4,
+};
+
 // Function to append data to the file with dynamic size of vector
 template <size_t N>
 void appendDataToFile_dynamic_size(std::ofstream &file, const std::vector<std::array<double, N>> &data)
@@ -242,6 +251,8 @@ int main()
 
     kinova_mediator kinova_left;  // 192.168.1.10 (KINOVA_GEN3_1)
     kinova_mediator kinova_right; // 192.168.1.12 (KINOVA_GEN3_2)
+    controller_name controller_name_data_right_z = controller_name::PID_CONTROLLER;
+    controller_name controller_name_data_left_z = controller_name::PID_CONTROLLER;
 
     // robot communication
     if (robots_to_control == robot_controlled::DUAL_KINOVA_GEN3_ARMS || robots_to_control == robot_controlled::KINOVA_GEN3_1_LEFT)
@@ -308,6 +319,7 @@ int main()
 
     // initialise all data structures (done)
     double i_term_lin_vel_z_axis_right_arm_data = 0.0;
+    double lin_pos_sp_equality_tolerance_y_axis_right_arm_data = 0.02;
     bool pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_flag = false;
     double damping_lin_z_axis_right_arm_data = -300.0;
     double d_term_lin_vel_error_z_axis_right_arm_data = 0.0;
@@ -315,12 +327,14 @@ int main()
     double lin_pos_sp_equality_tolerance_x_axis_left_arm_data = 0.02;
     double d_gain_lin_vel_z_axis_right_arm_data = -2.5;
     double lin_pos_error_stiffness_z_axis_left_arm_data = 0.0;
+    bool pos_constraint_arm_above_pos_sp_z_axis_right_arm_flag = false;
     bool pos_constraint_arm_above_uncertain_contact_region_z_axis_left_arm_flag = false;
     double integral_of_vel_term_error_z_axis_right_arm_data = 0.0;
     double lin_vel_sp_z_axis_left_arm_data = -0.025;
     double apply_ee_force_x_axis_right_arm_data = 0.0;
     double damping_term_z_axis_left_arm_data = 0.0;
     bool pos_constraint_arm_above_pos_sp_z_axis_left_arm_flag = false;
+    double lin_pos_sp_equality_tolerance_x_axis_right_arm_data = 0.02;
     double p_gain_pos_y_axis_left_arm_data = -50.0;
     bool pos_constraint_arm_in_uncertain_contact_region_z_axis_left_arm_flag = false;
     double lin_zero_vel_z_axis_left_arm_data = 0.0;
@@ -335,9 +349,9 @@ int main()
     bool pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_event = false;
     double i_term_saturation_upper_limit_z_axis_right_arm_data = 5.0;
     double i_term_saturation_lower_limit_z_axis_right_arm_data = -5.0;
+    double force_to_apply_to_table_z_axis_right_arm_data = 5.0;
     double measured_lin_vel_x_axis_left_arm_data = 0.0;
-    double lin_vel_sp_threshold_to_activate_i_z_axis_right_arm_data = 0.005;
-    double previous_lin_vel_error_pid_z_axis_right_arm_data = 0.0;
+    double lin_vel_sp_threshold_to_activate_i_z_axis_right_arm_data = 0.01;
     double damping_lin_z_axis_left_arm_data = -300.0;
     bool pos_out_of_tolerance_about_setpoint_y_axis_left_arm_event = false;
     double apply_ee_force_z_axis_right_arm_data = 0.0;
@@ -349,44 +363,55 @@ int main()
     double measured_lin_pos_y_axis_left_arm_data = 0.0;
     double apply_ee_force_z_axis_left_arm_data = 0.0;
     bool error_outside_threshold_to_deactivate_i_block_z_axis_left_arm_event = false;
+    double lin_pos_error_y_axis_right_arm_data = 0.0;
+    double lin_pos_sp_x_axis_right_arm_data = 0.5;
     double lin_pos_sp_z_axis_left_arm_data = 0.03;
+    bool states_x_axis_right_arm_is_active = false;
     bool states_z_axis_right_arm_is_active = false;
     double stiffness_lin_z_axis_right_arm_data = -100.0;
     bool vel_constraint_zero_vel_z_axis_left_arm_flag = false;
+    bool states_y_axis_right_arm_is_active = false;
     bool pos_out_of_tolerance_about_setpoint_x_axis_left_arm_event = false;
     double measured_lin_pos_x_axis_left_arm_data = 0.0;
     bool vel_constraint_zero_vel_z_axis_right_arm_flag = false;
     double d_term_lin_vel_z_axis_left_arm_data = 0.0;
-    double lin_pos_sp_uncertainty_range_z_axis_right_arm_data = 0.0;
+    double lin_pos_sp_uncertainty_range_z_axis_right_arm_data = 0.1;
     double i_term_lin_vel_z_axis_left_arm_data = 0.0;
-    double lin_pos_sp_y_axis_left_arm_data = 0.3;
-    double i_gain_lin_vel_z_axis_right_arm_data = 0.0;
+    double lin_pos_sp_y_axis_left_arm_data = 0.4;
+    double i_gain_lin_vel_z_axis_right_arm_data = -100.0;
     double lin_pos_sp_x_axis_left_arm_data = 0.5;
     double lin_pos_sp_uncertainty_range_z_axis_left_arm_data = 0.1;
     bool states_y_axis_left_arm_is_active = false;
+    double lin_pos_error_x_axis_right_arm_data = 0.0;
     double damping_term_z_axis_right_arm_data = 0.0;
-    double applied_force_threshold_apply_ee_force_z_axis_right_arm_data = 5.0;
     bool pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_flag = false;
+    double p_gain_pos_x_axis_right_arm_data = -50.0;
     bool pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_flag = false;
     double measured_lin_vel_z_axis_right_arm_data = 0.0;
+    double lin_pos_sp_y_axis_right_arm_data = -0.4;
     double lin_zero_vel_z_axis_right_arm_data = 0.0;
     double stiffness_term_lin_z_axis_right_arm_data = 0.0;
+    bool pos_out_of_tolerance_about_setpoint_x_axis_right_arm_event = false;
     double measured_lin_pos_z_axis_left_arm_data = 0.0;
+    bool pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_event = false;
     double lin_vel_error_damping_z_axis_left_arm_data = 0.0;
     double lin_vel_sp_z_axis_right_arm_data = -0.025;
     double lin_pos_sp_equality_tolerance_z_axis_left_arm_data = 0.005;
     double integral_of_vel_term_error_z_axis_left_arm_data = 0.0;
-    double lin_pos_sp_z_axis_right_arm_data = 0.0;
+    double lin_pos_sp_z_axis_right_arm_data = 0.03;
+    bool pos_constraint_arm_above_pos_sp_z_axis_right_arm_event = false;
     double measured_lin_vel_y_axis_right_arm_data = 0.0;
     double apply_ee_force_y_axis_left_arm_data = 0.0;
     double lin_vel_sp_equality_tolerance_z_axis_left_arm_data = 0.005;
-    bool net_applied_force_greater_than_threshold_z_axis_right_arm_flag = false;
     bool pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_event = false;
     bool error_within_threshold_to_activate_i_block_z_axis_right_arm_event = false;
     double d_term_lin_vel_z_axis_right_arm_data = 0.0;
+    double previous_lin_vel_error_z_axis_right_arm_data = -0.025;
     double force_to_apply_to_table_z_axis_left_arm_data = 5.0;
+    bool pos_out_of_tolerance_about_setpoint_y_axis_right_arm_event = false;
     bool pos_constraint_arm_above_pos_sp_z_axis_left_arm_event = false;
     double measured_lin_vel_x_axis_right_arm_data = 0.0;
+    double p_gain_pos_y_axis_right_arm_data = -50.0;
     double measured_lin_vel_z_axis_left_arm_data = 0.0;
     double lin_pos_error_stiffness_z_axis_right_arm_data = 0.0;
     double measured_lin_vel_y_axis_left_arm_data = 0.0;
@@ -414,20 +439,28 @@ int main()
     double lin_pos_error_x_axis_left_arm_data = 0.0;
 
     // logging
-    std::string log_file_pid_investigation = "log_files/log_file_pid_investigation.csv";
-    std::ofstream file_pid_investigation(log_file_pid_investigation);
+    std::string log_file_left = "log_files/log_file_left.csv";
+    std::string log_file_right = "log_files/log_file_right.csv";
+    std::ofstream data_stream_log_left(log_file_left);
+    std::ofstream data_stream_log_right(log_file_right);
 
-    if (!file_pid_investigation.is_open())
+    if (!data_stream_log_left.is_open())
     {
-        std::cerr << "Failed to open file: " << log_file_pid_investigation << std::endl;
+        std::cerr << "Failed to open file: " << log_file_left << std::endl;
+        return 0;
+    }
+    if (!data_stream_log_right.is_open())
+    {
+        std::cerr << "Failed to open file: " << log_file_right << std::endl;
         return 0;
     }
     // adding header
-    file_pid_investigation << "time_period_of_complete_controller_cycle_data,measured_lin_pos_z_axis_left_arm_data,measured_lin_vel_z_axis_left_arm_data,lin_vel_error_pid_z_axis_left_arm_data,p_term_lin_vel_z_axis_left_arm_data,d_term_lin_vel_error_z_axis_left_arm_data,d_term_lin_vel_z_axis_left_arm_data,integral_of_vel_term_error_z_axis_left_arm_data,i_term_lin_vel_z_axis_left_arm_data,apply_ee_force_z_axis_left_arm_data\n"; // header
+    data_stream_log_left << "controller_name_data_left_z,time_period_of_complete_controller_cycle_data,measured_lin_pos_z_axis_left_arm_data,measured_lin_vel_z_axis_left_arm_data,lin_vel_error_pid_z_axis_left_arm_data,lin_vel_error_damping_z_axis_left_arm_data,lin_pos_error_stiffness_z_axis_left_arm_data,p_term_lin_vel_z_axis_left_arm_data,d_term_lin_vel_error_z_axis_left_arm_data,d_term_lin_vel_z_axis_left_arm_data,integral_of_vel_term_error_z_axis_left_arm_data,i_term_lin_vel_z_axis_left_arm_data,stiffness_term_lin_z_axis_left_arm_data,damping_term_z_axis_left_arm_data,apply_ee_force_z_axis_left_arm_data\n";
+    data_stream_log_right << "controller_name_data_right_z,time_period_of_complete_controller_cycle_data,measured_lin_pos_z_axis_right_arm_data,measured_lin_vel_z_axis_right_arm_data,lin_vel_error_pid_z_axis_right_arm_data,lin_vel_error_damping_z_axis_right_arm_data,lin_pos_error_stiffness_z_axis_right_arm_data,p_term_lin_vel_z_axis_right_arm_data,d_term_lin_vel_error_z_axis_right_arm_data,d_term_lin_vel_z_axis_right_arm_data,integral_of_vel_term_error_z_axis_right_arm_data,i_term_lin_vel_z_axis_right_arm_data,stiffness_term_lin_z_axis_right_arm_data,damping_term_z_axis_right_arm_data,apply_ee_force_z_axis_right_arm_data\n";
 
-    std::vector<double> dataArray; // Vector to store data temporarily
     // initialise multi-dimensional array to store data
-    std::vector<std::array<double, 10>> data_pid_investigation;
+    std::vector<std::array<double, 15>> data_array_log_left;
+    std::vector<std::array<double, 15>> data_array_log_right;
     int iterationCount = 0;
 
     auto start_time_of_task = std::chrono::high_resolution_clock::now(); // start_time_of_task.count() gives time in seconds
@@ -459,16 +492,20 @@ int main()
         {
             // logging
             // Write remaining data to file
-            if (!dataArray.empty())
+            if (!data_array_log_left.empty())
             {
-                // appendDataToFile(file, dataArray);
-                appendDataToFile_dynamic_size(file_pid_investigation, data_pid_investigation);
-                data_pid_investigation.clear();
+                appendDataToFile_dynamic_size(data_stream_log_left, data_array_log_left);
+                data_array_log_left.clear();
             }
 
-            // file.close();
-            // file_ee_pose.close();
-            file_pid_investigation.close();
+            if (!data_array_log_right.empty())
+            {
+                appendDataToFile_dynamic_size(data_stream_log_right, data_array_log_right);
+                data_array_log_right.clear();
+            }
+
+            data_stream_log_left.close();
+            data_stream_log_right.close();
             std::cout << "Data collection completed.\n";
             break;
         }
@@ -550,7 +587,16 @@ int main()
             // executing all functions of the pre-condition and checking if any set of flags are true
             in_interval_monitor(&measured_lin_pos_z_axis_right_arm_data, &lin_pos_sp_z_axis_right_arm_data, &lin_pos_sp_uncertainty_range_z_axis_right_arm_data, &pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_flag);
 
-            if (pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_flag)
+            greater_than_monitor(&measured_lin_pos_z_axis_right_arm_data, &lin_pos_sp_z_axis_right_arm_data, &pos_constraint_arm_above_pos_sp_z_axis_right_arm_flag);
+
+            if (pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_flag && pos_constraint_arm_above_pos_sp_z_axis_right_arm_flag)
+            {
+                states_z_axis_right_arm_is_active = true;
+            }
+            // executing all functions of the pre-condition and checking if any set of flags are true
+            less_than_equal_to_monitor(&measured_lin_pos_z_axis_right_arm_data, &lin_pos_sp_z_axis_right_arm_data, &pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_flag);
+
+            if (pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_flag)
             {
                 states_z_axis_right_arm_is_active = true;
             }
@@ -586,9 +632,9 @@ int main()
 
                         multiply2(&p_gain_z_axis_right_arm_data, &lin_vel_error_pid_z_axis_right_arm_data, &p_term_lin_vel_z_axis_right_arm_data);
 
-                        differentiator(&lin_vel_error_pid_z_axis_right_arm_data, &previous_lin_vel_error_pid_z_axis_right_arm_data, &time_period_of_complete_controller_cycle_data, &d_term_lin_vel_error_z_axis_right_arm_data);
+                        differentiator(&lin_vel_error_pid_z_axis_right_arm_data, &previous_lin_vel_error_z_axis_right_arm_data, &time_period_of_complete_controller_cycle_data, &d_term_lin_vel_error_z_axis_right_arm_data);
 
-                        set_value_of_first_to_second_variable(&lin_vel_error_pid_z_axis_right_arm_data, &previous_lin_vel_error_pid_z_axis_right_arm_data);
+                        set_value_of_first_to_second_variable(&lin_vel_error_pid_z_axis_right_arm_data, &previous_lin_vel_error_z_axis_right_arm_data);
 
                         multiply2(&d_gain_lin_vel_z_axis_right_arm_data, &d_term_lin_vel_error_z_axis_right_arm_data, &d_term_lin_vel_z_axis_right_arm_data);
 
@@ -611,9 +657,9 @@ int main()
 
                         multiply2(&p_gain_z_axis_right_arm_data, &lin_vel_error_pid_z_axis_right_arm_data, &p_term_lin_vel_z_axis_right_arm_data);
 
-                        differentiator(&lin_vel_error_pid_z_axis_right_arm_data, &previous_lin_vel_error_pid_z_axis_right_arm_data, &time_period_of_complete_controller_cycle_data, &d_term_lin_vel_error_z_axis_right_arm_data);
+                        differentiator(&lin_vel_error_pid_z_axis_right_arm_data, &previous_lin_vel_error_z_axis_right_arm_data, &time_period_of_complete_controller_cycle_data, &d_term_lin_vel_error_z_axis_right_arm_data);
 
-                        set_value_of_first_to_second_variable(&lin_vel_error_pid_z_axis_right_arm_data, &previous_lin_vel_error_pid_z_axis_right_arm_data);
+                        set_value_of_first_to_second_variable(&lin_vel_error_pid_z_axis_right_arm_data, &previous_lin_vel_error_z_axis_right_arm_data);
 
                         multiply2(&d_gain_lin_vel_z_axis_right_arm_data, &d_term_lin_vel_error_z_axis_right_arm_data, &d_term_lin_vel_z_axis_right_arm_data);
 
@@ -633,17 +679,13 @@ int main()
             }
             // for each motion spec node ...
             // if combination of pre-cond flags are true
-            if (pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_flag && states_z_axis_right_arm_is_active)
+            if (pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_flag && pos_constraint_arm_above_pos_sp_z_axis_right_arm_flag && states_z_axis_right_arm_is_active)
             {
                 // execute all functions in post condition
                 less_than_equal_to_monitor(&measured_lin_pos_z_axis_right_arm_data, &lin_pos_sp_z_axis_right_arm_data, &pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_flag);
 
-                lower_than_upper_limit_monitor(&measured_lin_vel_z_axis_right_arm_data, &lin_zero_vel_z_axis_right_arm_data, &lin_vel_sp_equality_tolerance_z_axis_right_arm_data, &vel_constraint_zero_vel_z_axis_right_arm_flag);
-
-                greater_than_monitor(&apply_ee_force_z_axis_right_arm_data, &applied_force_threshold_apply_ee_force_z_axis_right_arm_data, &net_applied_force_greater_than_threshold_z_axis_right_arm_flag);
-
                 // check if post condition flags are true
-                if (pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_flag && vel_constraint_zero_vel_z_axis_right_arm_flag && net_applied_force_greater_than_threshold_z_axis_right_arm_flag)
+                if (pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_flag)
                 {
                     states_z_axis_right_arm_is_active = false;
                 }
@@ -652,9 +694,11 @@ int main()
                     // loop through each schedule and execute corresponding function names in monitors key
                     in_interval_monitor(&measured_lin_pos_z_axis_right_arm_data, &lin_pos_sp_z_axis_right_arm_data, &lin_pos_sp_uncertainty_range_z_axis_right_arm_data, &pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_event);
 
+                    greater_than_monitor(&measured_lin_pos_z_axis_right_arm_data, &lin_pos_sp_z_axis_right_arm_data, &pos_constraint_arm_above_pos_sp_z_axis_right_arm_event);
+
                     // check if all flags in the schedule are true
 
-                    if (pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_event)
+                    if (pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_event && pos_constraint_arm_above_pos_sp_z_axis_right_arm_event)
                     {
                         // execute all functions in the trigger chain
                         subtraction(&lin_pos_sp_z_axis_right_arm_data, &measured_lin_pos_z_axis_right_arm_data, &lin_pos_error_stiffness_z_axis_right_arm_data);
@@ -669,6 +713,122 @@ int main()
 
                         // set all flags in the schedule to false
                         pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_event = false;
+                        pos_constraint_arm_above_pos_sp_z_axis_right_arm_event = false;
+                    }
+                }
+            }
+            // for each motion spec node ...
+            // if combination of pre-cond flags are true
+            if (pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_flag && states_z_axis_right_arm_is_active)
+            {
+                // execute all functions in post condition
+                // check if post condition flags are true
+                if (false)
+                {
+                    states_z_axis_right_arm_is_active = false;
+                }
+                else
+                {
+                    // loop through each schedule and execute corresponding function names in monitors key
+                    less_than_equal_to_monitor(&measured_lin_pos_z_axis_right_arm_data, &lin_pos_sp_z_axis_right_arm_data, &pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_event);
+
+                    // check if all flags in the schedule are true
+
+                    if (pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_event)
+                    {
+                        // execute all functions in the trigger chain
+                        set_value_of_first_to_second_variable(&force_to_apply_to_table_z_axis_right_arm_data, &apply_ee_force_z_axis_right_arm_data);
+
+                        // set all flags in the schedule to false
+                        pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_event = false;
+                    }
+                }
+            }
+        }
+        // for every new dimension in the robot
+        // check if any motion specification satisfies pre condition
+        if (!states_x_axis_right_arm_is_active)
+        {
+            // executing all functions of the pre-condition and checking if any set of flags are true
+
+            if (true)
+            {
+                states_x_axis_right_arm_is_active = true;
+            }
+        }
+        // if a pre-condition is satisfied, then execute the motion specification
+        if (states_x_axis_right_arm_is_active)
+        {
+            // for each motion spec node ...
+            // if combination of pre-cond flags are true
+            if (true && states_x_axis_right_arm_is_active)
+            {
+                // execute all functions in post condition
+                // check if post condition flags are true
+                if (false)
+                {
+                    states_x_axis_right_arm_is_active = false;
+                }
+                else
+                {
+                    // loop through each schedule and execute corresponding function names in monitors key
+                    out_of_interval_monitor(&measured_lin_pos_x_axis_right_arm_data, &lin_pos_sp_x_axis_right_arm_data, &lin_pos_sp_equality_tolerance_x_axis_right_arm_data, &pos_out_of_tolerance_about_setpoint_x_axis_right_arm_event);
+
+                    // check if all flags in the schedule are true
+
+                    if (pos_out_of_tolerance_about_setpoint_x_axis_right_arm_event)
+                    {
+                        // execute all functions in the trigger chain
+                        subtraction(&lin_pos_sp_x_axis_right_arm_data, &measured_lin_pos_x_axis_right_arm_data, &lin_pos_error_x_axis_right_arm_data);
+
+                        multiply2(&p_gain_pos_x_axis_right_arm_data, &lin_pos_error_x_axis_right_arm_data, &apply_ee_force_x_axis_right_arm_data);
+
+                        // set all flags in the schedule to false
+                        pos_out_of_tolerance_about_setpoint_x_axis_right_arm_event = false;
+                    }
+                }
+            }
+        }
+        // for every new dimension in the robot
+        // check if any motion specification satisfies pre condition
+        if (!states_y_axis_right_arm_is_active)
+        {
+            // executing all functions of the pre-condition and checking if any set of flags are true
+
+            if (true)
+            {
+                states_y_axis_right_arm_is_active = true;
+            }
+        }
+        // if a pre-condition is satisfied, then execute the motion specification
+        if (states_y_axis_right_arm_is_active)
+        {
+            // for each motion spec node ...
+            // if combination of pre-cond flags are true
+            if (true && states_y_axis_right_arm_is_active)
+            {
+                // execute all functions in post condition
+                // check if post condition flags are true
+                if (false)
+                {
+                    states_y_axis_right_arm_is_active = false;
+                }
+                else
+                {
+                    // loop through each schedule and execute corresponding function names in monitors key
+                    out_of_interval_monitor(&measured_lin_pos_y_axis_right_arm_data, &lin_pos_sp_y_axis_right_arm_data, &lin_pos_sp_equality_tolerance_y_axis_right_arm_data, &pos_out_of_tolerance_about_setpoint_y_axis_right_arm_event);
+
+                    // check if all flags in the schedule are true
+
+                    if (pos_out_of_tolerance_about_setpoint_y_axis_right_arm_event)
+                    {
+                        // execute all functions in the trigger chain
+                        subtraction(&lin_pos_sp_y_axis_right_arm_data, &measured_lin_pos_y_axis_right_arm_data, &lin_pos_error_y_axis_right_arm_data);
+
+                        multiply2(&p_gain_pos_y_axis_right_arm_data, &lin_pos_error_y_axis_right_arm_data, &apply_ee_force_y_axis_right_arm_data);
+
+                        // set all flags in the schedule to false
+                        pos_out_of_tolerance_about_setpoint_y_axis_right_arm_event = false;
                     }
                 }
             }
@@ -1049,23 +1209,31 @@ int main()
             kinova_right.set_joint_torques(jnt_torques_right_cmd);
         }
 
-        data_pid_investigation.push_back({time_period_of_complete_controller_cycle_data, measured_lin_pos_z_axis_left_arm_data, measured_lin_vel_z_axis_left_arm_data, lin_vel_error_pid_z_axis_left_arm_data, p_term_lin_vel_z_axis_left_arm_data, d_term_lin_vel_error_z_axis_left_arm_data, d_term_lin_vel_z_axis_left_arm_data, integral_of_vel_term_error_z_axis_left_arm_data, i_term_lin_vel_z_axis_left_arm_data, apply_ee_force_z_axis_left_arm_data});
+        data_array_log_left.push_back({controller_name_data_left_z, time_period_of_complete_controller_cycle_data, measured_lin_pos_z_axis_left_arm_data, measured_lin_vel_z_axis_left_arm_data, lin_vel_error_pid_z_axis_left_arm_data, lin_vel_error_damping_z_axis_left_arm_data, lin_pos_error_stiffness_z_axis_left_arm_data, p_term_lin_vel_z_axis_left_arm_data, d_term_lin_vel_error_z_axis_left_arm_data, d_term_lin_vel_z_axis_left_arm_data, integral_of_vel_term_error_z_axis_left_arm_data, i_term_lin_vel_z_axis_left_arm_data, stiffness_term_lin_z_axis_left_arm_data, damping_term_z_axis_left_arm_data, apply_ee_force_z_axis_left_arm_data});
+        data_array_log_right.push_back({controller_name_data_right_z, time_period_of_complete_controller_cycle_data, measured_lin_pos_z_axis_right_arm_data, measured_lin_vel_z_axis_right_arm_data, lin_vel_error_pid_z_axis_right_arm_data, lin_vel_error_damping_z_axis_right_arm_data, lin_pos_error_stiffness_z_axis_right_arm_data, p_term_lin_vel_z_axis_right_arm_data, d_term_lin_vel_error_z_axis_right_arm_data, d_term_lin_vel_z_axis_right_arm_data, integral_of_vel_term_error_z_axis_right_arm_data, i_term_lin_vel_z_axis_right_arm_data, stiffness_term_lin_z_axis_right_arm_data, damping_term_z_axis_right_arm_data, apply_ee_force_z_axis_right_arm_data});
         iterationCount++;
         // Check if we should write to file (every 100 iterations)
         if (iterationCount % SAVE_LOG_EVERY_NTH_STEP == 0)
         {
-            appendDataToFile_dynamic_size(file_pid_investigation, data_pid_investigation);
-            data_pid_investigation.clear();
+            appendDataToFile_dynamic_size(data_stream_log_left, data_array_log_left);
+            appendDataToFile_dynamic_size(data_stream_log_right, data_array_log_right);
+            data_array_log_left.clear();
+            data_array_log_right.clear();
         }
     }
 
-    if (!dataArray.empty())
+    if (!data_array_log_left.empty())
     {
-        appendDataToFile_dynamic_size(file_pid_investigation, data_pid_investigation);
-        data_pid_investigation.clear();
+        appendDataToFile_dynamic_size(data_stream_log_left, data_array_log_left);
+        data_array_log_left.clear();
+    }
+    if (!data_array_log_right.empty())
+    {
+        appendDataToFile_dynamic_size(data_stream_log_right, data_array_log_right);
+        data_array_log_right.clear();
     }
 
-    file_pid_investigation.close();
+    data_stream_log_left.close();
     std::cout << "Data collection completed.\n";
     return 0;
 }

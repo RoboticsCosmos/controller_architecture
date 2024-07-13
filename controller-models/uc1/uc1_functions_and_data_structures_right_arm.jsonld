@@ -24,6 +24,28 @@
       "error_data": "adap_ctr_uc1:lin_vel_error_pid_z_axis_right_arm_data"
     },
     {
+      "@id": "adap_ctr_uc1:error_calculation_lin_pos_p_x_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "ErrorFunction",
+        "InstantaneousError"
+      ],
+      "measured_quantity": "adap_ctr_uc1:measured_lin_pos_x_axis_right_arm_data",
+      "reference_quantity": "adap_ctr_uc1:lin_pos_sp_x_axis_right_arm_data",
+      "error_data": "adap_ctr_uc1:lin_pos_error_x_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc1:error_calculation_lin_pos_p_y_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "ErrorFunction",
+        "InstantaneousError"
+      ],
+      "measured_quantity": "adap_ctr_uc1:measured_lin_pos_y_axis_right_arm_data",
+      "reference_quantity": "adap_ctr_uc1:lin_pos_sp_y_axis_right_arm_data",
+      "error_data": "adap_ctr_uc1:lin_pos_error_y_axis_right_arm_data"
+    },
+    {
       "@id": "adap_ctr_uc1:p_term_calculator_lin_vel_z_axis_right_arm_function",
       "@type": [
         "Functions",
@@ -36,6 +58,30 @@
       "product_data": "adap_ctr_uc1:p_term_lin_vel_z_axis_right_arm_data"
     },
     {
+      "@id": "adap_ctr_uc1:p_term_calculator_lin_pos_x_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Scale"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:p_gain_pos_x_axis_right_arm_data",
+        "adap_ctr_uc1:lin_pos_error_x_axis_right_arm_data"
+      ],
+      "product_data": "adap_ctr_uc1:apply_ee_force_x_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc1:p_term_calculator_lin_pos_y_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Scale"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:p_gain_pos_y_axis_right_arm_data",
+        "adap_ctr_uc1:lin_pos_error_y_axis_right_arm_data"
+      ],
+      "product_data": "adap_ctr_uc1:apply_ee_force_y_axis_right_arm_data"
+    },
+    {
       "@id": "adap_ctr_uc1:derivative_calculator_of_lin_vel_error_z_axis_right_arm_function",
       "@type": [
         "Functions",
@@ -43,7 +89,7 @@
       ],
       "time_period": "adap_ctr_uc1:time_period_of_complete_controller_cycle_data",
       "current_value": "adap_ctr_uc1:lin_vel_error_pid_z_axis_right_arm_data",
-      "previous_value": "adap_ctr_uc1:previous_lin_vel_error_pid_z_axis_right_arm_data",
+      "previous_value": "adap_ctr_uc1:previous_lin_vel_error_z_axis_right_arm_data",
       "differentiated_data": "adap_ctr_uc1:d_term_lin_vel_error_z_axis_right_arm_data"
     },
     {
@@ -182,8 +228,45 @@
         "Functions",
         "CopyVariableValue"
       ],
-      "variable_to_copy_to": "adap_ctr_uc1:previous_lin_vel_error_pid_z_axis_right_arm_data",
+      "variable_to_copy_to": "adap_ctr_uc1:previous_lin_vel_error_z_axis_right_arm_data",
       "variable_to_copy_from": "adap_ctr_uc1:lin_vel_error_pid_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc1:press_downwards_with_constant_force_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "CopyVariableValue"
+      ],
+      "variable_to_copy_to": "adap_ctr_uc1:apply_ee_force_z_axis_right_arm_data",
+      "variable_to_copy_from": "adap_ctr_uc1:force_to_apply_to_table_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc1:lin_pos_error_x_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "Error",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "lin_pos_error",
+      "data_type": "double",
+      "init_value": "0.0",
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc1:lin_pos_error_y_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "Error",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "lin_pos_error",
+      "data_type": "double",
+      "init_value": "0.0",
+      "quantity_kind": "Length",
+      "unit": "M"
     },
     {
       "@id": "adap_ctr_uc1:apply_ee_force_z_axis_right_arm_data",
@@ -191,9 +274,19 @@
         "Data",
         "ControlCommand"
       ],
-      "data_name": "pd_term_summation",
+      "data_name": "ee_force_control_command",
       "data_type": "double",
       "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc1:force_to_apply_to_table_z_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "ControlCommand"
+      ],
+      "data_name": "ee_force_value",
+      "data_type": "double",
+      "init_value": "5.0"
     },
     {
       "@id": "adap_ctr_uc1:lin_pos_sp_z_axis_right_arm_data",
@@ -205,7 +298,35 @@
       ],
       "data_name": "lin_pos_sp",
       "data_type": "double",
-      "init_value": "0.0",
+      "init_value": "0.03",
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc1:lin_pos_sp_x_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "Setpoint",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "lin_pos_sp",
+      "data_type": "double",
+      "init_value": "0.5",
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc1:lin_pos_sp_y_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "Setpoint",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "lin_pos_sp",
+      "data_type": "double",
+      "init_value": "-0.4",
       "quantity_kind": "Length",
       "unit": "M"
     },
@@ -264,6 +385,32 @@
       "unit": "M"
     },
     {
+      "@id": "adap_ctr_uc1:lin_pos_sp_equality_tolerance_x_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "lin_pos_sp_tolerance",
+      "data_type": "double",
+      "init_value": "0.02",
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc1:lin_pos_sp_equality_tolerance_y_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "lin_pos_sp_tolerance",
+      "data_type": "double",
+      "init_value": "0.02",
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
       "@id": "adap_ctr_uc1:lin_vel_sp_threshold_to_activate_i_z_axis_right_arm_data",
       "@type": [
         "Data",
@@ -272,7 +419,7 @@
       ],
       "data_name": "lin_vel_sp",
       "data_type": "double",
-      "init_value": "0.005",
+      "init_value": "0.01",
       "quantity_kind": "Velocity",
       "unit": "M-PER-SEC"
     },
@@ -285,22 +432,9 @@
       ],
       "data_name": "lin_pos_sp_uncertainty_range",
       "data_type": "double",
-      "init_value": "0.0",
+      "init_value": "0.1",
       "quantity_kind": "Length",
       "unit": "M"
-    },
-    {
-      "@id": "adap_ctr_uc1:applied_force_threshold_apply_ee_force_z_axis_right_arm_data",
-      "@type": [
-        "Data",
-        "QuantityKind",
-        "Quantity"
-      ],
-      "data_name": "applied_force_threshold",
-      "data_type": "double",
-      "init_value": "5.0",
-      "quantity_kind": "Force",
-      "unit": "N"
     },
     {
       "@id": "adap_ctr_uc1:p_gain_z_axis_right_arm_data",
@@ -308,6 +442,20 @@
       "data_name": "p_gain",
       "data_type": "double",
       "init_value": "-80.0"
+    },
+    {
+      "@id": "adap_ctr_uc1:p_gain_pos_x_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "p_gain",
+      "data_type": "double",
+      "init_value": "-50.0"
+    },
+    {
+      "@id": "adap_ctr_uc1:p_gain_pos_y_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "p_gain",
+      "data_type": "double",
+      "init_value": "-50.0"
     },
     {
       "@id": "adap_ctr_uc1:p_term_lin_vel_z_axis_right_arm_data",
@@ -331,13 +479,13 @@
       "init_value": "0.0"
     },
     {
-      "@id": "adap_ctr_uc1:previous_lin_vel_error_pid_z_axis_right_arm_data",
+      "@id": "adap_ctr_uc1:previous_lin_vel_error_z_axis_right_arm_data",
       "@type": [
         "Data"
       ],
       "data_name": "previous_difference_from_reference_value",
       "data_type": "double",
-      "init_value": "0.0"
+      "init_value": "-0.025"
     },
     {
       "@id": "adap_ctr_uc1:d_term_lin_vel_error_z_axis_right_arm_data",
@@ -372,7 +520,7 @@
       "@type": "Data",
       "data_name": "i_gain",
       "data_type": "double",
-      "init_value": "0.0"
+      "init_value": "-100.0"
     },
     {
       "@id": "adap_ctr_uc1:i_term_lin_vel_z_axis_right_arm_data",
@@ -438,9 +586,44 @@
       "init_value": "0.0"
     },
     {
+      "@id": "adap_ctr_uc1:pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_event",
+      "@type": "Data",
+      "data_name": "pos_constraint_arm_below_setpoint_contact_region",
+      "data_type": "bool",
+      "init_value": "false"
+    },
+    {
+      "@id": "adap_ctr_uc1:pos_out_of_tolerance_about_setpoint_x_axis_right_arm_event",
+      "@type": "Data",
+      "data_name": "pos_constraint_setpoint",
+      "data_type": "bool",
+      "init_value": "false"
+    },
+    {
+      "@id": "adap_ctr_uc1:pos_out_of_tolerance_about_setpoint_y_axis_right_arm_event",
+      "@type": "Data",
+      "data_name": "pos_constraint_setpoint",
+      "data_type": "bool",
+      "init_value": "false"
+    },
+    {
       "@id": "adap_ctr_uc1:pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_event",
       "@type": "Data",
       "data_name": "pos_constraint_arm_above_uncertain_contact_region",
+      "data_type": "bool",
+      "init_value": "false"
+    },
+    {
+      "@id": "adap_ctr_uc1:pos_constraint_arm_above_pos_sp_z_axis_right_arm_flag",
+      "@type": "Data",
+      "data_name": "pos_constraint_arm_above_pos_sp",
+      "data_type": "bool",
+      "init_value": "false"
+    },
+    {
+      "@id": "adap_ctr_uc1:pos_constraint_arm_above_pos_sp_z_axis_right_arm_event",
+      "@type": "Data",
+      "data_name": "pos_constraint_arm_above_pos_sp",
       "data_type": "bool",
       "init_value": "false"
     },
@@ -490,13 +673,6 @@
       "@id": "adap_ctr_uc1:vel_constraint_zero_vel_z_axis_right_arm_flag",
       "@type": "Data",
       "data_name": "vel_constraint_zero_vel",
-      "data_type": "bool",
-      "init_value": "false"
-    },
-    {
-      "@id": "adap_ctr_uc1:net_applied_force_greater_than_threshold_z_axis_right_arm_flag",
-      "@type": "Data",
-      "data_name": "net_applied_force_greater_than_threshold",
       "data_type": "bool",
       "init_value": "false"
     },
