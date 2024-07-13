@@ -321,6 +321,7 @@ int main()
     double apply_ee_force_x_axis_right_arm_data = 0.0;
     double damping_term_z_axis_left_arm_data = 0.0;
     bool pos_constraint_arm_above_pos_sp_z_axis_left_arm_flag = false;
+    double p_gain_pos_y_axis_left_arm_data = -50.0;
     bool pos_constraint_arm_in_uncertain_contact_region_z_axis_left_arm_flag = false;
     double lin_zero_vel_z_axis_left_arm_data = 0.0;
     double stiffness_lin_z_axis_left_arm_data = -100.0;
@@ -338,6 +339,7 @@ int main()
     double lin_vel_sp_threshold_to_activate_i_z_axis_right_arm_data = 0.005;
     double previous_lin_vel_error_pid_z_axis_right_arm_data = 0.0;
     double damping_lin_z_axis_left_arm_data = -300.0;
+    bool pos_out_of_tolerance_about_setpoint_y_axis_left_arm_event = false;
     double apply_ee_force_z_axis_right_arm_data = 0.0;
     double time_period_of_complete_controller_cycle_data = 0.0;
     double lin_vel_error_pid_z_axis_left_arm_data = 0.0;
@@ -346,7 +348,6 @@ int main()
     double p_gain_z_axis_left_arm_data = -80.0;
     double measured_lin_pos_y_axis_left_arm_data = 0.0;
     double apply_ee_force_z_axis_left_arm_data = 0.0;
-    double applied_force_threshold_apply_ee_force_z_axis_left_arm_data = 5.0;
     bool error_outside_threshold_to_deactivate_i_block_z_axis_left_arm_event = false;
     double lin_pos_sp_z_axis_left_arm_data = 0.03;
     bool states_z_axis_right_arm_is_active = false;
@@ -358,9 +359,11 @@ int main()
     double d_term_lin_vel_z_axis_left_arm_data = 0.0;
     double lin_pos_sp_uncertainty_range_z_axis_right_arm_data = 0.0;
     double i_term_lin_vel_z_axis_left_arm_data = 0.0;
+    double lin_pos_sp_y_axis_left_arm_data = 0.3;
     double i_gain_lin_vel_z_axis_right_arm_data = 0.0;
     double lin_pos_sp_x_axis_left_arm_data = 0.5;
     double lin_pos_sp_uncertainty_range_z_axis_left_arm_data = 0.1;
+    bool states_y_axis_left_arm_is_active = false;
     double damping_term_z_axis_right_arm_data = 0.0;
     double applied_force_threshold_apply_ee_force_z_axis_right_arm_data = 5.0;
     bool pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_flag = false;
@@ -390,6 +393,7 @@ int main()
     bool states_x_axis_left_arm_is_active = false;
     double measured_lin_pos_z_axis_right_arm_data = 0.0;
     double measured_lin_pos_y_axis_right_arm_data = 0.0;
+    double lin_pos_sp_equality_tolerance_y_axis_left_arm_data = 0.02;
     double i_gain_lin_vel_z_axis_left_arm_data = -100.0;
     double i_term_saturation_lower_limit_z_axis_left_arm_data = -5.0;
     double d_gain_lin_vel_z_axis_left_arm_data = -2.5;
@@ -406,6 +410,7 @@ int main()
     bool error_within_threshold_to_activate_i_block_z_axis_left_arm_event = false;
     double lin_vel_sp_threshold_to_activate_i_z_axis_left_arm_data = 0.01;
     bool error_outside_threshold_to_deactivate_i_block_z_axis_right_arm_event = false;
+    double lin_pos_error_y_axis_left_arm_data = 0.0;
     double lin_pos_error_x_axis_left_arm_data = 0.0;
 
     // logging
@@ -503,7 +508,7 @@ int main()
         time_elapsed = std::chrono::duration<double>(current_time - start_time_of_task);
         previous_time = current_time;
         time_period_of_complete_controller_cycle_data = time_period.count();
-        // std::cout << "time_period: " << time_period_of_complete_controller_cycle_data << std::endl;
+        std::cout << "time_period: " << time_period_of_complete_controller_cycle_data << std::endl;
 
         measured_lin_pos_x_axis_left_arm_data = measured_endEffPose_GF_left_arm.p.x();
         measured_lin_vel_x_axis_left_arm_data = measured_endEffTwist_GF_left_arm.GetTwist().vel.x();
@@ -531,18 +536,152 @@ int main()
             angle_axis_diff_GF_right_arm = KDL::diff(measured_endEffPose_GF_right_arm.M, desired_endEffPose_GF_right_arm.M);
         }
 
+        // for every new dimension in the robot
+        // check if any motion specification satisfies pre condition
+        if (!states_z_axis_right_arm_is_active)
+        {
+            // executing all functions of the pre-condition and checking if any set of flags are true
+            greater_than_upper_limit_monitor(&measured_lin_pos_z_axis_right_arm_data, &lin_pos_sp_z_axis_right_arm_data, &lin_pos_sp_uncertainty_range_z_axis_right_arm_data, &pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_flag);
 
+            if (pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_flag)
+            {
+                states_z_axis_right_arm_is_active = true;
+            }
+            // executing all functions of the pre-condition and checking if any set of flags are true
+            in_interval_monitor(&measured_lin_pos_z_axis_right_arm_data, &lin_pos_sp_z_axis_right_arm_data, &lin_pos_sp_uncertainty_range_z_axis_right_arm_data, &pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_flag);
+
+            if (pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_flag)
+            {
+                states_z_axis_right_arm_is_active = true;
+            }
+        }
+        // if a pre-condition is satisfied, then execute the motion specification
+        if (states_z_axis_right_arm_is_active)
+        {
+            // for each motion spec node ...
+            // if combination of pre-cond flags are true
+            if (pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_flag && states_z_axis_right_arm_is_active)
+            {
+                // execute all functions in post condition
+                in_interval_monitor(&measured_lin_pos_z_axis_right_arm_data, &lin_pos_sp_z_axis_right_arm_data, &lin_pos_sp_uncertainty_range_z_axis_right_arm_data, &pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_flag);
+
+                // check if post condition flags are true
+                if (pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_flag)
+                {
+                    states_z_axis_right_arm_is_active = false;
+                }
+                else
+                {
+                    // loop through each schedule and execute corresponding function names in monitors key
+                    greater_than_upper_limit_monitor(&measured_lin_pos_z_axis_right_arm_data, &lin_pos_sp_z_axis_right_arm_data, &lin_pos_sp_uncertainty_range_z_axis_right_arm_data, &pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_event);
+
+                    out_of_interval_monitor(&measured_lin_vel_z_axis_right_arm_data, &lin_vel_sp_z_axis_right_arm_data, &lin_vel_sp_threshold_to_activate_i_z_axis_right_arm_data, &error_outside_threshold_to_deactivate_i_block_z_axis_right_arm_event);
+
+                    // check if all flags in the schedule are true
+
+                    if (pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_event && error_outside_threshold_to_deactivate_i_block_z_axis_right_arm_event)
+                    {
+                        // execute all functions in the trigger chain
+                        subtraction(&lin_vel_sp_z_axis_right_arm_data, &measured_lin_vel_z_axis_right_arm_data, &lin_vel_error_pid_z_axis_right_arm_data);
+
+                        multiply2(&p_gain_z_axis_right_arm_data, &lin_vel_error_pid_z_axis_right_arm_data, &p_term_lin_vel_z_axis_right_arm_data);
+
+                        differentiator(&lin_vel_error_pid_z_axis_right_arm_data, &previous_lin_vel_error_pid_z_axis_right_arm_data, &time_period_of_complete_controller_cycle_data, &d_term_lin_vel_error_z_axis_right_arm_data);
+
+                        set_value_of_first_to_second_variable(&lin_vel_error_pid_z_axis_right_arm_data, &previous_lin_vel_error_pid_z_axis_right_arm_data);
+
+                        multiply2(&d_gain_lin_vel_z_axis_right_arm_data, &d_term_lin_vel_error_z_axis_right_arm_data, &d_term_lin_vel_z_axis_right_arm_data);
+
+                        summation2(&p_term_lin_vel_z_axis_right_arm_data, &d_term_lin_vel_z_axis_right_arm_data, &apply_ee_force_z_axis_right_arm_data);
+
+                        // set all flags in the schedule to false
+                        pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_event = false;
+                        error_outside_threshold_to_deactivate_i_block_z_axis_right_arm_event = false;
+                    }
+                    in_interval_monitor(&measured_lin_vel_z_axis_right_arm_data, &lin_vel_sp_z_axis_right_arm_data, &lin_vel_sp_threshold_to_activate_i_z_axis_right_arm_data, &error_within_threshold_to_activate_i_block_z_axis_right_arm_event);
+
+                    greater_than_upper_limit_monitor(&measured_lin_pos_z_axis_right_arm_data, &lin_pos_sp_z_axis_right_arm_data, &lin_pos_sp_uncertainty_range_z_axis_right_arm_data, &pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_event);
+
+                    // check if all flags in the schedule are true
+
+                    if (error_within_threshold_to_activate_i_block_z_axis_right_arm_event && pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_event)
+                    {
+                        // execute all functions in the trigger chain
+                        subtraction(&lin_vel_sp_z_axis_right_arm_data, &measured_lin_vel_z_axis_right_arm_data, &lin_vel_error_pid_z_axis_right_arm_data);
+
+                        multiply2(&p_gain_z_axis_right_arm_data, &lin_vel_error_pid_z_axis_right_arm_data, &p_term_lin_vel_z_axis_right_arm_data);
+
+                        differentiator(&lin_vel_error_pid_z_axis_right_arm_data, &previous_lin_vel_error_pid_z_axis_right_arm_data, &time_period_of_complete_controller_cycle_data, &d_term_lin_vel_error_z_axis_right_arm_data);
+
+                        set_value_of_first_to_second_variable(&lin_vel_error_pid_z_axis_right_arm_data, &previous_lin_vel_error_pid_z_axis_right_arm_data);
+
+                        multiply2(&d_gain_lin_vel_z_axis_right_arm_data, &d_term_lin_vel_error_z_axis_right_arm_data, &d_term_lin_vel_z_axis_right_arm_data);
+
+                        integrator(&time_period_of_complete_controller_cycle_data, &lin_vel_error_pid_z_axis_right_arm_data, &integral_of_vel_term_error_z_axis_right_arm_data);
+
+                        multiply2(&i_gain_lin_vel_z_axis_right_arm_data, &integral_of_vel_term_error_z_axis_right_arm_data, &i_term_lin_vel_z_axis_right_arm_data);
+
+                        saturation(&i_term_lin_vel_z_axis_right_arm_data, &i_term_saturation_lower_limit_z_axis_right_arm_data, &i_term_saturation_upper_limit_z_axis_right_arm_data);
+
+                        summation3(&p_term_lin_vel_z_axis_right_arm_data, &i_term_lin_vel_z_axis_right_arm_data, &d_term_lin_vel_z_axis_right_arm_data, &apply_ee_force_z_axis_right_arm_data);
+
+                        // set all flags in the schedule to false
+                        error_within_threshold_to_activate_i_block_z_axis_right_arm_event = false;
+                        pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_event = false;
+                    }
+                }
+            }
+            // for each motion spec node ...
+            // if combination of pre-cond flags are true
+            if (pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_flag && states_z_axis_right_arm_is_active)
+            {
+                // execute all functions in post condition
+                less_than_equal_to_monitor(&measured_lin_pos_z_axis_right_arm_data, &lin_pos_sp_z_axis_right_arm_data, &pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_flag);
+
+                lower_than_upper_limit_monitor(&measured_lin_vel_z_axis_right_arm_data, &lin_zero_vel_z_axis_right_arm_data, &lin_vel_sp_equality_tolerance_z_axis_right_arm_data, &vel_constraint_zero_vel_z_axis_right_arm_flag);
+
+                greater_than_monitor(&apply_ee_force_z_axis_right_arm_data, &applied_force_threshold_apply_ee_force_z_axis_right_arm_data, &net_applied_force_greater_than_threshold_z_axis_right_arm_flag);
+
+                // check if post condition flags are true
+                if (pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_flag && vel_constraint_zero_vel_z_axis_right_arm_flag && net_applied_force_greater_than_threshold_z_axis_right_arm_flag)
+                {
+                    states_z_axis_right_arm_is_active = false;
+                }
+                else
+                {
+                    // loop through each schedule and execute corresponding function names in monitors key
+                    in_interval_monitor(&measured_lin_pos_z_axis_right_arm_data, &lin_pos_sp_z_axis_right_arm_data, &lin_pos_sp_uncertainty_range_z_axis_right_arm_data, &pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_event);
+
+                    // check if all flags in the schedule are true
+
+                    if (pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_event)
+                    {
+                        // execute all functions in the trigger chain
+                        subtraction(&lin_pos_sp_z_axis_right_arm_data, &measured_lin_pos_z_axis_right_arm_data, &lin_pos_error_stiffness_z_axis_right_arm_data);
+
+                        multiply2(&stiffness_lin_z_axis_right_arm_data, &lin_pos_error_stiffness_z_axis_right_arm_data, &stiffness_term_lin_z_axis_right_arm_data);
+
+                        subtraction(&lin_vel_sp_z_axis_right_arm_data, &measured_lin_vel_z_axis_right_arm_data, &lin_vel_error_damping_z_axis_right_arm_data);
+
+                        multiply2(&damping_lin_z_axis_right_arm_data, &lin_vel_error_damping_z_axis_right_arm_data, &damping_term_z_axis_right_arm_data);
+
+                        summation2(&stiffness_term_lin_z_axis_right_arm_data, &damping_term_z_axis_right_arm_data, &apply_ee_force_z_axis_right_arm_data);
+
+                        // set all flags in the schedule to false
+                        pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_event = false;
+                    }
+                }
+            }
+        }
         // for every new dimension in the robot
         // check if any motion specification satisfies pre condition
         if (!states_z_axis_left_arm_is_active)
         {
-            std::cout  << "Checking which pre-condition is satisfied" << std::endl;
             // executing all functions of the pre-condition and checking if any set of flags are true
             greater_than_upper_limit_monitor(&measured_lin_pos_z_axis_left_arm_data, &lin_pos_sp_z_axis_left_arm_data, &lin_pos_sp_uncertainty_range_z_axis_left_arm_data, &pos_constraint_arm_above_uncertain_contact_region_z_axis_left_arm_flag);
 
-            if (pos_constraint_arm_above_uncertain_contact_region_z_axis_left_arm_flag == true)
+            if (pos_constraint_arm_above_uncertain_contact_region_z_axis_left_arm_flag)
             {
-                std::cout << "PID pre-cond satisfied" << std::endl;
                 states_z_axis_left_arm_is_active = true;
             }
             // executing all functions of the pre-condition and checking if any set of flags are true
@@ -550,18 +689,15 @@ int main()
 
             greater_than_monitor(&measured_lin_pos_z_axis_left_arm_data, &lin_pos_sp_z_axis_left_arm_data, &pos_constraint_arm_above_pos_sp_z_axis_left_arm_flag);
 
-            if (pos_constraint_arm_in_uncertain_contact_region_z_axis_left_arm_flag == true && pos_constraint_arm_above_pos_sp_z_axis_left_arm_flag == true)
+            if (pos_constraint_arm_in_uncertain_contact_region_z_axis_left_arm_flag && pos_constraint_arm_above_pos_sp_z_axis_left_arm_flag)
             {
-                std::cout << "Impedance control pre-cond satisfied" << std::endl;
                 states_z_axis_left_arm_is_active = true;
             }
             // executing all functions of the pre-condition and checking if any set of flags are true
             less_than_equal_to_monitor(&measured_lin_pos_z_axis_left_arm_data, &lin_pos_sp_z_axis_left_arm_data, &pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_flag);
 
-
-            if (pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_flag == true)
+            if (pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_flag)
             {
-                std::cout << "Force control pre-cond satisfied" << std::endl;
                 states_z_axis_left_arm_is_active = true;
             }
         }
@@ -570,17 +706,15 @@ int main()
         {
             // for each motion spec node ...
             // if combination of pre-cond flags are true
-            if (pos_constraint_arm_above_uncertain_contact_region_z_axis_left_arm_flag == true)
+            if (pos_constraint_arm_above_uncertain_contact_region_z_axis_left_arm_flag && states_z_axis_left_arm_is_active)
             {
-                std::cout << "Entered PID" << std::endl;
                 // execute all functions in post condition
                 in_interval_monitor(&measured_lin_pos_z_axis_left_arm_data, &lin_pos_sp_z_axis_left_arm_data, &lin_pos_sp_uncertainty_range_z_axis_left_arm_data, &pos_constraint_arm_in_uncertain_contact_region_z_axis_left_arm_flag);
 
                 // check if post condition flags are true
-                if (pos_constraint_arm_in_uncertain_contact_region_z_axis_left_arm_flag == true)
+                if (pos_constraint_arm_in_uncertain_contact_region_z_axis_left_arm_flag)
                 {
                     states_z_axis_left_arm_is_active = false;
-                    std::cout << "deactivating PID" << std::endl;
                 }
                 else
                 {
@@ -591,9 +725,8 @@ int main()
 
                     // check if all flags in the schedule are true
 
-                    if (pos_constraint_arm_above_uncertain_contact_region_z_axis_left_arm_event == true && error_outside_threshold_to_deactivate_i_block_z_axis_left_arm_event == true)
+                    if (pos_constraint_arm_above_uncertain_contact_region_z_axis_left_arm_event && error_outside_threshold_to_deactivate_i_block_z_axis_left_arm_event)
                     {
-                        std::cout << "PD active" << std::endl;
                         // execute all functions in the trigger chain
                         subtraction(&lin_vel_sp_z_axis_left_arm_data, &measured_lin_vel_z_axis_left_arm_data, &lin_vel_error_pid_z_axis_left_arm_data);
 
@@ -617,9 +750,8 @@ int main()
 
                     // check if all flags in the schedule are true
 
-                    if (error_within_threshold_to_activate_i_block_z_axis_left_arm_event == true && pos_constraint_arm_above_uncertain_contact_region_z_axis_left_arm_event == true)
+                    if (error_within_threshold_to_activate_i_block_z_axis_left_arm_event && pos_constraint_arm_above_uncertain_contact_region_z_axis_left_arm_event)
                     {
-                        std::cout << "PID active" << std::endl;
                         // execute all functions in the trigger chain
                         subtraction(&lin_vel_sp_z_axis_left_arm_data, &measured_lin_vel_z_axis_left_arm_data, &lin_vel_error_pid_z_axis_left_arm_data);
 
@@ -647,21 +779,18 @@ int main()
             }
             // for each motion spec node ...
             // if combination of pre-cond flags are true
-            if (pos_constraint_arm_in_uncertain_contact_region_z_axis_left_arm_flag == true && pos_constraint_arm_above_pos_sp_z_axis_left_arm_flag == true)
+            if (pos_constraint_arm_in_uncertain_contact_region_z_axis_left_arm_flag && pos_constraint_arm_above_pos_sp_z_axis_left_arm_flag && states_z_axis_left_arm_is_active)
             {
-                std::cout << "Impedance entry" << std::endl;
                 // execute all functions in post condition
                 less_than_equal_to_monitor(&measured_lin_pos_z_axis_left_arm_data, &lin_pos_sp_z_axis_left_arm_data, &pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_flag);
 
                 // check if post condition flags are true
-                if (pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_flag == true)
+                if (pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_flag)
                 {
                     states_z_axis_left_arm_is_active = false;
-                    std::cout << "deactivating Impedance" << std::endl;
                 }
                 else
                 {
-                    std::cout << "Impedance checking events for schedule..." << std::endl;
                     // loop through each schedule and execute corresponding function names in monitors key
                     in_interval_monitor(&measured_lin_pos_z_axis_left_arm_data, &lin_pos_sp_z_axis_left_arm_data, &lin_pos_sp_uncertainty_range_z_axis_left_arm_data, &pos_constraint_arm_in_uncertain_contact_region_z_axis_left_arm_event);
 
@@ -669,9 +798,8 @@ int main()
 
                     // check if all flags in the schedule are true
 
-                    if (pos_constraint_arm_in_uncertain_contact_region_z_axis_left_arm_event == true && pos_constraint_arm_above_pos_sp_z_axis_left_arm_event == true)
+                    if (pos_constraint_arm_in_uncertain_contact_region_z_axis_left_arm_event && pos_constraint_arm_above_pos_sp_z_axis_left_arm_event)
                     {
-                        std::cout << "[Executing Impedance]" << std::endl;
                         // execute all functions in the trigger chain
                         subtraction(&lin_pos_sp_z_axis_left_arm_data, &measured_lin_pos_z_axis_left_arm_data, &lin_pos_error_stiffness_z_axis_left_arm_data);
 
@@ -690,14 +818,9 @@ int main()
                 }
             }
             // for each motion spec node ...
-            // // if combination of pre-cond flags are true
-            // std::cout << "pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_flag: " << pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_flag << std::endl;
-             if (pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_flag == true )
+            // if combination of pre-cond flags are true
+            if (pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_flag && states_z_axis_left_arm_is_active)
             {
-                states_z_axis_left_arm_is_active = true;
-
-                std::cout
-                    << "Entered Force" << std::endl;
                 // execute all functions in post condition
                 // check if post condition flags are true
                 if (false)
@@ -708,11 +831,11 @@ int main()
                 {
                     // loop through each schedule and execute corresponding function names in monitors key
                     less_than_equal_to_monitor(&measured_lin_pos_z_axis_left_arm_data, &lin_pos_sp_z_axis_left_arm_data, &pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_event);
+
                     // check if all flags in the schedule are true
 
-                    if (pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_event == true)
+                    if (pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_event)
                     {
-                        std::cout << "[Force]" << std::endl;
                         // execute all functions in the trigger chain
                         set_value_of_first_to_second_variable(&force_to_apply_to_table_z_axis_left_arm_data, &apply_ee_force_z_axis_left_arm_data);
 
@@ -738,7 +861,7 @@ int main()
         {
             // for each motion spec node ...
             // if combination of pre-cond flags are true
-            if (true)
+            if (true && states_x_axis_left_arm_is_active)
             {
                 // execute all functions in post condition
                 // check if post condition flags are true
@@ -753,7 +876,7 @@ int main()
 
                     // check if all flags in the schedule are true
 
-                    if (pos_out_of_tolerance_about_setpoint_x_axis_left_arm_event == true)
+                    if (pos_out_of_tolerance_about_setpoint_x_axis_left_arm_event)
                     {
                         // execute all functions in the trigger chain
                         subtraction(&lin_pos_sp_x_axis_left_arm_data, &measured_lin_pos_x_axis_left_arm_data, &lin_pos_error_x_axis_left_arm_data);
@@ -762,6 +885,50 @@ int main()
 
                         // set all flags in the schedule to false
                         pos_out_of_tolerance_about_setpoint_x_axis_left_arm_event = false;
+                    }
+                }
+            }
+        }
+        // for every new dimension in the robot
+        // check if any motion specification satisfies pre condition
+        if (!states_y_axis_left_arm_is_active)
+        {
+            // executing all functions of the pre-condition and checking if any set of flags are true
+
+            if (true)
+            {
+                states_y_axis_left_arm_is_active = true;
+            }
+        }
+        // if a pre-condition is satisfied, then execute the motion specification
+        if (states_y_axis_left_arm_is_active)
+        {
+            // for each motion spec node ...
+            // if combination of pre-cond flags are true
+            if (true && states_y_axis_left_arm_is_active)
+            {
+                // execute all functions in post condition
+                // check if post condition flags are true
+                if (false)
+                {
+                    states_y_axis_left_arm_is_active = false;
+                }
+                else
+                {
+                    // loop through each schedule and execute corresponding function names in monitors key
+                    out_of_interval_monitor(&measured_lin_pos_y_axis_left_arm_data, &lin_pos_sp_y_axis_left_arm_data, &lin_pos_sp_equality_tolerance_y_axis_left_arm_data, &pos_out_of_tolerance_about_setpoint_y_axis_left_arm_event);
+
+                    // check if all flags in the schedule are true
+
+                    if (pos_out_of_tolerance_about_setpoint_y_axis_left_arm_event)
+                    {
+                        // execute all functions in the trigger chain
+                        subtraction(&lin_pos_sp_y_axis_left_arm_data, &measured_lin_pos_y_axis_left_arm_data, &lin_pos_error_y_axis_left_arm_data);
+
+                        multiply2(&p_gain_pos_y_axis_left_arm_data, &lin_pos_error_y_axis_left_arm_data, &apply_ee_force_y_axis_left_arm_data);
+
+                        // set all flags in the schedule to false
+                        pos_out_of_tolerance_about_setpoint_y_axis_left_arm_event = false;
                     }
                 }
             }

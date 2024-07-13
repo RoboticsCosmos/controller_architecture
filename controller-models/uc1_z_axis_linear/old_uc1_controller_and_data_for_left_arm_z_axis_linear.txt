@@ -1,0 +1,960 @@
+{
+  "@context": [
+    "https://controller.org/metamodels/architecture_components/monitor.jsonld",
+    "https://controller.org/metamodels/architecture_components/plan.jsonld",
+    "https://controller.org/metamodels/controllers/controller.jsonld",
+    "https://controller.org/metamodels/controllers/error.jsonld",
+    "https://controller.org/metamodels/controllers/functions.jsonld",
+    "https://controller.org/metamodels/controllers/PID/pid_controller.jsonld",
+    "https://controller.org/metamodels/controllers/ForceControl/impedance_controller.jsonld",
+    "https://comp-rob2b.github.io/metamodels/qudt.json",
+    "https://controller.org/metamodels/algorithm.jsonld",
+    {
+      "adap_ctr_uc1": "https://controller.org/models/adap_ctr_uc1#",
+      "QuantityKind": "qudt-schema:QuantityKind",
+      "Quantity": "qudt-schema:Quantity"
+    }
+  ],
+  "@graph": [
+    {
+      "@id": "adap_ctr_uc1:current_controller_execution_time_logger_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "GetCurrentTime"
+      ],
+      "current_time_data": "adap_ctr_uc1:current_controller_execution_time_data_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:current_time_period_calculator_p_block_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "Subtract"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:current_controller_execution_time_data_z_axis_left_arm",
+        "adap_ctr_uc1:previous_execution_time_p_block_data_z_axis_left_arm"
+      ],
+      "difference_data": "adap_ctr_uc1:mesured_time_period_data_p_block_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:mesured_time_period_data_p_block_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "mesured_time_period_data_p_block",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:current_time_period_calculator_i_block_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "Subtract"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:current_controller_execution_time_data_z_axis_left_arm",
+        "adap_ctr_uc1:previous_execution_time_i_block_data_z_axis_left_arm"
+      ],
+      "difference_data": "adap_ctr_uc1:mesured_time_period_data_i_block_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:mesured_time_period_data_i_block_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "mesured_time_period_data_i_block",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:current_time_period_calculator_d_block_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "Subtract"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:current_controller_execution_time_data_z_axis_left_arm",
+        "adap_ctr_uc1:previous_execution_time_d_block_data_z_axis_left_arm"
+      ],
+      "difference_data": "adap_ctr_uc1:mesured_time_period_data_d_block_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:mesured_time_period_data_d_block_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "mesured_time_period_data_d_block",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:previous_execution_time_p_block_data_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "previous_time_data_p_block",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:previous_execution_time_i_block_data_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "previous_time_data_i_block",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:previous_execution_time_d_block_data_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "previous_time_data_d_block",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:desired_time_period_data_p_block_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "desired_time_period_data_p_block",
+      "data_type": "double",
+      "init_value": 0.001,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:desired_time_period_data_i_block_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "desired_time_period_data_i_block",
+      "data_type": "double",
+      "init_value": 0.001,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:desired_time_period_data_d_block_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "desired_time_period_data_d_block",
+      "data_type": "double",
+      "init_value": 0.001,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:current_controller_execution_time_data_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "current_controller_execution_time",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:linear_vel_sp_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "linear_vel_sp",
+      "data_type": "double",
+      "quantity_kind": "Velocity",
+      "unit": "M-PER-SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:linear_vel_sp_tolerance_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "linear_vel_sp_tolerance",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Velocity",
+      "unit": "M-PER-SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:linear_pos_sp_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "linear_pos_sp",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc1:measured_linear_vel_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "measured_linear_vel",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Velocity",
+      "unit": "M-PER-SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:measured_linear_pos_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "measured_linear_pos",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc1:summation_pid_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "Sum"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:p_term_z_axis_left_arm",
+        "adap_ctr_uc1:i_term_z_axis_left_arm",
+        "adap_ctr_uc1:d_term_z_axis_left_arm"
+      ],
+      "summed_data": "adap_ctr_uc1:pid_controller_control_command_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:pid_controller_control_command_z_axis_left_arm",
+      "@type": "Data",
+      "data_name": "pid_controller_control_command",
+      "data_type": "double",
+      "init_value": 0.0
+    },
+    {
+      "@id": "adap_ctr_uc1:summation_impedance_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "Sum"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:stiffness_term_z_axis_left_arm_data",
+        "adap_ctr_uc1:damping_term_z_axis_left_arm_data"
+      ],
+      "summed_data": "adap_ctr_uc1:impedance_controller_control_command_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:impedance_controller_control_command_z_axis_left_arm",
+      "@type": "Data",
+      "data_name": "impedance_controller_control_command",
+      "data_type": "double",
+      "init_value": 0.0
+    },
+    {
+      "@id": "adap_ctr_uc1:get_stiffness_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "ConstantReturnValue"
+      ],
+      "constant_return_data": "adap_ctr_uc1:stiffness_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:stiffness_z_axis_left_arm",
+      "@type": "Data",
+      "data_name": "stiffness",
+      "data_type": "double",
+      "init_value": 0.0
+    },
+    {
+      "@id": "adap_ctr_uc1:get_damping_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "ConstantReturnValue"
+      ],
+      "constant_return_data": "adap_ctr_uc1:damping_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:damping_z_axis_left_arm",
+      "@type": "Data",
+      "data_name": "damping",
+      "data_type": "double",
+      "init_value": 0.0
+    },
+    {
+      "@id": "adap_ctr_uc1:get_stiffness_term_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "Multiply"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:stiffness_z_axis_left_arm",
+        "adap_ctr_uc1:pos_error_z_axis_left_arm"
+      ],
+      "product_data": "adap_ctr_uc1:stiffness_term_z_axis_left_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc1:stiffness_term_z_axis_left_arm_data",
+      "@type": "Data",
+      "data_name": "stiffness_term",
+      "data_type": "double",
+      "init_value": 0.0
+    },
+    {
+      "@id": "adap_ctr_uc1:get_damping_term_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "Multiply"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:damping_z_axis_left_arm",
+        "adap_ctr_uc1:difference_2_from_reference_value_z_axis_left_arm"
+      ],
+      "product_data": "adap_ctr_uc1:damping_term_z_axis_left_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc1:damping_term_z_axis_left_arm_data",
+      "@type": "Data",
+      "data_name": "damping_term",
+      "data_type": "double",
+      "init_value": 0.0
+    },
+    {
+      "@id": "adap_ctr_uc1:measured_time_period_data_of_complete_controller_cycle",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "time_period",
+      "data_type": "double",
+      "init_value": 0.001,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:get_vel_error_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "Subtract"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:linear_vel_sp_z_axis_left_arm",
+        "adap_ctr_uc1:measured_linear_vel_z_axis_left_arm"
+      ],
+      "difference_data": "adap_ctr_uc1:vel_error_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:get_difference_1_from_reference_value_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "ErrorBasedOnConstraint"
+      ],
+      "constraint_to_derive_error": "adap_ctr_uc1:vel_constraint_2_z_axis_left_arm",
+      "error_data": "adap_ctr_uc1:difference_1_from_reference_value_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:difference_1_from_reference_value_z_axis_left_arm",
+      "@type": "Data",
+      "data_name": "difference_from_reference_value",
+      "data_type": "double",
+      "init_value": 0.0
+    },
+    {
+      "@id": "adap_ctr_uc1:get_difference_2_from_reference_value_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "GetErrorBasedOnConstraint"
+      ],
+      "constraint_to_derive_error": "adap_ctr_uc1:vel_constraint_2_z_axis_left_arm",
+      "error_data": "adap_ctr_uc1:difference_2_from_reference_value_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:difference_2_from_reference_value_z_axis_left_arm",
+      "@type": "Data",
+      "data_name": "difference_from_reference_value",
+      "data_type": "double",
+      "init_value": 0.0
+    },
+    {
+      "@id": "adap_ctr_uc1:measured_linear_vel_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "measured_linear_vel",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Velocity",
+      "unit": "M-PER-SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:vel_error_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "vel_error",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Velocity",
+      "unit": "M-PER-SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:get_pos_error_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "Subtract"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:linear_pos_sp_z_axis_left_arm",
+        "adap_ctr_uc1:measured_linear_pos_z_axis_left_arm"
+      ],
+      "difference_data": "adap_ctr_uc1:pos_error_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:previous_vel_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "previous_vel",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Velocity",
+      "unit": "M-PER-SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:pos_error_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "pos_error",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc1:p_term_calculator_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "Multiply"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:p_gain_z_axis_left_arm_data",
+        "adap_ctr_uc1:difference_1_from_reference_value_z_axis_left_arm"
+      ],
+      "product_data": "adap_ctr_uc1:p_term_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:p_term_z_axis_left_arm",
+      "@type": "Data",
+      "data_name": "p_term",
+      "data_type": "double",
+      "init_value": 0.0
+    },
+    {
+      "@id": "adap_ctr_uc1:p_gain_z_axis_left_arm_data",
+      "@type": "Data",
+      "data_name": "p_gain",
+      "data_type": "double",
+      "init_value": 0.0
+    },
+    {
+      "@id": "adap_ctr_uc1:get_integral_of_pos_error_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "IntegralFromStartError"
+      ],
+      "time_period": "adap_ctr_uc1:time_period_of_complete_controller_cycle_data",
+      "quantity_to_integrate": "adap_ctr_uc1:difference_1_from_reference_value_z_axis_left_arm",
+      "integrated_data": "adap_ctr_uc1:integral_of_vel_term_error_z_axis_left_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc1:integral_of_vel_term_error_z_axis_left_arm_data",
+      "@type": "Data",
+      "data_name": "vel_error_integral",
+      "data_type": "double",
+      "init_value": 0.0
+    },
+    {
+      "@id": "adap_ctr_uc1:get_i_term_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "Multiply"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:i_gain_z_axis_left_arm",
+        "adap_ctr_uc1:integral_of_vel_term_error_z_axis_left_arm_data"
+      ],
+      "product_data": "adap_ctr_uc1:i_term_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:saturate_i_term_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "Saturation"
+      ],
+      "signal_to_saturate": "adap_ctr_uc1:i_term_z_axis_left_arm",
+      "saturated_data": "adap_ctr_uc1:i_term_z_axis_left_arm",
+      "saturation_limits": [
+        "adap_ctr_uc1:i_term_saturation_lower_limit_z_axis_left_arm_data",
+        "adap_ctr_uc1:i_term_saturation_upper_limit_z_axis_left_arm_data"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc1:i_term_saturation_lower_limit_z_axis_left_arm_data",
+      "@type": "Data",
+      "data_name": "i_term_saturation_lower_limit",
+      "data_type": "double",
+      "init_value": -0.1
+    },
+    {
+      "@id": "adap_ctr_uc1:i_term_saturation_upper_limit_z_axis_left_arm_data",
+      "@type": "Data",
+      "data_name": "i_term_saturation_upper_limit",
+      "data_type": "double",
+      "init_value": 0.1
+    },
+    {
+      "@id": "adap_ctr_uc1:i_term_z_axis_left_arm",
+      "@type": "Data",
+      "data_name": "i_term",
+      "data_type": "double",
+      "init_value": 0.0
+    },
+    {
+      "@id": "adap_ctr_uc1:get_i_gain_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "ConstantReturnValue"
+      ],
+      "constant_return_data": "adap_ctr_uc1:i_gain_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:i_gain_z_axis_left_arm",
+      "@type": "Data",
+      "data_name": "i_gain",
+      "data_type": "double",
+      "init_value": 0.0
+    },
+    {
+      "@id": "adap_ctr_uc1:get_derivative_of_pos_error_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "DerivativeFromError"
+      ],
+      "time_period": "adap_ctr_uc1:time_period_of_complete_controller_cycle_data",
+      "quantity_to_differentiate": "adap_ctr_uc1:difference_1_from_reference_value_z_axis_left_arm",
+      "differentiated_data": "adap_ctr_uc1:d_term_error_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:d_term_error_z_axis_left_arm",
+      "@type": "Data",
+      "data_name": "vel_error_derivative",
+      "data_type": "double",
+      "init_value": 0.0
+    },
+    {
+      "@id": "adap_ctr_uc1:get_d_term_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "Multiply"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:d_gain_z_axis_left_arm",
+        "adap_ctr_uc1:d_term_error_z_axis_left_arm"
+      ],
+      "product_data": "adap_ctr_uc1:d_term_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:d_term_z_axis_left_arm",
+      "@type": "Data",
+      "data_name": "d_term",
+      "data_type": "double",
+      "init_value": 0.0
+    },
+    {
+      "@id": "adap_ctr_uc1:get_d_gain_z_axis_left_arm",
+      "@type": [
+        "Functions",
+        "ConstantReturnValue"
+      ],
+      "constant_return_data": "adap_ctr_uc1:d_gain_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc1:d_gain_z_axis_left_arm",
+      "@type": "Data",
+      "data_name": "d_gain",
+      "data_type": "double",
+      "init_value": 0.0
+    },
+    {
+      "@id": "adap_ctr_uc1:get_current_time_z_axis_left_arm_p_block",
+      "@type": [
+        "Functions",
+        "GetCurrentTime"
+      ],
+      "current_time_data": "adap_ctr_uc1:current_time_data_z_axis_left_arm_p_block"
+    },
+    {
+      "@id": "adap_ctr_uc1:get_current_time_period_z_axis_left_arm_p_block",
+      "@type": [
+        "Functions",
+        "Subtract"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:current_time_data_z_axis_left_arm_p_block",
+        "adap_ctr_uc1:previous_time_data_z_axis_left_arm_p_block"
+      ],
+      "difference_data": "adap_ctr_uc1:mesured_time_period_data_z_axis_left_arm_p_block"
+    },
+    {
+      "@id": "adap_ctr_uc1:mesured_time_period_data_z_axis_left_arm_p_block",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "mesured_time_period_data_p_block",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:previous_time_data_z_axis_left_arm_p_block",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "previous_time_data_p_block",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:desired_time_period_data_z_axis_left_arm_p_block",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "desired_time_period_data_p_block",
+      "data_type": "double",
+      "init_value": 0.001,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:current_time_data_z_axis_left_arm_p_block",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "current_time_data_p_block",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:get_current_time_z_axis_left_arm_i_block",
+      "@type": [
+        "Functions",
+        "GetCurrentTime"
+      ],
+      "current_time_data": "adap_ctr_uc1:current_time_data_z_axis_left_arm_i_block"
+    },
+    {
+      "@id": "adap_ctr_uc1:get_current_time_period_z_axis_left_arm_i_block",
+      "@type": [
+        "Functions",
+        "Subtract"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:current_time_data_z_axis_left_arm_i_block",
+        "adap_ctr_uc1:previous_time_data_z_axis_left_arm_i_block"
+      ],
+      "difference_data": "adap_ctr_uc1:mesured_time_period_data_z_axis_left_arm_i_block"
+    },
+    {
+      "@id": "adap_ctr_uc1:mesured_time_period_data_z_axis_left_arm_i_block",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "mesured_time_period_data_i_block",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:previous_time_data_z_axis_left_arm_i_block",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "previous_time_data_i_block",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:desired_time_period_data_z_axis_left_arm_i_block",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "desired_time_period_data_i_block",
+      "data_type": "double",
+      "init_value": 0.001,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:current_time_data_z_axis_left_arm_i_block",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "current_time_data_i_block",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:get_current_time_z_axis_left_arm_d_block",
+      "@type": [
+        "Functions",
+        "GetCurrentTime"
+      ],
+      "current_time_data": "adap_ctr_uc1:current_time_data_z_axis_left_arm_d_block"
+    },
+    {
+      "@id": "adap_ctr_uc1:get_current_time_period_z_axis_left_arm_d_block",
+      "@type": [
+        "Functions",
+        "Subtract"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:current_time_data_z_axis_left_arm_d_block",
+        "adap_ctr_uc1:previous_time_data_z_axis_left_arm_d_block"
+      ],
+      "difference_data": "adap_ctr_uc1:mesured_time_period_data_z_axis_left_arm_d_block"
+    },
+    {
+      "@id": "adap_ctr_uc1:mesured_time_period_data_z_axis_left_arm_d_block",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "mesured_time_period_data_d_block",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:previous_time_data_z_axis_left_arm_d_block",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "previous_time_data_d_block",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:desired_time_period_data_z_axis_left_arm_d_block",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "desired_time_period_data_d_block",
+      "data_type": "double",
+      "init_value": 0.001,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:current_time_data_z_axis_left_arm_d_block",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "current_time_data_d_block",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Time",
+      "unit": "SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:first_cycle_of_i_block",
+      "@type": "Data",
+      "data_name": "first_cycle_of_i_block_bool",
+      "data_type": "boolean",
+      "init_value": "true"
+    },
+    {
+      "@id": "adap_ctr_uc1:first_cycle_of_d_block",
+      "@type": "Data",
+      "data_name": "first_cycle_of_d_block_bool",
+      "data_type": "boolean",
+      "init_value": "true"
+    },
+    {
+      "@id": "adap_ctr_uc1:linear_pos_sp_uncertainty_range_z_axis_left_arm",
+      "@type": [
+        "Data",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "linear_pos_sp_uncertainty_range",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc1:lin_pos_z_axis_left_arm_sp_minus_abs_uncertainty_range",
+      "@type": [
+        "Functions",
+        "Subtract"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:linear_pos_sp_z_axis_left_arm",
+        "adap_ctr_uc1:linear_pos_sp_uncertainty_range_z_axis_left_arm"
+      ],
+      "difference_data": "adap_ctr_uc1:lin_pos_z_axis_left_arm_sp_minus_abs_uncertainty_range_data"
+    },
+    {
+      "@id": "adap_ctr_uc1:lin_pos_z_axis_left_arm_sp_plus_abs_uncertainty_range",
+      "@type": [
+        "Functions",
+        "Sum"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc1:linear_pos_sp_z_axis_left_arm",
+        "adap_ctr_uc1:linear_pos_sp_uncertainty_range_z_axis_left_arm"
+      ],
+      "summed_data": "adap_ctr_uc1:lin_pos_z_axis_left_arm_sp_plus_abs_uncertainty_range_data"
+    },
+    {
+      "@id": "adap_ctr_uc1:lin_pos_z_axis_left_arm_sp_minus_abs_uncertainty_range_data",
+      "@type": [
+        "Data",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "lin_pos_upper_bound_contact_uncertainty_range",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc1:lin_pos_z_axis_left_arm_sp_plus_abs_uncertainty_range_data",
+      "@type": [
+        "Data",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "lin_pos_lower_bound_contact_uncertainty_range",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc1:adap_ctr_uc1:lin_zero_vel_data",
+      "@type": [
+        "Data",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "lin_zero_vel",
+      "data_type": "double",
+      "init_value": 0.0,
+      "quantity_kind": "Velocity",
+      "unit": "M-PER-SEC"
+    },
+    {
+      "@id": "adap_ctr_uc1:lin_zero_vel_data_tolerance",
+      "@type": [
+        "Data",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "lin_zero_vel_tolerance",
+      "data_type": "double",
+      "init_value": 0.005,
+      "quantity_kind": "Velocity",
+      "unit": "M-PER-SEC"
+    }
+  ]
+}

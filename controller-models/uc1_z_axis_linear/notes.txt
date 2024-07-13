@@ -1,0 +1,11 @@
+,
+    {
+      "Assumption": er"Schedules has function calls in a control activity which are there in a while loop. 
+      All other single time instatiations will be performed before entering it.",
+      "Eg": "Uncertainty limits for the setpoints"
+    }
+
+
+
+{ToDo: time_period_of_complete_controller_cycle calculation, one time calculation like upper limits, lower limits, etc.}
+{Doubts: there are different version of saturation (over the error or over the i_term), in this approoach, this would be writing two different schedules, instead of the types. However, the different integral types can be used in the function type.}

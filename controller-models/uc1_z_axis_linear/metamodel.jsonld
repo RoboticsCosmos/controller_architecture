@@ -1,0 +1,110 @@
+{
+  "@context": [
+    "https://controller.org/metamodels/architecture_components/plan.jsonld",
+    "https://controller.org/metamodels/algorithm.jsonld",
+    {
+      "adap_ctr_uc1": "https://controller.org/models/adap_ctr_uc1#"
+    }
+  ],
+  "@graph": [
+    {
+      "@id": "motion_specification_1",
+      "@type": [
+        "MotionSpecification"
+      ],
+      "pre_condition": [
+        "ms1_pre_constraint_1"
+      ],
+      "per_condition": [
+        "ms1_per_constraint_1"
+      ],
+      "post_condition": [
+        "ms1_post_constraint_1"
+      ]
+    },
+    {
+      "@id": "monitor_1",
+      "@type": [
+        "ConstraintMonitor",
+        "ConstraintToFlag",
+        "ConstraintToEvent"
+      ],
+      "constraint": "ms1_pre_constraint_1",
+      "flag": "ms1_flag_1",
+      "emitted_event": "ms1_mon1_event_1"
+    },
+    {
+      "@id": "monitor_2",
+      "@type": [
+        "ConstraintMonitor",
+        "ConstraintToEvent"
+      ],
+      "constraint": "ms1_per_constraint_1",
+      "emitted_event": "ms1_mon2_event_1"
+    },
+    {
+      "@id": "schedule_call_1",
+      "@type": [
+        "ScheduleCallback"
+      ],
+      "desired_event": "ms1_emitted_event_1",
+      "schedule": "schedule_1"
+    },
+    {
+      "@id": "controller_call_1",
+      "@type": [
+        "ConstraintController"
+      ],
+      "constraints": [
+        "ms1_per_constraint_1"
+      ],
+      "controller": "controller_1"
+    },
+    {
+      "@id": "schedule_1",
+      "@type": [
+        "Schedule"
+      ],
+      "controller": "controller_1",
+      "monitor": "monitor_to_emit_event_for_schedule_call_1",
+      "trigger_chain": [
+        "fn_1, fn2, fn3"
+      ]
+    },
+    {
+      "@id": "controller_1",
+      "@type": [
+        "Controller"
+      ],
+      "functions": [
+        "fn_1",
+        "fn_2",
+        "fn_3"
+      ],
+      "data_structures": [
+        "ms1_measured_quantity_1",
+        "ms1_quantity_to_compare_1",
+        "ms1_error_data_1"
+      ]
+    },
+    {
+      "@id": "fn_1",
+      "@type": [
+        "Function",
+        "ErrorFunction"
+      ],
+      "measured_quantity": "ms1_measured_quantity_1",
+      "quantity_to_compare": "ms1_quantity_to_compare_1",
+      "error_data": "ms1_error_data_1"
+    },
+    {
+      "@id": "ms1_error_data_1",
+      "@type": [
+        "Data",
+        "ErrorData"
+      ],
+      "init_value": "0.0",
+      "data_type": "double"
+    }
+  ]
+}

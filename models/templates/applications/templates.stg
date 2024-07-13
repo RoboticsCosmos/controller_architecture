@@ -45,7 +45,7 @@ handle_dimension_of_control(ctr_arch_specs_node, functions) ::= <<
             <!execute all functions from trigger chain!>
             <!set all event flags to false!>
 // if combination of pre-cond flags are true
-if (<if(strip(motion_spec_node.pre_condition.flag_names))><motion_spec_node.pre_condition.flag_names: {flag_name | <flag_name>} ; separator=" && "> && states_z_axis_left_arm_is_active) <else>true && states_z_axis_left_arm_is_active)<endif>
+if (<if(strip(motion_spec_node.pre_condition.flag_names))><motion_spec_node.pre_condition.flag_names: {flag_name | <flag_name>} ; separator=" && "> && <ctr_arch_specs_node.pre_condition_satisfied>) <else>true && <ctr_arch_specs_node.pre_condition_satisfied>)<endif>
 {
   // execute all functions in post condition
   <execute_functions_from_list(motion_spec_node.post_condition.function_names, functions)>
