@@ -453,7 +453,6 @@
       "@type": [
         "Schedule"
       ],
-      "associated_controller": "adap_ctr_uc1:pd_controller_z_axis_right_arm",
       "trigger_chain": [
         "adap_ctr_uc1:error_calculation_lin_vel_pid_z_axis_right_arm_function",
         "adap_ctr_uc1:p_term_calculator_lin_vel_z_axis_right_arm_function",
@@ -468,7 +467,6 @@
       "@type": [
         "Schedule"
       ],
-      "associated_controller": "adap_ctr_uc1:pid_controller_z_axis_right_arm",
       "trigger_chain": [
         "adap_ctr_uc1:error_calculation_lin_vel_pid_z_axis_right_arm_function",
         "adap_ctr_uc1:p_term_calculator_lin_vel_z_axis_right_arm_function",
@@ -486,7 +484,6 @@
       "@type": [
         "Schedule"
       ],
-      "associated_controller": "adap_ctr_uc1:impedance_controller_z_axis_right_arm",
       "trigger_chain": [
         "adap_ctr_uc1:error_calculation_lin_pos_stiffness_z_axis_right_arm_function",
         "adap_ctr_uc1:stiffness_term_calculator_lin_z_axis_right_arm_function",
@@ -500,7 +497,6 @@
       "@type": [
         "Schedule"
       ],
-      "associated_controller": "adap_ctr_uc1:constant_force_controller_z_axis_right_arm",
       "trigger_chain": [
         "adap_ctr_uc1:press_downwards_with_constant_force_z_axis_right_arm_function"
       ]
@@ -510,7 +506,6 @@
       "@type": [
         "Schedule"
       ],
-      "associated_controller": "adap_ctr_uc1:p_controller_x_axis_right_arm",
       "trigger_chain": [
         "adap_ctr_uc1:error_calculation_lin_pos_p_x_axis_right_arm_function",
         "adap_ctr_uc1:p_term_calculator_lin_pos_x_axis_right_arm_function"
@@ -521,7 +516,6 @@
       "@type": [
         "Schedule"
       ],
-      "associated_controller": "adap_ctr_uc1:p_controller_y_axis_right_arm",
       "trigger_chain": [
         "adap_ctr_uc1:error_calculation_lin_pos_p_y_axis_right_arm_function",
         "adap_ctr_uc1:p_term_calculator_lin_pos_y_axis_right_arm_function"

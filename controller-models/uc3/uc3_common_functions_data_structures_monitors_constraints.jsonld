@@ -1,0 +1,118 @@
+{
+  "@context": [
+    "https://controller.org/metamodels/algorithm.jsonld",
+    "https://controller.org/metamodels/controllers/functions.jsonld",
+    "https://controller.org/metamodels/controllers/error.jsonld",
+    "https://controller.org/metamodels/controllers/controller.jsonld",
+    "https://comp-rob2b.github.io/metamodels/qudt.json",
+    "https://controller.org/metamodels/architecture_components/monitor.jsonld",
+    {
+      "adap_ctr_uc3": "https://controller.org/models/adap_ctr_uc3#"
+    }
+  ],
+  "@graph": [
+    {
+      "@id": "adap_ctr_uc3:pos_constraint_limit_on_both_arms_to_avoid_collison_y_axis",
+      "@type": [
+        "Constraint",
+        "LessThanEqualToConstraint"
+      ],
+      "quantity_to_compare": "adap_ctr_uc3:abs_distance_between_both_arms_y_axis_data",
+      "quantity_to_compare_with": "adap_ctr_uc3:lin_pos_limit_to_avoid_collision_y_axis_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:pos_constraint_both_arms_grasped_box_y_axis",
+      "@type": [
+        "Constraint",
+        "LessThanEqualToConstraint"
+      ],
+      "quantity_to_compare": "adap_ctr_uc3:abs_distance_between_both_arms_y_axis_data",
+      "quantity_to_compare_with": "adap_ctr_uc3:width_of_box_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:pos_constraint_both_arms_not_grasped_box_y_axis",
+      "@type": [
+        "Constraint",
+        "GreaterThanConstraint"
+      ],
+      "quantity_to_compare": "adap_ctr_uc3:abs_distance_between_both_arms_y_axis_data",
+      "quantity_to_compare_with": "adap_ctr_uc3:width_of_box_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:pos_constraint_both_arms_not_grasped_box_y_axis_monitor",
+      "@type": [
+        "ConstraintMonitor",
+        "ConstraintToFlag"
+      ],
+      "constraint_to_monitor": "adap_ctr_uc3:pos_constraint_both_arms_not_grasped_box_y_axis",
+      "flag_set_by_monitor": "adap_ctr_uc3:both_arms_not_grasped_box_y_axis_flag"
+    },
+    {
+      "@id": "adap_ctr_uc3:pos_constraint_both_arms_grasped_box_y_axis_monitor",
+      "@type": [
+        "ConstraintMonitor",
+        "ConstraintToFlag"
+      ],
+      "constraint_to_monitor": "adap_ctr_uc3:pos_constraint_both_arms_grasped_box_y_axis",
+      "flag_set_by_monitor": "adap_ctr_uc3:both_arms_grasped_box_y_axis_flag"
+    },
+    {
+      "@id": "adap_ctr_uc3:pos_constraint_limit_on_both_arms_to_avoid_collison_y_axis_monitor",
+      "@type": [
+        "ConstraintMonitor",
+        "ConstraintToFlag"
+      ],
+      "constraint_to_monitor": "adap_ctr_uc3:pos_constraint_limit_on_both_arms_to_avoid_collison_y_axis",
+      "flag_set_by_monitor": "adap_ctr_uc3:pos_constraint_limit_on_both_arms_to_avoid_collison_y_axis_flag"
+    },
+    {
+      "@id": "adap_ctr_uc3:lin_pos_limit_to_avoid_collision_y_axis_data",
+      "@type": "Data",
+      "data_name": "lin_pos_limit_to_avoid_collision",
+      "data_type": "double",
+      "init_value": "0.15"
+    },
+    {
+      "@id": "adap_ctr_uc3:abs_distance_between_both_arms_y_axis_data",
+      "@type": "Data",
+      "data_name": "abs_distance_between_both_arms",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:width_of_box_data",
+      "@type": "Data",
+      "data_name": "width_of_box",
+      "data_type": "double",
+      "init_value": "0.26"
+    },
+    {
+      "@id": "adap_ctr_uc3:pos_constraint_limit_on_both_arms_to_avoid_collison_y_axis_flag",
+      "@type": "Data",
+      "data_name": "pos_constraint_limit_on_both_arms_to_avoid_collison_flag",
+      "data_type": "bool",
+      "init_value": "false"
+    },
+    {
+      "@id": "adap_ctr_uc3:lin_pos_table_height_z_axis_data",
+      "@type": "Data",
+      "data_name": "lin_pos_table_height_z_axis",
+      "data_type": "double",
+      "init_value": "0.03"
+    },
+    {
+      "@id": "adap_ctr_uc3:both_arms_grasped_box_y_axis_flag",
+      "@type": "Data",
+      "data_name": "both_arms_grasped_box_y_axis_flag",
+      "data_type": "bool",
+      "init_value": "false"
+    },
+    {
+      "@id": "adap_ctr_uc3:both_arms_not_grasped_box_y_axis_flag",
+      "@type": "Data",
+      "data_name": "both_arms_not_grasped_box_y_axis_flag",
+      "data_type": "bool",
+      "init_value": "false"
+    }
+  ]
+}
