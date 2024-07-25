@@ -72,11 +72,11 @@ set_kdl_solvers_and_data_structures() ::= <<
     const KDL::Vector BL_x_axis_wrt_GF_left(1.0, 0.0, 0.0);
     const KDL::Vector BL_y_axis_wrt_GF_left(0.0, 1.0, 0.0);
     const KDL::Vector BL_z_axis_wrt_GF_left(0.0, 0.0, 1.0);
-    const KDL::Vector BL_position_wrt_GF_left(0., 0.5, 0.0); // left
+    const KDL::Vector BL_position_wrt_GF_left(0., 0.41, 0.0); // left
     const KDL::Vector BL_x_axis_wrt_GF_right(1.0, 0.0, 0.0);
     const KDL::Vector BL_y_axis_wrt_GF_right(0.0, 1.0, 0.0);
     const KDL::Vector BL_z_axis_wrt_GF_right(0.0, 0.0, 1.0);
-    const KDL::Vector BL_position_wrt_GF_right(0.0, -0.5, 0.0);                                                  // right
+    const KDL::Vector BL_position_wrt_GF_right(0.0, -0.41, 0.0);                                                 // right
     const KDL::Rotation BL_wrt_GF_left(BL_x_axis_wrt_GF_left, BL_y_axis_wrt_GF_left, BL_z_axis_wrt_GF_left);     // added as columns
     const KDL::Rotation BL_wrt_GF_right(BL_x_axis_wrt_GF_right, BL_y_axis_wrt_GF_right, BL_z_axis_wrt_GF_right); // added as columns
     const KDL::Frame BL_wrt_GF_frame_left(BL_wrt_GF_left, BL_position_wrt_GF_left);
@@ -136,8 +136,8 @@ initialise_robot_to_control_and_set_torque_control_mode() ::= <<
 
     kinova_mediator kinova_left;  // 192.168.1.10 (KINOVA_GEN3_1)
     kinova_mediator kinova_right; // 192.168.1.12 (KINOVA_GEN3_2)
-    controller_name controller_name_data_right_z = controller_name::PID_CONTROLLER;
-    controller_name controller_name_data_left_z = controller_name::PID_CONTROLLER;
+    controller_name controller_name_data_right_z = controller_name::NONE;
+    controller_name controller_name_data_left_z = controller_name::NONE;
 
     // robot communication
     if (robots_to_control == robot_controlled::DUAL_KINOVA_GEN3_ARMS || robots_to_control == robot_controlled::KINOVA_GEN3_1_LEFT)

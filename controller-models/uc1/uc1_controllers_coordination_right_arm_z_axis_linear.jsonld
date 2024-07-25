@@ -10,54 +10,43 @@
   "@graph": [
     {
       "@id": "adap_ctr_uc1:states_z_axis_right_arm",
-      "@type": [
-        "Plan"
-      ],
+      "@type": "Plan",
       "set_of_states": [
-        "adap_ctr_uc1:adaptive_controller_architecture_motion_specification_pid_z_axis_right_arm",
-        "adap_ctr_uc1:adaptive_controller_architecture_motion_specification_impedance_z_axis_right_arm",
-        "adap_ctr_uc1:adaptive_controller_architecture_motion_specification_constant_force_z_axis_right_arm"
+        "adap_ctr_uc1:adap_ctr_mo_spec_pid_z_axis_right_arm",
+        "adap_ctr_uc1:adap_ctr_mo_spec_impedance_z_axis_right_arm",
+        "adap_ctr_uc1:adap_ctr_mo_spec_constant_force_z_axis_right_arm"
       ]
     },
     {
       "@id": "adap_ctr_uc1:states_x_axis_right_arm",
-      "@type": [
-        "Plan"
-      ],
+      "@type": "Plan",
       "set_of_states": [
-        "adap_ctr_uc1:adaptive_controller_architecture_motion_specification_p_x_axis_right_arm"
+        "adap_ctr_uc1:adap_ctr_mo_spec_p_x_axis_right_arm"
       ]
     },
     {
       "@id": "adap_ctr_uc1:states_y_axis_right_arm",
-      "@type": [
-        "Plan"
-      ],
+      "@type": "Plan",
       "set_of_states": [
-        "adap_ctr_uc1:adaptive_controller_architecture_motion_specification_p_y_axis_right_arm"
+        "adap_ctr_uc1:adap_ctr_mo_spec_p_y_axis_right_arm"
       ]
     },
     {
-      "@id": "adap_ctr_uc1:adaptive_controller_architecture_motion_specification_pid_z_axis_right_arm",
-      "@type": [
-        "MotionSpecification"
-      ],
+      "@id": "adap_ctr_uc1:adap_ctr_mo_spec_pid_z_axis_right_arm",
+      "@type": "MotionSpecification",
       "pre_condition": [
         "adap_ctr_uc1:pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm"
       ],
       "per_condition": [
-        "adap_ctr_uc1:vel_constraint_setpoint_pid_z_axis_right_arm",
-        "adap_ctr_uc1:error_within_threshold_to_activate_i_block_z_axis_right_arm"
+        "adap_ctr_uc1:vel_constraint_setpoint_pid_z_axis_right_arm"
       ],
       "post_condition": [
         "adap_ctr_uc1:pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm"
       ]
     },
     {
-      "@id": "adap_ctr_uc1:adaptive_controller_architecture_motion_specification_impedance_z_axis_right_arm",
-      "@type": [
-        "MotionSpecification"
-      ],
+      "@id": "adap_ctr_uc1:adap_ctr_mo_spec_impedance_z_axis_right_arm",
+      "@type": "MotionSpecification",
       "pre_condition": [
         "adap_ctr_uc1:pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm",
         "adap_ctr_uc1:pos_constraint_arm_above_pos_sp_z_axis_right_arm"
@@ -71,10 +60,8 @@
       ]
     },
     {
-      "@id": "adap_ctr_uc1:adaptive_controller_architecture_motion_specification_constant_force_z_axis_right_arm",
-      "@type": [
-        "MotionSpecification"
-      ],
+      "@id": "adap_ctr_uc1:adap_ctr_mo_spec_constant_force_z_axis_right_arm",
+      "@type": "MotionSpecification",
       "pre_condition": [
         "adap_ctr_uc1:pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm"
       ],
@@ -84,10 +71,8 @@
       "post_condition": []
     },
     {
-      "@id": "adap_ctr_uc1:adaptive_controller_architecture_motion_specification_p_x_axis_right_arm",
-      "@type": [
-        "MotionSpecification"
-      ],
+      "@id": "adap_ctr_uc1:adap_ctr_mo_spec_p_x_axis_right_arm",
+      "@type": "MotionSpecification",
       "pre_condition": [],
       "per_condition": [
         "adap_ctr_uc1:pos_constraint_setpoint_x_axis_right_arm"
@@ -95,10 +80,8 @@
       "post_condition": []
     },
     {
-      "@id": "adap_ctr_uc1:adaptive_controller_architecture_motion_specification_p_y_axis_right_arm",
-      "@type": [
-        "MotionSpecification"
-      ],
+      "@id": "adap_ctr_uc1:adap_ctr_mo_spec_p_y_axis_right_arm",
+      "@type": "MotionSpecification",
       "pre_condition": [],
       "per_condition": [
         "adap_ctr_uc1:pos_constraint_setpoint_y_axis_right_arm"
@@ -107,9 +90,7 @@
     },
     {
       "@id": "adap_ctr_uc1:p_controller_y_axis_right_arm_call",
-      "@type": [
-        "ConstraintController"
-      ],
+      "@type": "ConstraintController",
       "constraints_controlled": [
         "adap_ctr_uc1:pos_constraint_setpoint_y_axis_right_arm"
       ],
@@ -117,9 +98,7 @@
     },
     {
       "@id": "adap_ctr_uc1:p_controller_x_axis_right_arm_call",
-      "@type": [
-        "ConstraintController"
-      ],
+      "@type": "ConstraintController",
       "constraints_controlled": [
         "adap_ctr_uc1:pos_constraint_setpoint_x_axis_right_arm"
       ],
@@ -127,9 +106,7 @@
     },
     {
       "@id": "adap_ctr_uc1:constant_force_controller_z_axis_right_arm_call",
-      "@type": [
-        "ConstraintController"
-      ],
+      "@type": "ConstraintController",
       "constraints_controlled": [
         "adap_ctr_uc1:press_downwards_with_constant_force_z_axis_right_arm"
       ],
@@ -137,9 +114,7 @@
     },
     {
       "@id": "adap_ctr_uc1:pd_controller_z_axis_right_arm_call",
-      "@type": [
-        "ConstraintController"
-      ],
+      "@type": "ConstraintController",
       "constraints_controlled": [
         "adap_ctr_uc1:vel_constraint_setpoint_pid_z_axis_right_arm"
       ],
@@ -147,9 +122,7 @@
     },
     {
       "@id": "adap_ctr_uc1:pid_controller_z_axis_right_arm_call",
-      "@type": [
-        "ConstraintController"
-      ],
+      "@type": "ConstraintController",
       "constraints_controlled": [
         "adap_ctr_uc1:vel_constraint_setpoint_pid_z_axis_right_arm"
       ],
@@ -157,9 +130,7 @@
     },
     {
       "@id": "adap_ctr_uc1:impedance_controller_z_axis_right_arm_call",
-      "@type": [
-        "ConstraintController"
-      ],
+      "@type": "ConstraintController",
       "constraints_controlled": [
         "adap_ctr_uc1:pos_constraint_setpoint_stiffness_z_axis_right_arm",
         "adap_ctr_uc1:vel_constraint_setpoint_damping_z_axis_right_arm"
@@ -175,7 +146,7 @@
       "schedules_of_algorithm": [
         "adap_ctr_uc1:pid_controller_schedule_z_axis_right_arm"
       ],
-      "schedule_event_associations": [
+      "sch_evnt_assn": [
         "adap_ctr_uc1:pid_controller_schedule_z_axis_right_arm_call"
       ]
     },
@@ -326,7 +297,7 @@
         "adap_ctr_uc1:d_term_calculator_lin_vel_z_axis_right_arm_function",
         "adap_ctr_uc1:pd_term_summation_z_axis_right_arm_function"
       ],
-      "controller_signals": [
+      "ctr_signals": [
         "adap_ctr_uc1:measured_lin_vel_z_axis_right_arm_data",
         "adap_ctr_uc1:lin_vel_sp_z_axis_right_arm_data",
         "adap_ctr_uc1:lin_vel_error_pid_z_axis_right_arm_data",
@@ -356,7 +327,7 @@
         "adap_ctr_uc1:saturate_i_term_lin_vel_z_axis_right_arm_function",
         "adap_ctr_uc1:pid_term_summation_z_axis_right_arm_function"
       ],
-      "controller_signals": [
+      "ctr_signals": [
         "adap_ctr_uc1:measured_lin_vel_z_axis_right_arm_data",
         "adap_ctr_uc1:lin_vel_sp_z_axis_right_arm_data",
         "adap_ctr_uc1:lin_vel_error_pid_z_axis_right_arm_data",
@@ -387,7 +358,7 @@
         "adap_ctr_uc1:damping_term_calculator_lin_z_axis_right_arm_function",
         "adap_ctr_uc1:stiffness_damping_terms_summation_z_axis_right_arm_function"
       ],
-      "controller_signals": [
+      "ctr_signals": [
         "adap_ctr_uc1:measured_lin_pos_z_axis_right_arm_data",
         "adap_ctr_uc1:lin_pos_sp_z_axis_right_arm_data",
         "adap_ctr_uc1:lin_pos_error_stiffness_z_axis_right_arm_data",
@@ -409,7 +380,7 @@
       "ctr_functions": [
         "adap_ctr_uc1:press_downwards_with_constant_force_z_axis_right_arm_function"
       ],
-      "controller_signals": [
+      "ctr_signals": [
         "adap_ctr_uc1:apply_ee_force_z_axis_right_arm_data",
         "adap_ctr_uc1:force_to_apply_to_table_z_axis_right_arm_data"
       ]
@@ -423,7 +394,7 @@
         "adap_ctr_uc1:error_calculation_lin_pos_p_x_axis_right_arm_function",
         "adap_ctr_uc1:p_term_calculator_lin_pos_x_axis_right_arm_function"
       ],
-      "controller_signals": [
+      "ctr_signals": [
         "adap_ctr_uc1:measured_lin_pos_x_axis_right_arm_data",
         "adap_ctr_uc1:lin_pos_sp_x_axis_right_arm_data",
         "adap_ctr_uc1:lin_pos_error_x_axis_right_arm_data",
@@ -440,7 +411,7 @@
         "adap_ctr_uc1:error_calculation_lin_pos_p_y_axis_right_arm_function",
         "adap_ctr_uc1:p_term_calculator_lin_pos_y_axis_right_arm_function"
       ],
-      "controller_signals": [
+      "ctr_signals": [
         "adap_ctr_uc1:measured_lin_pos_y_axis_right_arm_data",
         "adap_ctr_uc1:lin_pos_sp_y_axis_right_arm_data",
         "adap_ctr_uc1:lin_pos_error_y_axis_right_arm_data",

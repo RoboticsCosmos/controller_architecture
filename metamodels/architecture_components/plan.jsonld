@@ -9,21 +9,23 @@
         "StateParameters": "plan:StateParameters",
         "Action": "plan:Action",
         "MotionSpecification": "plan:MotionSpecification",
-
         "pre_condition": {
             "@id": "plan:pre_condition",
-            "@type": "@id"
+            "@type": "@id",
+            "@container": "@set"
         },
         "post_condition": {
             "@id": "plan:post_condition",
-            "@type": "@id"
+            "@type": "@id",
+            "@container": "@set"
         },
         "per_condition": {
             "@id": "plan:per_condition",
-            "@type": "@id"
+            "@type": "@id",
+            "@container": "@set"
         },
-        "motion_specification": {
-            "@id": "plan:motion_specification",
+        "mo_spec": {
+            "@id": "plan:mo_spec",
             "@type": "@id"
         },
         "monitors": {

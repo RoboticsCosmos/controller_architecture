@@ -13,8 +13,8 @@
             "@type": "@id",
             "@container": "@set"
         },
-        "controller_signals": {
-            "@id": "controller:controller_signals",
+        "ctr_signals": {
+            "@id": "controller:ctr_signals",
             "@type": "@id",
             "@container": "@set"
         },

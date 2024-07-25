@@ -350,10 +350,10 @@ class FunctionsTranslator:
             function_call_name = "get_sign"
 
             # getting all attributes
-            input_signal_id = g.value(subject=function_id, predicate=ERROR.input_signal)
+            input_signal_id = g.value(subject=function_id, predicate=FUNCTIONS.input_signal)
             input_signal_name = g.compute_qname(input_signal_id)[-1]
 
-            sign_data_id = g.value(subject=function_id, predicate=ERROR.sign_data)
+            sign_data_id = g.value(subject=function_id, predicate=FUNCTIONS.sign_data)
             sign_data_name = g.compute_qname(sign_data_id)[-1]
 
             # updating the data structures
@@ -377,10 +377,10 @@ class FunctionsTranslator:
             function_call_name = "hside"
 
             # getting all attributes
-            input_signal_id = g.value(subject=function_id, predicate=ERROR.input_signal)
+            input_signal_id = g.value(subject=function_id, predicate=FUNCTIONS.input_signal)
             input_signal_name = g.compute_qname(input_signal_id)[-1]
 
-            stepped_data_id = g.value(subject=function_id, predicate=ERROR.stepped_data)
+            stepped_data_id = g.value(subject=function_id, predicate=FUNCTIONS.stepped_data)
             stepped_data_name = g.compute_qname(stepped_data_id)[-1]
 
             # updating the data structures
@@ -404,11 +404,13 @@ class FunctionsTranslator:
             function_call_name = "get_abs"
 
             # getting all attributes
-            input_signal_id = g.value(subject=function_id, predicate=ERROR.input_signal)
+            input_signal_id = g.value(
+                subject=function_id, predicate=FUNCTIONS.input_signal
+            )
             input_signal_name = g.compute_qname(input_signal_id)[-1]
 
             absolute_data_id = g.value(
-                subject=function_id, predicate=ERROR.absolute_data
+                subject=function_id, predicate=FUNCTIONS.absolute_data
             )
             absolute_data_name = g.compute_qname(absolute_data_id)[-1]
 

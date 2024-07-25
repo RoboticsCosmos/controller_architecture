@@ -15,13 +15,12 @@ class ALGORITHM(DefinedNamespace):
     Activity: URIRef
     algorithm_details: URIRef
     schedules_of_algorithm: URIRef
-    schedule_event_associations: URIRef
+    sch_evnt_assn: URIRef
     data_type: URIRef
     data_name: URIRef
     uncertainty_data: URIRef
     init_value: URIRef
     trigger_chain: URIRef
-    associated_controller: URIRef
     constraints_controlled: URIRef
     constraint_controller: URIRef
     schedule_to_call: URIRef
@@ -107,7 +106,7 @@ class CONTROLLER(DefinedNamespace):
     Feedback: URIRef
     TimePeriod: URIRef
     ctr_functions: URIRef
-    controller_signals: URIRef
+    ctr_signals: URIRef
     controller_name: URIRef
     controller_output: URIRef
     desired_time_period_val: URIRef
@@ -223,8 +222,8 @@ class MONITOR(DefinedNamespace):
     quantity_to_compare: URIRef
     quantity_to_compare_with: URIRef
     flag_or_event_to_check: URIRef
-    flag_set_by_monitor: URIRef
-    event_emitted_by_monitor: URIRef
+    flag_set: URIRef
+    event_emitted: URIRef
     operator: URIRef
 
     _NS = Namespace(
@@ -245,7 +244,7 @@ class PLAN(DefinedNamespace):
     pre_condition: URIRef
     post_condition: URIRef
     per_condition: URIRef
-    motion_specification: URIRef
+    mo_spec: URIRef
     monitors: URIRef
     action: URIRef
     set_of_states: URIRef

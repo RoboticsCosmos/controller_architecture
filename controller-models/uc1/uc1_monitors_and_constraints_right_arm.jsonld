@@ -161,8 +161,8 @@
         "ConstraintToFlag"
       ],
       "constraint_to_monitor": "adap_ctr_uc1:pos_constraint_arm_above_pos_sp_z_axis_right_arm",
-      "event_emitted_by_monitor": "adap_ctr_uc1:pos_constraint_arm_above_pos_sp_z_axis_right_arm_event",
-      "flag_set_by_monitor": "adap_ctr_uc1:pos_constraint_arm_above_pos_sp_z_axis_right_arm_flag"
+      "event_emitted": "adap_ctr_uc1:pos_constraint_arm_above_pos_sp_z_axis_right_arm_event",
+      "flag_set": "adap_ctr_uc1:pos_constraint_arm_above_pos_sp_z_axis_right_arm_flag"
     },
     {
       "@id": "adap_ctr_uc1:pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_monitor",
@@ -172,8 +172,8 @@
         "ConstraintToFlag"
       ],
       "constraint_to_monitor": "adap_ctr_uc1:pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm",
-      "event_emitted_by_monitor": "adap_ctr_uc1:pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_event",
-      "flag_set_by_monitor": "adap_ctr_uc1:pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_flag"
+      "event_emitted": "adap_ctr_uc1:pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_event",
+      "flag_set": "adap_ctr_uc1:pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_flag"
     },
     {
       "@id": "adap_ctr_uc1:pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_monitor",
@@ -183,8 +183,8 @@
         "ConstraintToFlag"
       ],
       "constraint_to_monitor": "adap_ctr_uc1:pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm",
-      "event_emitted_by_monitor": "adap_ctr_uc1:pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_event",
-      "flag_set_by_monitor": "adap_ctr_uc1:pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_flag"
+      "event_emitted": "adap_ctr_uc1:pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_event",
+      "flag_set": "adap_ctr_uc1:pos_constraint_arm_in_uncertain_contact_region_z_axis_right_arm_flag"
     },
     {
       "@id": "adap_ctr_uc1:error_within_threshold_to_activate_i_block_z_axis_right_arm_monitor",
@@ -193,7 +193,7 @@
         "ConstraintToEvent"
       ],
       "constraint_to_monitor": "adap_ctr_uc1:error_within_threshold_to_activate_i_block_z_axis_right_arm",
-      "event_emitted_by_monitor": "adap_ctr_uc1:error_within_threshold_to_activate_i_block_z_axis_right_arm_event"
+      "event_emitted": "adap_ctr_uc1:error_within_threshold_to_activate_i_block_z_axis_right_arm_event"
     },
     {
       "@id": "adap_ctr_uc1:error_outside_threshold_to_deactivate_i_block_z_axis_right_arm_monitor",
@@ -202,7 +202,7 @@
         "ConstraintToEvent"
       ],
       "constraint_to_monitor": "adap_ctr_uc1:error_outside_threshold_to_deactivate_i_block_z_axis_right_arm",
-      "event_emitted_by_monitor": "adap_ctr_uc1:error_outside_threshold_to_deactivate_i_block_z_axis_right_arm_event"
+      "event_emitted": "adap_ctr_uc1:error_outside_threshold_to_deactivate_i_block_z_axis_right_arm_event"
     },
     {
       "@id": "adap_ctr_uc1:pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_monitor",
@@ -211,7 +211,7 @@
         "ConstraintToFlag"
       ],
       "constraint_to_monitor": "adap_ctr_uc1:pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm",
-      "flag_set_by_monitor": "adap_ctr_uc1:pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_flag"
+      "flag_set": "adap_ctr_uc1:pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_flag"
     },
     {
       "@id": "adap_ctr_uc1:pos_constraint_arm_below_setpoint_contact_region_event_z_axis_right_arm_monitor",
@@ -220,7 +220,7 @@
         "ConstraintToEvent"
       ],
       "constraint_to_monitor": "adap_ctr_uc1:pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm",
-      "event_emitted_by_monitor": "adap_ctr_uc1:pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_event"
+      "event_emitted": "adap_ctr_uc1:pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_event"
     },
     {
       "@id": "adap_ctr_uc1:vel_constraint_zero_vel_z_axis_right_arm_monitor",
@@ -229,7 +229,7 @@
         "ConstraintToFlag"
       ],
       "constraint_to_monitor": "adap_ctr_uc1:vel_constraint_zero_vel_z_axis_right_arm",
-      "flag_set_by_monitor": "adap_ctr_uc1:vel_constraint_zero_vel_z_axis_right_arm_flag"
+      "flag_set": "adap_ctr_uc1:vel_constraint_zero_vel_z_axis_right_arm_flag"
     },
     {
       "@id": "adap_ctr_uc1:pos_out_of_tolerance_about_setpoint_x_axis_right_arm_monitor",
@@ -238,7 +238,7 @@
         "ConstraintToEvent"
       ],
       "constraint_to_monitor": "adap_ctr_uc1:pos_constraint_out_of_tolerance_about_setpoint_x_axis_right_arm",
-      "event_emitted_by_monitor": "adap_ctr_uc1:pos_out_of_tolerance_about_setpoint_x_axis_right_arm_event"
+      "event_emitted": "adap_ctr_uc1:pos_out_of_tolerance_about_setpoint_x_axis_right_arm_event"
     },
     {
       "@id": "adap_ctr_uc1:pos_out_of_tolerance_about_setpoint_y_axis_right_arm_monitor",
@@ -247,7 +247,7 @@
         "ConstraintToEvent"
       ],
       "constraint_to_monitor": "adap_ctr_uc1:pos_constraint_out_of_tolerance_about_setpoint_y_axis_right_arm",
-      "event_emitted_by_monitor": "adap_ctr_uc1:pos_out_of_tolerance_about_setpoint_y_axis_right_arm_event"
+      "event_emitted": "adap_ctr_uc1:pos_out_of_tolerance_about_setpoint_y_axis_right_arm_event"
     }
   ]
 }

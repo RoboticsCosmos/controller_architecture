@@ -18,7 +18,16 @@
         "ConstraintToEvent": "monitor:ConstraintToEvent",
         "ConstraintToFlag": "monitor:ConstraintToFlag",
         "EventMonitor": "monitor:EventMonitor",
-
+        "ConstraintController": "monitor:ConstraintController",
+        "constraints_controlled": {
+            "@id": "monitor:constraints_controlled",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "constraint_controller": {
+            "@id": "monitor:constraint_controller",
+            "@type": "@id"
+        },
         "in_interval_lower_bound": {
             "@id": "monitor:in_interval_lower_bound",
             "@type": "@id"
@@ -47,12 +56,12 @@
             "@id": "monitor:flag_or_event_to_check",
             "@type": "@id"
         },
-        "flag_set_by_monitor": {
-            "@id": "monitor:flag_set_by_monitor",
+        "flag_set": {
+            "@id": "monitor:flag_set",
             "@type": "@id"
         },
-        "event_emitted_by_monitor": {
-            "@id": "monitor:event_emitted_by_monitor",
+        "event_emitted": {
+            "@id": "monitor:event_emitted",
             "@type": "@id"
         },
         "operator": {

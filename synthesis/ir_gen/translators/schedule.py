@@ -89,7 +89,7 @@ class ScheduleTranslator:
                     )
 
                     constraint_monitor_id = g.value(
-                        predicate=MONITOR.event_emitted_by_monitor,
+                        predicate=MONITOR.event_emitted,
                         object=desired_event_id,
                     )
 

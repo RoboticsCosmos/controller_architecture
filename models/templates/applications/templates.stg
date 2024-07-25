@@ -18,7 +18,7 @@ handle_dimension_of_control(ctr_arch_specs_node, functions) ::= <<
   if (!<ctr_arch_specs_node.pre_condition_satisfied>)
   {
   <!execute all functions in pre-condition!>
-  <ctr_arch_specs_node.motion_specification_states: {motion_spec_node |
+  <ctr_arch_specs_node.mo_spec_states: {motion_spec_node |
   // executing all functions of the pre-condition and checking if any set of flags are true
   <execute_functions_from_list(motion_spec_node.pre_condition.function_names, functions)>
 
@@ -30,7 +30,7 @@ handle_dimension_of_control(ctr_arch_specs_node, functions) ::= <<
   // if a pre-condition is satisfied, then execute the motion specification
   if (<ctr_arch_specs_node.pre_condition_satisfied>)
   {
-    <ctr_arch_specs_node.motion_specification_states: {motion_spec_node |
+    <ctr_arch_specs_node.mo_spec_states: {motion_spec_node |
 // for each motion spec node ...
       <!if pre-cond flags are active!>
         <!execute all post-condition functions!>

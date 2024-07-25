@@ -1,14 +1,11 @@
-adaptive-pid-controller-c:
-	@./../STSTv4/stst.sh -s "<>" -t ../models/templates/applications/ simple_adaptive_pid.application ../backup_simple_adaptive_pid_ir.json
+uc1:
+	@./../STSTv4/stst.sh -s "<>" -t ../models/templates/applications/ uc1.application ../gen/irs/uc1.json
 
-pid-controller:
-	@./../STSTv4/stst.sh -s "<>" -t ../models/templates/applications/ pid_controller.application ../gen/pid_controller.json
+uc3_pid:
+	@./../STSTv4/stst.sh -s "<>" -t ../models/templates/applications/ uc3_pid.application ../gen/irs/uc3_pid.json
 
-p-controller:
-	@./../STSTv4/stst.sh -s "<>" -t ../models/templates/applications/ p_controller.application ../gen/p_controller.json
-
-uc1_test:
-	@./../STSTv4/stst.sh -s "<>" -t ../models/templates/applications/ uc1_test.application ../gen/irs/uc1_latest_30_June.json
+uc3_abag:
+	@./../STSTv4/stst.sh -s "<>" -t ../models/templates/applications/ uc3_abag.application ../gen/irs/uc3_abag.json
 
 uc1_lin_z_axis_left_arm:
-	@./../STSTv4/stst.sh -s "<>" -t ../models/templates/applications/ uc1_test.application ../gen/irs/uc1_lin_z_axis_arm_1.json
+	@./../STSTv4/stst.sh -s "<>" -t ../models/templates/applications/ uc1.application ../gen/irs/uc1_lin_z_axis_arm_1.json

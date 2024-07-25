@@ -50,7 +50,7 @@ def main():
         else os.getcwd()
     )
     meta_models_path = os.path.join(current_dir, "../metamodels/")
-    models_path = os.path.join(current_dir, "../controller-models/uc1/")
+    models_path = os.path.join(current_dir, "../controller-models/uc3_abag/")
 
     url_map = {METAMODELS: meta_models_path}
     resolver.install(resolver.IriToFileResolver(url_map))
@@ -98,7 +98,7 @@ def main():
             predicate=rdflib.RDF.type, object=PLAN.Plan, unique=True
         ):
             motion_spec_per_dimension = dict()
-            motion_specification_list = []
+            mo_spec_list = []
 
             dimension_of_control = g.compute_qname(plan)[-1]
 
@@ -106,7 +106,7 @@ def main():
             motion_spec_per_dimension["pre_condition_satisfied"] = (
                 dimension_of_control + "_is_active"
             )
-            motion_spec_per_dimension["motion_specification_states"] = []
+            motion_spec_per_dimension["mo_spec_states"] = []
 
             data_structures_dict[dimension_of_control + "_is_active"] = {
                 "data_type": "bool",
@@ -167,19 +167,19 @@ def main():
                         )
 
                         if "ConstraintToFlag" in constraint_monitor_types:
-                            flag_set_by_monitor_id = g.value(
+                            flag_set_id = g.value(
                                 subject=constraint_monitor_id,
-                                predicate=MONITOR.flag_set_by_monitor,
+                                predicate=MONITOR.flag_set,
                             )
-                            if flag_set_by_monitor_id is None:
+                            if flag_set_id is None:
                                 print(
-                                    f"Error: flag_set_by_monitor_id is None for constraint_monitor_id: {constraint_monitor_id}"
+                                    f"Error: flag_set_id is None for constraint_monitor_id: {constraint_monitor_id}"
                                 )
 
                             ir = MonitorTranslator().translate(
                                 g,
                                 constraint_to_monitor_id=pre_condition,
-                                flag_or_event_id=flag_set_by_monitor_id,
+                                flag_or_event_id=flag_set_id,
                                 is_flag=True,
                             )
                             functions_dict.update(ir["functions"])
@@ -210,14 +210,14 @@ def main():
                         )
 
                         if "ConstraintToFlag" in constraint_monitor_types:
-                            flag_set_by_monitor_id = g.value(
+                            flag_set_id = g.value(
                                 subject=constraint_monitor_id,
-                                predicate=MONITOR.flag_set_by_monitor,
+                                predicate=MONITOR.flag_set,
                             )
                             ir = MonitorTranslator().translate(
                                 g,
                                 constraint_to_monitor_id=post_condition,
-                                flag_or_event_id=flag_set_by_monitor_id,
+                                flag_or_event_id=flag_set_id,
                                 is_flag=True,
                             )
                             functions_dict.update(ir["functions"])
@@ -244,7 +244,6 @@ def main():
                         predicate=ALGORITHM.constraints_controlled, object=per_condition
                     )
 
-                    # new section from here
                     # if generator is empty, then it doesn't enter the for loop
                     for node_id in node_generator_for_constraint_controller:
 
@@ -258,8 +257,13 @@ def main():
                             object=controller_id,
                         )
 
-                        if activity_for_the_controller_id not in activity_for_the_controller_ids:
-                            activity_for_the_controller_ids.add(activity_for_the_controller_id)
+                        if (
+                            activity_for_the_controller_id
+                            not in activity_for_the_controller_ids
+                        ):
+                            activity_for_the_controller_ids.add(
+                                activity_for_the_controller_id
+                            )
 
                             schedules_id_list, _ = helper.get_from_container(
                                 subject_node=activity_for_the_controller_id,
@@ -269,21 +273,6 @@ def main():
 
                             for schedule_id in schedules_id_list:
                                 schedule_node_ids.add(schedule_id)
-                    # until here
-
-                    # if generator is empty, then it doesn't enter the for loop
-                    # for node_id in node_generator_for_constraint_controller:
-                    #     if node_id not in controller_call_node_ids:
-                    #         constraint_controller = g.value(
-                    #             subject=node_id,
-                    #             predicate=ALGORITHM.constraint_controller,
-                    #         )
-                    #         schedule_of_controller = g.value(
-                    #             predicate=ALGORITHM.associated_controller,
-                    #             object=constraint_controller,
-                    #         )
-                    #         schedule_node_ids.add(schedule_of_controller)
-                    #     controller_call_node_ids.add(node_id)
 
                 print("[runner.py] schedule_node_ids: ", schedule_node_ids)
                 ir = ScheduleTranslator().translate(
@@ -297,11 +286,9 @@ def main():
                 helper.deep_update_dictionary(
                     motion_spec_state_dict["schedules"], ir["schedules"]
                 )
-                motion_specification_list.append(motion_spec_state_dict)
+                mo_spec_list.append(motion_spec_state_dict)
 
-            motion_spec_per_dimension["motion_specification_states"] = (
-                motion_specification_list
-            )
+            motion_spec_per_dimension["mo_spec_states"] = mo_spec_list
             controller_architecture_per_dimension_list.append(motion_spec_per_dimension)
 
         ir = {
@@ -316,7 +303,7 @@ def main():
 
         # save in a json file
         with open(
-            "/home/melody-u18/Desktop/Thesis/controller_architecture/gen/irs/uc1_latest_30_June.json",
+            "/home/melody-u18/Desktop/Thesis/controller_architecture/gen/irs/uc3_abag.json",
             "w",
         ) as f:
             f.write(json_obj)

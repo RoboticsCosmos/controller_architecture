@@ -67,11 +67,14 @@ enum robot_controlled
 
 enum controller_name
 {
+    NONE = -1,
     PD_CONTROLLER = 0,
     PID_CONTROLLER = 1,
     FORCE_CONTROLLER = 2,
     IMPEDANCE_CONTROLLER = 3,
     P_CONTROLLER = 4,
+    STIFFNESS_CONTROLLER = 5,
+    ABAG_CONTROLLER = 6,
 };
 >>
 
@@ -108,12 +111,16 @@ transform_ee_force_to_ee_frame_and_calculate_jnt_torques_and_send_to_robot() ::=
         if (robots_to_control == robot_controlled::DUAL_KINOVA_GEN3_ARMS || robots_to_control == robot_controlled::KINOVA_GEN3_1_LEFT)
         {
             // write the ee torques to to linkWrenches_GF_left
-            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].force(0) = apply_ee_force_x_axis_left_arm_data;
-            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].force(1) = apply_ee_force_y_axis_left_arm_data;
-            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].force(2) = apply_ee_force_z_axis_left_arm_data;
-            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].torque(0) = stiffness_angular_left_arm[0]*angle_axis_diff_GF_left_arm(0);
-            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].torque(1) = stiffness_angular_left_arm[1]*angle_axis_diff_GF_left_arm(1);
-            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].torque(2) = stiffness_angular_left_arm[2]*angle_axis_diff_GF_left_arm(2);
+            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].force(0) = -apply_ee_force_x_axis_left_arm_data;
+            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].force(1) = -apply_ee_force_y_axis_left_arm_data;
+            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].force(2) = -apply_ee_force_z_axis_left_arm_data;
+            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].torque(0) = -stiffness_angular_left_arm[0]*angle_axis_diff_GF_left_arm(0);
+            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].torque(1) = -stiffness_angular_left_arm[1]*angle_axis_diff_GF_left_arm(1);
+            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].torque(2) = -stiffness_angular_left_arm[2]*angle_axis_diff_GF_left_arm(2);
+
+            apply_ee_force_x_axis_left_arm_data = 0.0;
+            apply_ee_force_y_axis_left_arm_data = 0.0;
+            apply_ee_force_z_axis_left_arm_data = 0.0;
 
             // thresholding in cartesian space of the end effector
             for (int i = 0; i \< 3; i++)
@@ -165,12 +172,16 @@ transform_ee_force_to_ee_frame_and_calculate_jnt_torques_and_send_to_robot() ::=
         if (robots_to_control == robot_controlled::DUAL_KINOVA_GEN3_ARMS || robots_to_control == robot_controlled::KINOVA_GEN3_2_RIGHT)
         {
             // write the ee torques to to linkWrenches_GF_right
-            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].force(0) = apply_ee_force_x_axis_right_arm_data;
-            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].force(1) = apply_ee_force_y_axis_right_arm_data;
-            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].force(2) = apply_ee_force_z_axis_right_arm_data;
-            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].torque(0) = stiffness_angular_right_arm[0]*angle_axis_diff_GF_right_arm(0);
-            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].torque(1) = stiffness_angular_right_arm[1]*angle_axis_diff_GF_right_arm(1);
-            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].torque(2) = stiffness_angular_right_arm[2]*angle_axis_diff_GF_right_arm(2);
+            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].force(0) = -apply_ee_force_x_axis_right_arm_data;
+            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].force(1) = -apply_ee_force_y_axis_right_arm_data;
+            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].force(2) = -apply_ee_force_z_axis_right_arm_data;
+            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].torque(0) = -stiffness_angular_right_arm[0]*angle_axis_diff_GF_right_arm(0);
+            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].torque(1) = -stiffness_angular_right_arm[1]*angle_axis_diff_GF_right_arm(1);
+            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].torque(2) = -stiffness_angular_right_arm[2]*angle_axis_diff_GF_right_arm(2);
+
+            apply_ee_force_x_axis_right_arm_data = 0.0;
+            apply_ee_force_y_axis_right_arm_data = 0.0;
+            apply_ee_force_z_axis_right_arm_data = 0.0;
 
             // thresholding in cartesian space of the end effector
             for (int i = 0; i \< 3; i++)
@@ -231,8 +242,8 @@ initialise_orientation_control_data() ::= <<
     KDL::Vector angle_axis_diff_GF_right_arm;
     KDL::Vector angle_axis_diff_GF_left_arm;
 
-    double stiffness_angular_left_arm[3] = {-15.0, -15., -15.};
-    double stiffness_angular_right_arm[3] = {-15.0, -15., -15.};
+    double stiffness_angular_left_arm[3] = {15.0, 15., 15.};
+    double stiffness_angular_right_arm[3] = {15.0, 15., 15.};
 
     KDL::Frame desired_endEffPose_GF_left_arm;
     desired_endEffPose_GF_left_arm.M = KDL::Rotation::Quaternion(desired_quat_GF_left_arm[0], desired_quat_GF_left_arm[1], desired_quat_GF_left_arm[2], desired_quat_GF_left_arm[3]);

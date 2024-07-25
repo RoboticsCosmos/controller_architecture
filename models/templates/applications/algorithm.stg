@@ -43,6 +43,18 @@ saturation(function_node) ::= <<
 saturation(&<function_node.signal_to_saturate>, &<function_node.saturation_limits; separator=", &">);
 >>
 
+get_sign(function_node) ::= <<
+get_sign(&<function_node.input_signal>, &<function_node.sign_data>);
+>>
+
+hside(function_node) ::= <<
+hside(&<function_node.input_signal>, &<function_node.stepped_data>);
+>>
+
+get_abs(function_node) ::= <<
+get_abs(&<function_node.input_signal>, &<function_node.absolute_data>);
+>>
+
 set_value_of_first_to_second_variable(function_node) ::= <<
 set_value_of_first_to_second_variable(&<function_node.first_variable_to_copy_from>, &<function_node.second_variable_to_copy_to>);
 >>

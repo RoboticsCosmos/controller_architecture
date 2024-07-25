@@ -21,7 +21,7 @@ void appendDataToFile_dynamic_size(std::ofstream &file, const std::vector\<std::
 
 set_robots_to_control() ::= <<
     // set robots to control
-    robot_controlled robots_to_control = robot_controlled::KINOVA_GEN3_1_LEFT;
+    robot_controlled robots_to_control = robot_controlled::DUAL_KINOVA_GEN3_ARMS;
 >>
 
 
@@ -63,11 +63,75 @@ read_from_config_file_and_set_variables() ::= <<
 >>
 
 
-initialise_logging_file_and_headers() ::= <<
+initialise_logging_file_and_headers_uc3_pid() ::= <<
+
+  // logging
+  std::string log_file_left = "log_files/log_file_left_uc3_pid.csv";
+  std::string log_file_right = "log_files/log_file_right_uc3_pid.csv";
+  std::ofstream data_stream_log_left(log_file_left);
+  std::ofstream data_stream_log_right(log_file_right);
+
+  if (!data_stream_log_left.is_open())
+  {
+    std::cerr \<\< "Failed to open file: " \<\< log_file_left \<\< std::endl;
+    return 0;
+  }
+  if (!data_stream_log_right.is_open())
+  {
+    std::cerr \<\< "Failed to open file: " \<\< log_file_right \<\< std::endl;
+    return 0;
+  }
+  // adding header
+  data_stream_log_left \<\< "controller_name_data_left_z,time_period_of_complete_controller_cycle_data,measured_lin_pos_z_axis_left_arm_data,measured_lin_vel_z_axis_left_arm_data,lin_vel_error_pid_z_axis_left_arm_data,lin_pos_error_stiffness_z_axis_left_arm_data,p_term_lin_vel_z_axis_left_arm_data,d_term_lin_vel_error_z_axis_left_arm_data,d_term_lin_vel_z_axis_left_arm_data,integral_of_vel_term_error_z_axis_left_arm_data,i_term_lin_vel_z_axis_left_arm_data,apply_ee_force_z_axis_left_arm_data\n";
+  data_stream_log_right \<\< "controller_name_data_right_z,time_period_of_complete_controller_cycle_data,measured_lin_pos_z_axis_right_arm_data,measured_lin_vel_z_axis_right_arm_data,lin_vel_error_pid_z_axis_right_arm_data,lin_pos_error_stiffness_z_axis_right_arm_data,p_term_lin_vel_z_axis_right_arm_data,d_term_lin_vel_error_z_axis_right_arm_data,d_term_lin_vel_z_axis_right_arm_data,integral_of_vel_term_error_z_axis_right_arm_data,i_term_lin_vel_z_axis_right_arm_data,apply_ee_force_z_axis_right_arm_data\n";
+
+  // initialise multi-dimensional array to store data
+  std::vector\<std::array\<double, 15>\> data_array_log_left;
+  std::vector\<std::array\<double, 15>\> data_array_log_right;
+  int iterationCount = 0;
+>>
+
+commented_print_statement_for_abs_distance_bw_both_arms() ::= <<
+    abs_distance_between_both_arms_y_axis_data = std::abs(measured_lin_pos_y_axis_left_arm_data - measured_lin_pos_y_axis_right_arm_data);
+
+    // std::cout \<\< "x-left: " \<\< measured_lin_pos_x_axis_left_arm_data \<\< " y-left: " \<\< measured_lin_pos_y_axis_left_arm_data \<\< " z-left: " \<\< measured_lin_pos_z_axis_left_arm_data \<\< std::endl;
+    // std::cout \<\< "x-right: " \<\< measured_lin_pos_x_axis_right_arm_data \<\< " y-right: " \<\< measured_lin_pos_y_axis_right_arm_data \<\< " z-right: " \<\< measured_lin_pos_z_axis_right_arm_data \<\< std::endl;
+    // std::cout \<\< "diff-y: " \<\< abs_distance_between_both_arms_y_axis_data \<\< std::endl;
+>>
+
+initialise_logging_file_and_headers_uc3_abag() ::= <<
+
+  // logging
+  std::string log_file_left = "log_files/log_file_left_abag.csv";
+  std::string log_file_right = "log_files/log_file_right_abag.csv";
+  std::ofstream data_stream_log_left(log_file_left);
+  std::ofstream data_stream_log_right(log_file_right);
+
+  if (!data_stream_log_left.is_open())
+  {
+    std::cerr \<\< "Failed to open file: " \<\< log_file_left \<\< std::endl;
+    return 0;
+  }
+  if (!data_stream_log_right.is_open())
+  {
+    std::cerr \<\< "Failed to open file: " \<\< log_file_right \<\< std::endl;
+    return 0;
+  }
+  // adding header
+  data_stream_log_left \<\< "controller_name_data_left_z,time_period_of_complete_controller_cycle_data,measured_lin_pos_z_axis_left_arm_data,measured_lin_vel_z_axis_left_arm_data,lin_pos_error_stiffness_z_axis_left_arm_data,apply_ee_force_z_axis_left_arm_data,abag_saturation_of_control_command_signal_z_axis_left_arm_data,abag_filtered_error_signal_z_axis_left_arm_data,abag_error_signal_z_axis_left_arm_data,abag_saturation_of_bias_term_z_axis_left_arm_data,abag_saturation_of_gain_z_axis_left_arm_data\n";
+  data_stream_log_right \<\< "controller_name_data_right_z,time_period_of_complete_controller_cycle_data,measured_lin_pos_z_axis_right_arm_data,measured_lin_vel_z_axis_right_arm_data,lin_pos_error_stiffness_z_axis_right_arm_data,apply_ee_force_z_axis_right_arm_data,abag_saturation_of_control_command_signal_z_axis_right_arm_data,abag_filtered_error_signal_z_axis_right_arm_data,abag_error_signal_z_axis_right_arm_data,abag_saturation_of_bias_term_z_axis_right_arm_data,abag_saturation_of_gain_z_axis_right_arm_data\n";
+
+  // initialise multi-dimensional array to store data
+  std::vector\<std::array\<double, 15>\> data_array_log_left;
+  std::vector\<std::array\<double, 15>\> data_array_log_right;
+  int iterationCount = 0;
+>>
+
+initialise_logging_file_and_headers_uc1() ::= <<
 
     // logging
-    std::string log_file_left = "log_files/log_file_left.csv";
-    std::string log_file_right = "log_files/log_file_right.csv";
+    std::string log_file_left = "log_files/uc1_log_file_left.csv";
+    std::string log_file_right = "log_files/uc1_log_file_right.csv";
     std::ofstream data_stream_log_left(log_file_left);
     std::ofstream data_stream_log_right(log_file_right);
 
@@ -166,7 +230,7 @@ set_robot_feedback_to_corresponding_variables() ::= <<
 >>
 
 
-update_logging_arrays_and_add_to_file_if_sufficient_data_collected() ::= <<
+update_logging_arrays_and_add_to_file_if_sufficient_data_collected_uc1() ::= <<
         data_array_log_left.push_back({controller_name_data_left_z, time_period_of_complete_controller_cycle_data, measured_lin_pos_z_axis_left_arm_data, measured_lin_vel_z_axis_left_arm_data, lin_vel_error_pid_z_axis_left_arm_data, lin_vel_error_damping_z_axis_left_arm_data, lin_pos_error_stiffness_z_axis_left_arm_data, p_term_lin_vel_z_axis_left_arm_data, d_term_lin_vel_error_z_axis_left_arm_data, d_term_lin_vel_z_axis_left_arm_data, integral_of_vel_term_error_z_axis_left_arm_data, i_term_lin_vel_z_axis_left_arm_data, stiffness_term_lin_z_axis_left_arm_data, damping_term_z_axis_left_arm_data, apply_ee_force_z_axis_left_arm_data});
         data_array_log_right.push_back({controller_name_data_right_z, time_period_of_complete_controller_cycle_data, measured_lin_pos_z_axis_right_arm_data, measured_lin_vel_z_axis_right_arm_data, lin_vel_error_pid_z_axis_right_arm_data, lin_vel_error_damping_z_axis_right_arm_data, lin_pos_error_stiffness_z_axis_right_arm_data, p_term_lin_vel_z_axis_right_arm_data, d_term_lin_vel_error_z_axis_right_arm_data, d_term_lin_vel_z_axis_right_arm_data, integral_of_vel_term_error_z_axis_right_arm_data, i_term_lin_vel_z_axis_right_arm_data, stiffness_term_lin_z_axis_right_arm_data, damping_term_z_axis_right_arm_data, apply_ee_force_z_axis_right_arm_data});
         iterationCount++;
@@ -178,6 +242,34 @@ update_logging_arrays_and_add_to_file_if_sufficient_data_collected() ::= <<
             data_array_log_left.clear();
             data_array_log_right.clear();
         }
+>>
+
+update_logging_arrays_and_add_to_file_if_sufficient_data_collected_uc3_pid() ::= <<
+        data_array_log_left.push_back({controller_name_data_left_z, time_period_of_complete_controller_cycle_data, measured_lin_pos_z_axis_left_arm_data, measured_lin_vel_z_axis_left_arm_data, lin_vel_error_pid_z_axis_left_arm_data, lin_pos_error_stiffness_z_axis_left_arm_data, p_term_lin_vel_z_axis_left_arm_data, d_term_lin_vel_error_z_axis_left_arm_data, d_term_lin_vel_z_axis_left_arm_data, integral_of_vel_term_error_z_axis_left_arm_data, i_term_lin_vel_z_axis_left_arm_data, apply_ee_force_z_axis_left_arm_data});
+        data_array_log_right.push_back({controller_name_data_right_z, time_period_of_complete_controller_cycle_data, measured_lin_pos_z_axis_right_arm_data, measured_lin_vel_z_axis_right_arm_data, lin_vel_error_pid_z_axis_right_arm_data, lin_pos_error_stiffness_z_axis_right_arm_data, p_term_lin_vel_z_axis_right_arm_data, d_term_lin_vel_error_z_axis_right_arm_data, d_term_lin_vel_z_axis_right_arm_data, integral_of_vel_term_error_z_axis_right_arm_data, i_term_lin_vel_z_axis_right_arm_data, apply_ee_force_z_axis_right_arm_data});
+        iterationCount++;
+        // Check if we should write to file (every 100 iterations)
+        if (iterationCount % SAVE_LOG_EVERY_NTH_STEP == 0)
+        {
+            appendDataToFile_dynamic_size(data_stream_log_left, data_array_log_left);
+            appendDataToFile_dynamic_size(data_stream_log_right, data_array_log_right);
+            data_array_log_left.clear();
+            data_array_log_right.clear();
+        }
+>>
+
+update_logging_arrays_and_add_to_file_if_sufficient_data_collected_uc3_abag() ::= <<
+    data_array_log_left.push_back({controller_name_data_left_z, time_period_of_complete_controller_cycle_data, measured_lin_pos_z_axis_left_arm_data, measured_lin_vel_z_axis_left_arm_data, lin_pos_error_stiffness_z_axis_left_arm_data, apply_ee_force_z_axis_left_arm_data, abag_saturation_of_control_command_signal_z_axis_left_arm_data, abag_filtered_error_signal_z_axis_left_arm_data, abag_error_signal_z_axis_left_arm_data, abag_saturation_of_bias_term_z_axis_left_arm_data, abag_saturation_of_gain_z_axis_left_arm_data});
+    data_array_log_right.push_back({controller_name_data_right_z, time_period_of_complete_controller_cycle_data, measured_lin_pos_z_axis_right_arm_data, measured_lin_vel_z_axis_right_arm_data, lin_pos_error_stiffness_z_axis_right_arm_data, apply_ee_force_z_axis_right_arm_data, abag_saturation_of_control_command_signal_z_axis_right_arm_data, abag_filtered_error_signal_z_axis_right_arm_data, abag_error_signal_z_axis_right_arm_data, abag_saturation_of_bias_term_z_axis_right_arm_data, abag_saturation_of_gain_z_axis_right_arm_data});
+    iterationCount++;
+    // Check if we should write to file (every 100 iterations)
+    if (iterationCount % SAVE_LOG_EVERY_NTH_STEP == 0)
+    {
+        appendDataToFile_dynamic_size(data_stream_log_left, data_array_log_left);
+        appendDataToFile_dynamic_size(data_stream_log_right, data_array_log_right);
+        data_array_log_left.clear();
+        data_array_log_right.clear();
+    }
 >>
 
 
