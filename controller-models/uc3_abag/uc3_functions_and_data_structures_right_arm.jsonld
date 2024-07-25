@@ -622,7 +622,7 @@
       "@type": "Data",
       "data_name": "stiffness",
       "data_type": "double",
-      "init_value": "-100.0"
+      "init_value": "100.0"
     },
     {
       "@id": "adap_ctr_uc3:lin_pos_error_x_axis_right_arm_data",
@@ -646,7 +646,7 @@
       ],
       "data_name": "ee_force_value",
       "data_type": "double",
-      "init_value": "5.0"
+      "init_value": "-5.0"
     },
     {
       "@id": "adap_ctr_uc3:lin_pos_error_stiffness_z_axis_right_arm_data",
@@ -761,7 +761,7 @@
       "@type": "Data",
       "data_name": "p_gain",
       "data_type": "double",
-      "init_value": "-200.0"
+      "init_value": "200.0"
     },
     {
       "@id": "adap_ctr_uc3:time_period_of_complete_controller_cycle_data",
@@ -855,7 +855,7 @@
       ],
       "data_name": "ee_force_value",
       "data_type": "double",
-      "init_value": "-13.0"
+      "init_value": "13.0"
     },
     {
       "@id": "adap_ctr_uc3:measured_lin_pos_y_axis_right_arm_data",

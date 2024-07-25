@@ -63,7 +63,7 @@ int main() {
 // initialise all data structures (done)
 <initialise_data_structures(data_structures)>
 
-<initialise_logging_file_and_headers()>
+<initialise_logging_file_and_headers_uc3_abag()>
 
 <initialise_time_variables()>
 
@@ -79,13 +79,15 @@ int main() {
 
 <set_robot_feedback_to_corresponding_variables()>
 
+<commented_print_statement_for_abs_distance_bw_both_arms()>
+
 <calculate_angle_diff_for_orientation_control()>
 
   <loop_through_each_dimension_of_control(controller_architecture, functions)>
 
 <transform_ee_force_to_ee_frame_and_calculate_jnt_torques_and_send_to_robot()>
 
-<update_logging_arrays_and_add_to_file_if_sufficient_data_collected()>
+<update_logging_arrays_and_add_to_file_if_sufficient_data_collected_uc3_abag()>
   }
 
 <save_remaining_data_before_exiting_the_program()>

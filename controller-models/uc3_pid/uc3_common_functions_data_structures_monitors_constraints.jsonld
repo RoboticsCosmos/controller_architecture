@@ -45,7 +45,7 @@
         "ConstraintToFlag"
       ],
       "constraint_to_monitor": "adap_ctr_uc3:pos_constraint_both_arms_not_grasped_box_y_axis",
-      "flag_set_by_monitor": "adap_ctr_uc3:both_arms_not_grasped_box_y_axis_flag"
+      "flag_set": "adap_ctr_uc3:both_arms_not_grasped_box_y_axis_flag"
     },
     {
       "@id": "adap_ctr_uc3:pos_constraint_both_arms_grasped_box_y_axis_monitor",
@@ -54,7 +54,7 @@
         "ConstraintToFlag"
       ],
       "constraint_to_monitor": "adap_ctr_uc3:pos_constraint_both_arms_grasped_box_y_axis",
-      "flag_set_by_monitor": "adap_ctr_uc3:both_arms_grasped_box_y_axis_flag"
+      "flag_set": "adap_ctr_uc3:both_arms_grasped_box_y_axis_flag"
     },
     {
       "@id": "adap_ctr_uc3:pos_constraint_limit_on_both_arms_to_avoid_collison_y_axis_monitor",
@@ -63,7 +63,7 @@
         "ConstraintToFlag"
       ],
       "constraint_to_monitor": "adap_ctr_uc3:pos_constraint_limit_on_both_arms_to_avoid_collison_y_axis",
-      "flag_set_by_monitor": "adap_ctr_uc3:pos_constraint_limit_on_both_arms_to_avoid_collison_y_axis_flag"
+      "flag_set": "adap_ctr_uc3:pos_constraint_limit_on_both_arms_to_avoid_collison_y_axis_flag"
     },
     {
       "@id": "adap_ctr_uc3:lin_pos_limit_to_avoid_collision_y_axis_data",
