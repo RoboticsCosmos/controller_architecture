@@ -3,6 +3,7 @@
     "https://controller.org/metamodels/architecture_components/plan.jsonld",
     "https://controller.org/metamodels/algorithm.jsonld",
     "https://controller.org/metamodels/controllers/controller.jsonld",
+    "https://controller.org/metamodels/architecture_components/monitor.jsonld",
     {
       "adap_ctr_uc3": "https://controller.org/models/adap_ctr_uc3#"
     }
@@ -41,8 +42,7 @@
         "adap_ctr_uc3:pos_constraint_ee_below_desired_height_left_arm_z_axis"
       ],
       "per_condition": [
-        "adap_ctr_uc3:vel_constraint_setpoint_pid_z_axis_left_arm",
-        "adap_ctr_uc3:error_within_threshold_to_activate_i_block_z_axis_left_arm"
+        "adap_ctr_uc3:vel_constraint_setpoint_pid_z_axis_left_arm"
       ],
       "post_condition": [
         "adap_ctr_uc3:pos_constraint_left_arm_reached_desired_height_z_axis",
@@ -125,14 +125,6 @@
       "constraint_controller": "adap_ctr_uc3:constant_force_controller_z_axis_left_arm"
     },
     {
-      "@id": "adap_ctr_uc3:pd_controller_z_axis_left_arm_call",
-      "@type": "ConstraintController",
-      "constraints_controlled": [
-        "adap_ctr_uc3:vel_constraint_setpoint_pid_z_axis_left_arm"
-      ],
-      "constraint_controller": "adap_ctr_uc3:pd_controller_z_axis_left_arm"
-    },
-    {
       "@id": "adap_ctr_uc3:stiffness_controller_to_maintain_pos_at_setpoint_z_axis_left_arm_call",
       "@type": "ConstraintController",
       "constraints_controlled": [
@@ -155,23 +147,12 @@
       ],
       "algorithm_details": "adap_ctr_uc3:pid_controller_z_axis_left_arm",
       "schedules_of_algorithm": [
-        "adap_ctr_uc3:pid_controller_schedule_z_axis_left_arm"
+        "adap_ctr_uc3:pid_controller_high_i_gain_schedule_z_axis_left_arm",
+        "adap_ctr_uc3:pid_controller_low_i_gain_schedule_z_axis_left_arm"
       ],
       "sch_evnt_assn": [
-        "adap_ctr_uc3:pid_controller_schedule_z_axis_left_arm_call"
-      ]
-    },
-    {
-      "@id": "adap_ctr_uc3:pd_controller_activity_z_axis_left_arm",
-      "@type": [
-        "Activity"
-      ],
-      "algorithm_details": "adap_ctr_uc3:pd_controller_z_axis_left_arm",
-      "schedules_of_algorithm": [
-        "adap_ctr_uc3:pd_controller_schedule_z_axis_left_arm"
-      ],
-      "sch_evnt_assn": [
-        "adap_ctr_uc3:pd_controller_schedule_z_axis_left_arm_call"
+        "adap_ctr_uc3:pid_controller_high_i_gain_schedule_z_axis_left_arm_call",
+        "adap_ctr_uc3:pid_controller_low_i_gain_schedule_z_axis_left_arm_call"
       ]
     },
     {
@@ -238,26 +219,26 @@
       "schedule_to_call": "adap_ctr_uc3:stiffness_controller_schedule_to_maintain_pos_at_setpoint_z_axis_left_arm"
     },
     {
-      "@id": "adap_ctr_uc3:pd_controller_schedule_z_axis_left_arm_call",
+      "@id": "adap_ctr_uc3:pid_controller_low_i_gain_schedule_z_axis_left_arm_call",
       "@type": [
         "ScheduleCallback",
         "EventBasedScheduleCallback"
       ],
       "desired_events": [
-        "adap_ctr_uc3:error_outside_threshold_to_deactivate_i_block_z_axis_left_arm_event"
+        "adap_ctr_uc3:error_outside_threshold_z_axis_left_arm_event"
       ],
-      "schedule_to_call": "adap_ctr_uc3:pd_controller_schedule_z_axis_left_arm"
+      "schedule_to_call": "adap_ctr_uc3:pid_controller_low_i_gain_schedule_z_axis_left_arm"
     },
     {
-      "@id": "adap_ctr_uc3:pid_controller_schedule_z_axis_left_arm_call",
+      "@id": "adap_ctr_uc3:pid_controller_high_i_gain_schedule_z_axis_left_arm_call",
       "@type": [
         "ScheduleCallback",
         "EventBasedScheduleCallback"
       ],
       "desired_events": [
-        "adap_ctr_uc3:error_within_threshold_to_activate_i_block_z_axis_left_arm_event"
+        "adap_ctr_uc3:error_within_threshold_z_axis_left_arm_event"
       ],
-      "schedule_to_call": "adap_ctr_uc3:pid_controller_schedule_z_axis_left_arm"
+      "schedule_to_call": "adap_ctr_uc3:pid_controller_high_i_gain_schedule_z_axis_left_arm"
     },
     {
       "@id": "adap_ctr_uc3:p_controller_schedule_x_axis_left_arm_call",
@@ -300,41 +281,18 @@
       ],
       "ctr_functions": [
         "adap_ctr_uc3:error_calculation_lin_pos_stiffness_z_axis_left_arm_function",
-        "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_left_arm_function"
+        "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_left_arm_function",
+        "adap_ctr_uc3:add_stiffness_term_to_ee_force_lin_z_axis_left_arm_function",
+        "adap_ctr_uc3:append_weight_of_box_to_ee_force_z_axis_left_arm_function"
       ],
       "ctr_signals": [
         "adap_ctr_uc3:measured_lin_pos_z_axis_left_arm_data",
         "adap_ctr_uc3:lin_pos_sp_z_axis_left_arm_data",
         "adap_ctr_uc3:lin_pos_error_stiffness_z_axis_left_arm_data",
         "adap_ctr_uc3:stiffness_lin_z_axis_left_arm_data",
-        "adap_ctr_uc3:apply_ee_force_z_axis_left_arm_data"
-      ]
-    },
-    {
-      "@id": "adap_ctr_uc3:pd_controller_z_axis_left_arm",
-      "@type": [
-        "Controller"
-      ],
-      "ctr_functions": [
-        "adap_ctr_uc3:error_calculation_lin_vel_pid_z_axis_left_arm_function",
-        "adap_ctr_uc3:p_term_calculator_lin_vel_z_axis_left_arm_function",
-        "adap_ctr_uc3:derivative_calculator_of_lin_vel_error_z_axis_left_arm_function",
-        "adap_ctr_uc3:update_previous_vel_error_with_current_vel_error_data_z_axis_left_arm_function",
-        "adap_ctr_uc3:d_term_calculator_lin_vel_z_axis_left_arm_function",
-        "adap_ctr_uc3:pd_term_summation_z_axis_left_arm_function"
-      ],
-      "ctr_signals": [
-        "adap_ctr_uc3:measured_lin_vel_z_axis_left_arm_data",
-        "adap_ctr_uc3:lin_vel_sp_z_axis_left_arm_data",
-        "adap_ctr_uc3:lin_vel_error_pid_z_axis_left_arm_data",
-        "adap_ctr_uc3:previous_lin_vel_error_z_axis_left_arm_data",
-        "adap_ctr_uc3:p_gain_z_axis_left_arm_data",
-        "adap_ctr_uc3:p_term_lin_vel_z_axis_left_arm_data",
-        "adap_ctr_uc3:time_period_of_complete_controller_cycle_data",
-        "adap_ctr_uc3:d_term_lin_vel_error_z_axis_left_arm_data",
-        "adap_ctr_uc3:d_gain_lin_vel_z_axis_left_arm_data",
-        "adap_ctr_uc3:d_term_lin_vel_z_axis_left_arm_data",
-        "adap_ctr_uc3:apply_ee_force_z_axis_left_arm_data"
+        "adap_ctr_uc3:apply_ee_force_z_axis_left_arm_data",
+        "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_left_arm_data",
+        "adap_ctr_uc3:weight_of_box_data"
       ]
     },
     {
@@ -348,12 +306,17 @@
         "adap_ctr_uc3:derivative_calculator_of_lin_vel_error_z_axis_left_arm_function",
         "adap_ctr_uc3:d_term_calculator_lin_vel_z_axis_left_arm_function",
         "adap_ctr_uc3:update_previous_vel_error_with_current_vel_error_data_z_axis_left_arm_function",
-        "adap_ctr_uc3:integral_calculator_of_lin_vel_error_z_axis_left_arm_function",
-        "adap_ctr_uc3:i_term_calculator_lin_vel_z_axis_left_arm_function",
+        "adap_ctr_uc3:high_i_gain_integral_calculator_of_lin_vel_error_z_axis_left_arm_function",
+        "adap_ctr_uc3:low_i_gain_integral_calculator_of_lin_vel_error_z_axis_left_arm_function",
+        "adap_ctr_uc3:i_gain_low_times_error_calculator_lin_vel_z_axis_left_arm_function",
+        "adap_ctr_uc3:i_gain_high_times_error_calculator_lin_vel_z_axis_left_arm_function",
         "adap_ctr_uc3:saturate_i_term_lin_vel_z_axis_left_arm_function",
-        "adap_ctr_uc3:pid_term_summation_z_axis_left_arm_function"
+        "adap_ctr_uc3:pid_term_summation_z_axis_left_arm_function",
+        "adap_ctr_uc3:add_pid_term_summation_to_ee_force_z_axis_left_arm_function",
+        "adap_ctr_uc3:append_weight_of_box_to_ee_force_z_axis_left_arm_function"
       ],
       "ctr_signals": [
+        "adap_ctr_uc3:time_period_of_complete_controller_cycle_data",
         "adap_ctr_uc3:measured_lin_vel_z_axis_left_arm_data",
         "adap_ctr_uc3:lin_vel_sp_z_axis_left_arm_data",
         "adap_ctr_uc3:lin_vel_error_pid_z_axis_left_arm_data",
@@ -364,12 +327,16 @@
         "adap_ctr_uc3:d_term_lin_vel_error_z_axis_left_arm_data",
         "adap_ctr_uc3:d_gain_lin_vel_z_axis_left_arm_data",
         "adap_ctr_uc3:d_term_lin_vel_z_axis_left_arm_data",
-        "adap_ctr_uc3:integral_of_vel_term_error_z_axis_left_arm_data",
-        "adap_ctr_uc3:i_gain_lin_vel_z_axis_left_arm_data",
+        "adap_ctr_uc3:i_gain_low_lin_vel_z_axis_left_arm_data",
+        "adap_ctr_uc3:i_gain_low_times_error_lin_vel_z_axis_left_arm_data",
+        "adap_ctr_uc3:i_gain_high_lin_vel_z_axis_left_arm_data",
+        "adap_ctr_uc3:i_gain_high_times_error_lin_vel_z_axis_left_arm_data",
         "adap_ctr_uc3:i_term_lin_vel_z_axis_left_arm_data",
         "adap_ctr_uc3:i_term_saturation_lower_limit_z_axis_left_arm_data",
         "adap_ctr_uc3:i_term_saturation_upper_limit_z_axis_left_arm_data",
-        "adap_ctr_uc3:apply_ee_force_z_axis_left_arm_data"
+        "adap_ctr_uc3:pid_term_summation_z_axis_left_arm_data",
+        "adap_ctr_uc3:apply_ee_force_z_axis_left_arm_data",
+        "adap_ctr_uc3:weight_of_box_data"
       ]
     },
     {
@@ -392,13 +359,15 @@
       ],
       "ctr_functions": [
         "adap_ctr_uc3:error_calculation_lin_pos_p_x_axis_left_arm_function",
-        "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_left_arm_function"
+        "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_left_arm_function",
+        "adap_ctr_uc3:add_p_term_to_ee_force_lin_pos_x_axis_left_arm_function"
       ],
       "ctr_signals": [
         "adap_ctr_uc3:measured_lin_pos_x_axis_left_arm_data",
         "adap_ctr_uc3:lin_pos_sp_x_axis_left_arm_data",
         "adap_ctr_uc3:lin_pos_error_x_axis_left_arm_data",
         "adap_ctr_uc3:p_gain_pos_x_axis_left_arm_data",
+        "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_left_arm_data",
         "adap_ctr_uc3:apply_ee_force_x_axis_left_arm_data"
       ]
     },
@@ -422,11 +391,13 @@
       ],
       "trigger_chain": [
         "adap_ctr_uc3:error_calculation_lin_pos_stiffness_z_axis_left_arm_function",
-        "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_left_arm_function"
+        "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_left_arm_function",
+        "adap_ctr_uc3:add_stiffness_term_to_ee_force_lin_z_axis_left_arm_function",
+        "adap_ctr_uc3:append_weight_of_box_to_ee_force_z_axis_left_arm_function"
       ]
     },
     {
-      "@id": "adap_ctr_uc3:pd_controller_schedule_z_axis_left_arm",
+      "@id": "adap_ctr_uc3:pid_controller_low_i_gain_schedule_z_axis_left_arm",
       "@type": [
         "Schedule"
       ],
@@ -436,24 +407,31 @@
         "adap_ctr_uc3:derivative_calculator_of_lin_vel_error_z_axis_left_arm_function",
         "adap_ctr_uc3:update_previous_vel_error_with_current_vel_error_data_z_axis_left_arm_function",
         "adap_ctr_uc3:d_term_calculator_lin_vel_z_axis_left_arm_function",
-        "adap_ctr_uc3:pd_term_summation_z_axis_left_arm_function"
-      ]
-    },
-    {
-      "@id": "adap_ctr_uc3:pid_controller_schedule_z_axis_left_arm",
-      "@type": [
-        "Schedule"
-      ],
-      "trigger_chain": [
-        "adap_ctr_uc3:error_calculation_lin_vel_pid_z_axis_left_arm_function",
-        "adap_ctr_uc3:p_term_calculator_lin_vel_z_axis_left_arm_function",
-        "adap_ctr_uc3:derivative_calculator_of_lin_vel_error_z_axis_left_arm_function",
-        "adap_ctr_uc3:update_previous_vel_error_with_current_vel_error_data_z_axis_left_arm_function",
-        "adap_ctr_uc3:d_term_calculator_lin_vel_z_axis_left_arm_function",
-        "adap_ctr_uc3:integral_calculator_of_lin_vel_error_z_axis_left_arm_function",
-        "adap_ctr_uc3:i_term_calculator_lin_vel_z_axis_left_arm_function",
+        "adap_ctr_uc3:i_gain_low_times_error_calculator_lin_vel_z_axis_left_arm_function",
+        "adap_ctr_uc3:low_i_gain_integral_calculator_of_lin_vel_error_z_axis_left_arm_function",
         "adap_ctr_uc3:saturate_i_term_lin_vel_z_axis_left_arm_function",
-        "adap_ctr_uc3:pid_term_summation_z_axis_left_arm_function"
+        "adap_ctr_uc3:pid_term_summation_z_axis_left_arm_function",
+        "adap_ctr_uc3:add_pid_term_summation_to_ee_force_z_axis_left_arm_function",
+        "adap_ctr_uc3:append_weight_of_box_to_ee_force_z_axis_left_arm_function"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:pid_controller_high_i_gain_schedule_z_axis_left_arm",
+      "@type": [
+        "Schedule"
+      ],
+      "trigger_chain": [
+        "adap_ctr_uc3:error_calculation_lin_vel_pid_z_axis_left_arm_function",
+        "adap_ctr_uc3:p_term_calculator_lin_vel_z_axis_left_arm_function",
+        "adap_ctr_uc3:derivative_calculator_of_lin_vel_error_z_axis_left_arm_function",
+        "adap_ctr_uc3:update_previous_vel_error_with_current_vel_error_data_z_axis_left_arm_function",
+        "adap_ctr_uc3:d_term_calculator_lin_vel_z_axis_left_arm_function",
+        "adap_ctr_uc3:i_gain_high_times_error_calculator_lin_vel_z_axis_left_arm_function",
+        "adap_ctr_uc3:high_i_gain_integral_calculator_of_lin_vel_error_z_axis_left_arm_function",
+        "adap_ctr_uc3:saturate_i_term_lin_vel_z_axis_left_arm_function",
+        "adap_ctr_uc3:pid_term_summation_z_axis_left_arm_function",
+        "adap_ctr_uc3:add_pid_term_summation_to_ee_force_z_axis_left_arm_function",
+        "adap_ctr_uc3:append_weight_of_box_to_ee_force_z_axis_left_arm_function"
       ]
     },
     {
@@ -472,7 +450,8 @@
       ],
       "trigger_chain": [
         "adap_ctr_uc3:error_calculation_lin_pos_p_x_axis_left_arm_function",
-        "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_left_arm_function"
+        "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_left_arm_function",
+        "adap_ctr_uc3:add_p_term_to_ee_force_lin_pos_x_axis_left_arm_function"
       ]
     },
     {

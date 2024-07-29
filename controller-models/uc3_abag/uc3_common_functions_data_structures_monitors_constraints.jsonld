@@ -120,6 +120,20 @@
       "data_name": "both_arms_not_grasped_box_y_axis_flag",
       "data_type": "bool",
       "init_value": "false"
+    },
+    {
+      "@id": "adap_ctr_uc3:abag_mapping_to_force_factor_data",
+      "@type": "Data",
+      "data_name": "abag_mapping_to_force_factor",
+      "data_type": "double",
+      "init_value": "10.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:weight_of_box_data",
+      "@type": "Data",
+      "data_name": "weight_of_box",
+      "data_type": "double",
+      "init_value": "5.0"
     }
   ]
 }

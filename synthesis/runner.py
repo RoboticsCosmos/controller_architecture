@@ -125,7 +125,7 @@ def main():
                         "function_names": [],
                         "flag_names": [],
                     },
-                    "schedules": dict(),
+                    "schedules": dict(),  # ideally this key should be 'activities'
                 }
 
                 """
@@ -139,6 +139,8 @@ def main():
                     },
                 }
                 """
+
+                motion_spec_name = g.compute_qname(motion_spec)[-1]
 
                 pre_conditions = g.objects(
                     subject=motion_spec,
@@ -239,19 +241,21 @@ def main():
 
                 # for each per condition
                 for per_condition in per_conditions:
+
                     # get the constraint controller associated with the per condition (constraint_controlled). Assumption: one or more controller can be associated with a per condition, but in differernt nodes
                     node_generator_for_constraint_controller = g.subjects(
-                        predicate=ALGORITHM.constraints_controlled, object=per_condition
+                        predicate=MONITOR.constraints_controlled, object=per_condition
                     )
 
                     # if generator is empty, then it doesn't enter the for loop
+                    # for each controller associated with one per condition, get the activity associated with the controller
                     for node_id in node_generator_for_constraint_controller:
-
+                        # get the controller id
                         controller_id = g.value(
                             subject=node_id,
-                            predicate=ALGORITHM.constraint_controller,
+                            predicate=MONITOR.constraint_controller,
                         )
-                        # get the activities associated with the controller
+                        # get the activity associated with the controller
                         activity_for_the_controller_id = g.value(
                             predicate=ALGORITHM.algorithm_details,
                             object=controller_id,
@@ -264,20 +268,32 @@ def main():
                             activity_for_the_controller_ids.add(
                                 activity_for_the_controller_id
                             )
+                            # even though there is only one activity associated with the controller,
+                            # it is stored in a set for future use
 
-                            schedules_id_list, _ = helper.get_from_container(
-                                subject_node=activity_for_the_controller_id,
-                                predicate_value=ALGORITHM.schedules_of_algorithm,
-                                graph=g,
-                            )
+                            # get the schedule ids associated with the activity
+                            # schedules_id_list, _ = helper.get_from_container(
+                            #     subject_node=activity_for_the_controller_id,
+                            #     predicate_value=ALGORITHM.schedules_of_algorithm,
+                            #     graph=g,
+                            # )
 
-                            for schedule_id in schedules_id_list:
-                                schedule_node_ids.add(schedule_id)
+                            # for schedule_id in schedules_id_list:
+                            #     schedule_node_ids.add(schedule_id)
 
-                print("[runner.py] schedule_node_ids: ", schedule_node_ids)
+                # note: all schedules associated with one mo_spec among others in a dimension are considered in one scope
+                # (as in all use cases only one activity is associated with one mo_spec).
+                # But in general, there can be multiple activities associated with one mo_spec,
+                # and individual activity must be considered in its scope, rather than under the
+                # scope of mo_spec
+                # Note: One activity can execute maximum one schedule at a time.
+                print(
+                    "[runner.py] activity for", motion_spec_name, ": ",
+                    activity_for_the_controller_ids,
+                )
                 ir = ScheduleTranslator().translate(
                     g,
-                    schedule_node_ids,
+                    activity_for_the_controller_ids,
                     motion_spec,
                 )
 
@@ -303,7 +319,7 @@ def main():
 
         # save in a json file
         with open(
-            "/home/melody-u18/Desktop/Thesis/controller_architecture/gen/irs/uc3_abag.json",
+            "/home/melody-u18/Desktop/Thesis/controller_architecture/gen/irs/uc3_abag_test.json",
             "w",
         ) as f:
             f.write(json_obj)

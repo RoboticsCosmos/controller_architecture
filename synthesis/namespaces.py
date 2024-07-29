@@ -11,7 +11,6 @@ class ALGORITHM(DefinedNamespace):
     ScheduleCallback: URIRef
     EventBasedScheduleCallback: URIRef
     FunctionCall: URIRef
-    ConstraintController: URIRef
     Activity: URIRef
     algorithm_details: URIRef
     schedules_of_algorithm: URIRef
@@ -21,13 +20,10 @@ class ALGORITHM(DefinedNamespace):
     uncertainty_data: URIRef
     init_value: URIRef
     trigger_chain: URIRef
-    constraints_controlled: URIRef
-    constraint_controller: URIRef
     schedule_to_call: URIRef
     desired_events: URIRef
 
     _NS = Namespace("https://controller.org/metamodels/algorithm#")
-
 
 class ERROR(DefinedNamespace):
 
@@ -51,7 +47,6 @@ class ERROR(DefinedNamespace):
     previous_value: URIRef
 
     _NS = Namespace("https://controller.org/metamodels/controllers/error#")
-
 
 class FUNCTIONS(DefinedNamespace):
 
@@ -95,7 +90,6 @@ class FUNCTIONS(DefinedNamespace):
 
     _NS = Namespace("https://controller.org/metamodels/controllers/functions#")
 
-
 class CONTROLLER(DefinedNamespace):
 
     Controller: URIRef
@@ -119,7 +113,6 @@ class CONTROLLER(DefinedNamespace):
 
     _NS = Namespace("https://controller.org/metamodels/controllers/controller#")
 
-
 class ABAG(DefinedNamespace):
 
     ABAG: URIRef
@@ -134,7 +127,6 @@ class ABAG(DefinedNamespace):
     adaptive_gain_limits: URIRef
 
     _NS = Namespace("https://controller.org/metamodels/controllers/ABAG/abag#")
-
 
 class PID_CONTROLLER(DefinedNamespace):
 
@@ -176,7 +168,6 @@ class PID_CONTROLLER(DefinedNamespace):
 
     _NS = Namespace("https://controller.org/metamodels/controllers/PID/pid_controller#")
 
-
 class IMPEDANCE_CONTROLLER(DefinedNamespace):
 
     ImpedanceController: URIRef
@@ -191,10 +182,7 @@ class IMPEDANCE_CONTROLLER(DefinedNamespace):
     init_inertia_param: URIRef
     init_damping_param: URIRef
 
-    _NS = Namespace(
-        "https://controller.org/metamodels/controllers/ForceControl/impedance_controller#"
-    )
-
+    _NS = Namespace("https://controller.org/metamodels/controllers/ForceControl/impedance_controller#")
 
 class MONITOR(DefinedNamespace):
 
@@ -215,6 +203,9 @@ class MONITOR(DefinedNamespace):
     ConstraintToEvent: URIRef
     ConstraintToFlag: URIRef
     EventMonitor: URIRef
+    ConstraintController: URIRef
+    constraints_controlled: URIRef
+    constraint_controller: URIRef
     in_interval_lower_bound: URIRef
     in_interval_upper_bound: URIRef
     tolerance: URIRef
@@ -226,10 +217,7 @@ class MONITOR(DefinedNamespace):
     event_emitted: URIRef
     operator: URIRef
 
-    _NS = Namespace(
-        "https://controller.org/metamodels/architecture_components/monitor#"
-    )
-
+    _NS = Namespace("https://controller.org/metamodels/architecture_components/monitor#")
 
 class PLAN(DefinedNamespace):
 

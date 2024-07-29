@@ -56,7 +56,19 @@
         "adap_ctr_uc3:p_gain_pos_x_axis_right_arm_data",
         "adap_ctr_uc3:lin_pos_error_x_axis_right_arm_data"
       ],
-      "product_data": "adap_ctr_uc3:apply_ee_force_x_axis_right_arm_data"
+      "product_data": "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:add_p_term_to_ee_force_lin_pos_x_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Sum"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:apply_ee_force_x_axis_right_arm_data",
+        "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_right_arm_data"
+      ],
+      "summed_data": "adap_ctr_uc3:apply_ee_force_x_axis_right_arm_data"
     },
     {
       "@id": "adap_ctr_uc3:derivative_calculator_of_lin_vel_error_z_axis_right_arm_function",
@@ -82,26 +94,48 @@
       "product_data": "adap_ctr_uc3:d_term_lin_vel_z_axis_right_arm_data"
     },
     {
-      "@id": "adap_ctr_uc3:integral_calculator_of_lin_vel_error_z_axis_right_arm_function",
+      "@id": "adap_ctr_uc3:high_i_gain_integral_calculator_of_lin_vel_error_z_axis_right_arm_function",
       "@type": [
         "Functions",
         "IntegralFromStartError"
       ],
       "time_period": "adap_ctr_uc3:time_period_of_complete_controller_cycle_data",
-      "quantity_to_integrate": "adap_ctr_uc3:lin_vel_error_pid_z_axis_right_arm_data",
-      "integrated_data": "adap_ctr_uc3:integral_of_vel_term_error_z_axis_right_arm_data"
+      "quantity_to_integrate": "adap_ctr_uc3:i_gain_high_times_error_lin_vel_z_axis_right_arm_data",
+      "integrated_data": "adap_ctr_uc3:i_term_lin_vel_z_axis_right_arm_data"
     },
     {
-      "@id": "adap_ctr_uc3:i_term_calculator_lin_vel_z_axis_right_arm_function",
+      "@id": "adap_ctr_uc3:low_i_gain_integral_calculator_of_lin_vel_error_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "IntegralFromStartError"
+      ],
+      "time_period": "adap_ctr_uc3:time_period_of_complete_controller_cycle_data",
+      "quantity_to_integrate": "adap_ctr_uc3:i_gain_low_times_error_lin_vel_z_axis_right_arm_data",
+      "integrated_data": "adap_ctr_uc3:i_term_lin_vel_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:i_gain_low_times_error_calculator_lin_vel_z_axis_right_arm_function",
       "@type": [
         "Functions",
         "Scale"
       ],
       "arguments_list": [
-        "adap_ctr_uc3:i_gain_lin_vel_z_axis_right_arm_data",
-        "adap_ctr_uc3:integral_of_vel_term_error_z_axis_right_arm_data"
+        "adap_ctr_uc3:i_gain_low_lin_vel_z_axis_right_arm_data",
+        "adap_ctr_uc3:lin_vel_error_pid_z_axis_right_arm_data"
       ],
-      "product_data": "adap_ctr_uc3:i_term_lin_vel_z_axis_right_arm_data"
+      "product_data": "adap_ctr_uc3:i_gain_low_times_error_lin_vel_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:i_gain_high_times_error_calculator_lin_vel_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Scale"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:i_gain_high_lin_vel_z_axis_right_arm_data",
+        "adap_ctr_uc3:lin_vel_error_pid_z_axis_right_arm_data"
+      ],
+      "product_data": "adap_ctr_uc3:i_gain_high_times_error_lin_vel_z_axis_right_arm_data"
     },
     {
       "@id": "adap_ctr_uc3:saturate_i_term_lin_vel_z_axis_right_arm_function",
@@ -117,18 +151,6 @@
       ]
     },
     {
-      "@id": "adap_ctr_uc3:pd_term_summation_z_axis_right_arm_function",
-      "@type": [
-        "Functions",
-        "Sum"
-      ],
-      "arguments_list": [
-        "adap_ctr_uc3:p_term_lin_vel_z_axis_right_arm_data",
-        "adap_ctr_uc3:d_term_lin_vel_z_axis_right_arm_data"
-      ],
-      "summed_data": "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data"
-    },
-    {
       "@id": "adap_ctr_uc3:pid_term_summation_z_axis_right_arm_function",
       "@type": [
         "Functions",
@@ -138,6 +160,18 @@
         "adap_ctr_uc3:p_term_lin_vel_z_axis_right_arm_data",
         "adap_ctr_uc3:i_term_lin_vel_z_axis_right_arm_data",
         "adap_ctr_uc3:d_term_lin_vel_z_axis_right_arm_data"
+      ],
+      "summed_data": "adap_ctr_uc3:pid_term_summation_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:add_pid_term_summation_to_ee_force_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Sum"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data",
+        "adap_ctr_uc3:pid_term_summation_z_axis_right_arm_data"
       ],
       "summed_data": "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data"
     },
@@ -189,7 +223,59 @@
         "adap_ctr_uc3:stiffness_lin_z_axis_right_arm_data",
         "adap_ctr_uc3:lin_pos_error_stiffness_z_axis_right_arm_data"
       ],
-      "product_data": "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data"
+      "product_data": "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:add_stiffness_term_to_ee_force_lin_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Sum"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data",
+        "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_right_arm_data"
+      ],
+      "summed_data": "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:append_weight_of_box_to_ee_force_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Sum"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data",
+        "adap_ctr_uc3:weight_of_box_data"
+      ],
+      "summed_data": "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:i_gain_low_times_error_lin_vel_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "i_gain_times_error",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:pid_term_summation_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "pid_term_summation",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "p_term",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "stiffness_term_output",
+      "data_type": "double",
+      "init_value": "0.0"
     },
     {
       "@id": "adap_ctr_uc3:lin_pos_error_stiffness_z_axis_right_arm_data",
@@ -338,7 +424,7 @@
       "unit": "M"
     },
     {
-      "@id": "adap_ctr_uc3:lin_vel_sp_threshold_to_activate_i_z_axis_right_arm_data",
+      "@id": "adap_ctr_uc3:lin_vel_sp_threshold_z_axis_right_arm_data",
       "@type": [
         "Data",
         "QuantityKind",
@@ -346,7 +432,7 @@
       ],
       "data_name": "lin_vel_sp",
       "data_type": "double",
-      "init_value": "0.015",
+      "init_value": "0.02",
       "quantity_kind": "Velocity",
       "unit": "M-PER-SEC"
     },
@@ -416,18 +502,25 @@
       "init_value": "0.0"
     },
     {
-      "@id": "adap_ctr_uc3:integral_of_vel_term_error_z_axis_right_arm_data",
-      "@type": "Data",
-      "data_name": "vel_error_integral",
-      "data_type": "double",
-      "init_value": "0.0"
-    },
-    {
-      "@id": "adap_ctr_uc3:i_gain_lin_vel_z_axis_right_arm_data",
+      "@id": "adap_ctr_uc3:i_gain_high_lin_vel_z_axis_right_arm_data",
       "@type": "Data",
       "data_name": "i_gain",
       "data_type": "double",
       "init_value": "100.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:i_gain_low_lin_vel_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "i_gain",
+      "data_type": "double",
+      "init_value": "20.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:i_gain_high_times_error_lin_vel_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "i_term",
+      "data_type": "double",
+      "init_value": "0.0"
     },
     {
       "@id": "adap_ctr_uc3:i_term_lin_vel_z_axis_right_arm_data",
@@ -465,16 +558,16 @@
       "init_value": "false"
     },
     {
-      "@id": "adap_ctr_uc3:error_within_threshold_to_activate_i_block_z_axis_right_arm_event",
+      "@id": "adap_ctr_uc3:error_within_threshold_z_axis_right_arm_event",
       "@type": "Data",
-      "data_name": "error_within_threshold_to_activate_i_block",
+      "data_name": "error_within_threshold",
       "data_type": "bool",
       "init_value": "false"
     },
     {
-      "@id": "adap_ctr_uc3:error_outside_threshold_to_deactivate_i_block_z_axis_right_arm_event",
+      "@id": "adap_ctr_uc3:error_outside_threshold_z_axis_right_arm_event",
       "@type": "Data",
-      "data_name": "error_outside_threshold_to_deactivate_i_block",
+      "data_name": "error_outside_threshold",
       "data_type": "bool",
       "init_value": "false"
     },

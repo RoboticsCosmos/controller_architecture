@@ -85,9 +85,11 @@ int main() {
 
   <loop_through_each_dimension_of_control(controller_architecture, functions)>
 
+<push_collected_data_to_array_uc3_pid()>
+
 <transform_ee_force_to_ee_frame_and_calculate_jnt_torques_and_send_to_robot()>
 
-<update_logging_arrays_and_add_to_file_if_sufficient_data_collected_uc3_pid()>
+<update_logging_arrays_and_add_to_file_if_sufficient_data_collected()>
   }
 
 <save_remaining_data_before_exiting_the_program()>

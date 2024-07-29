@@ -33,7 +33,19 @@
         "adap_ctr_uc3:p_gain_pos_x_axis_right_arm_data",
         "adap_ctr_uc3:lin_pos_error_x_axis_right_arm_data"
       ],
-      "product_data": "adap_ctr_uc3:apply_ee_force_x_axis_right_arm_data"
+      "product_data": "adap_ctr_uc3:p_term_lin_pos_x_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:add_p_term_to_ee_force_lin_pos_x_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Sum"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:p_term_lin_pos_x_axis_right_arm_data",
+        "adap_ctr_uc3:apply_ee_force_x_axis_right_arm_data"
+      ],
+      "summed_data": "adap_ctr_uc3:apply_ee_force_x_axis_right_arm_data"
     },
     {
       "@id": "adap_ctr_uc3:press_downwards_with_constant_force_z_axis_right_arm_function",
@@ -74,7 +86,19 @@
         "adap_ctr_uc3:stiffness_lin_z_axis_right_arm_data",
         "adap_ctr_uc3:lin_pos_error_stiffness_z_axis_right_arm_data"
       ],
-      "product_data": "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data"
+      "product_data": "adap_ctr_uc3:stiffness_term_lin_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:add_stiffness_term_to_ee_force_lin_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Sum"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:stiffness_term_lin_z_axis_right_arm_data",
+        "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data"
+      ],
+      "summed_data": "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data"
     },
     {
       "@id": "adap_ctr_uc3:abag_subtract_filtering_factor_by_one_z_axis_right_arm_function",
@@ -354,6 +378,30 @@
       ],
       "variable_to_copy_to": "adap_ctr_uc3:abag_previous_adaptive_gain_signal_z_axis_right_arm_data",
       "variable_to_copy_from": "adap_ctr_uc3:abag_adaptive_gain_signal_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:scale_abag_output_by_mapping_to_force_factor_data_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Scale"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:abag_difference_bias_and_scaled_error_z_axis_right_arm_data",
+        "adap_ctr_uc3:abag_mapping_to_force_factor_data"
+      ],
+      "product_data": "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:add_weight_of_box_to_ee_force_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Sum"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data",
+        "adap_ctr_uc3:weight_of_box_data"
+      ],
+      "summed_data": "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data"
     },
     {
       "@id": "adap_ctr_uc3:abag_saturation_lower_limit_z_axis_right_arm_data",
@@ -649,6 +697,20 @@
       "init_value": "-5.0"
     },
     {
+      "@id": "adap_ctr_uc3:p_term_lin_pos_x_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "p_term",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:stiffness_term_lin_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "stiffness_term",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
       "@id": "adap_ctr_uc3:lin_pos_error_stiffness_z_axis_right_arm_data",
       "@type": [
         "Data",
@@ -761,7 +823,7 @@
       "@type": "Data",
       "data_name": "p_gain",
       "data_type": "double",
-      "init_value": "200.0"
+      "init_value": "150.0"
     },
     {
       "@id": "adap_ctr_uc3:time_period_of_complete_controller_cycle_data",

@@ -3,6 +3,7 @@
     "https://controller.org/metamodels/architecture_components/plan.jsonld",
     "https://controller.org/metamodels/algorithm.jsonld",
     "https://controller.org/metamodels/controllers/controller.jsonld",
+    "https://controller.org/metamodels/architecture_components/monitor.jsonld",
     {
       "adap_ctr_uc3": "https://controller.org/models/adap_ctr_uc3#"
     }
@@ -267,14 +268,16 @@
       ],
       "ctr_functions": [
         "adap_ctr_uc3:error_calculation_lin_pos_stiffness_z_axis_left_arm_function",
-        "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_left_arm_function"
+        "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_left_arm_function",
+        "adap_ctr_uc3:add_stiffness_term_to_ee_force_lin_z_axis_left_arm_function"
       ],
       "ctr_signals": [
         "adap_ctr_uc3:measured_lin_pos_z_axis_left_arm_data",
         "adap_ctr_uc3:lin_pos_sp_z_axis_left_arm_data",
         "adap_ctr_uc3:lin_pos_error_stiffness_z_axis_left_arm_data",
         "adap_ctr_uc3:stiffness_lin_z_axis_left_arm_data",
-        "adap_ctr_uc3:apply_ee_force_z_axis_left_arm_data"
+        "adap_ctr_uc3:apply_ee_force_z_axis_left_arm_data",
+        "adap_ctr_uc3:stiffness_term_lin_z_axis_left_arm_data"
       ]
     },
     {
@@ -307,7 +310,9 @@
         "adap_ctr_uc3:abag_saturation_of_control_command_z_axis_left_arm_function",
         "adap_ctr_uc3:abag_update_previous_error_with_current_error_z_axis_left_arm_function",
         "adap_ctr_uc3:abag_update_previous_bias_with_current_bias_z_axis_left_arm_function",
-        "adap_ctr_uc3:abag_update_previous_gain_with_current_gain_z_axis_left_arm_function"
+        "adap_ctr_uc3:abag_update_previous_gain_with_current_gain_z_axis_left_arm_function",
+        "adap_ctr_uc3:scale_abag_output_by_mapping_to_force_factor_data_z_axis_left_arm_function",
+        "adap_ctr_uc3:add_weight_of_box_to_ee_force_z_axis_left_arm_function"
       ],
       "ctr_signals": [
         "adap_ctr_uc3:number_one_data",
@@ -344,7 +349,9 @@
         "adap_ctr_uc3:abag_difference_bias_and_scaled_error_z_axis_left_arm_data",
         "adap_ctr_uc3:abag_saturation_of_control_command_z_axis_left_arm_data",
         "adap_ctr_uc3:abag_control_command_signal_z_axis_left_arm_data",
-        "adap_ctr_uc3:abag_saturation_of_control_command_signal_z_axis_left_arm_data"
+        "adap_ctr_uc3:abag_saturation_of_control_command_signal_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_mapping_to_force_factor_data",
+        "adap_ctr_uc3:weight_of_box_data"
       ]
     },
     {
@@ -367,14 +374,16 @@
       ],
       "ctr_functions": [
         "adap_ctr_uc3:error_calculation_lin_pos_p_x_axis_left_arm_function",
-        "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_left_arm_function"
+        "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_left_arm_function",
+        "adap_ctr_uc3:add_p_term_to_ee_force_lin_pos_x_axis_left_arm_function"
       ],
       "ctr_signals": [
         "adap_ctr_uc3:measured_lin_pos_x_axis_left_arm_data",
         "adap_ctr_uc3:lin_pos_sp_x_axis_left_arm_data",
         "adap_ctr_uc3:lin_pos_error_x_axis_left_arm_data",
         "adap_ctr_uc3:p_gain_pos_x_axis_left_arm_data",
-        "adap_ctr_uc3:apply_ee_force_x_axis_left_arm_data"
+        "adap_ctr_uc3:apply_ee_force_x_axis_left_arm_data",
+        "adap_ctr_uc3:p_term_lin_pos_x_axis_left_arm_data"
       ]
     },
     {
@@ -397,7 +406,8 @@
       ],
       "trigger_chain": [
         "adap_ctr_uc3:error_calculation_lin_pos_stiffness_z_axis_left_arm_function",
-        "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_left_arm_function"
+        "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_left_arm_function",
+        "adap_ctr_uc3:add_stiffness_term_to_ee_force_lin_z_axis_left_arm_function"
       ]
     },
     {
@@ -428,6 +438,8 @@
         "adap_ctr_uc3:abag_multiply_gain_by_sign_of_error_z_axis_left_arm_function",
         "adap_ctr_uc3:abag_subtract_bias_and_scaled_error_z_axis_left_arm_function",
         "adap_ctr_uc3:abag_saturation_of_control_command_z_axis_left_arm_function",
+        "adap_ctr_uc3:scale_abag_output_by_mapping_to_force_factor_data_z_axis_left_arm_function",
+        "adap_ctr_uc3:add_weight_of_box_to_ee_force_z_axis_left_arm_function",
         "adap_ctr_uc3:abag_update_previous_error_with_current_error_z_axis_left_arm_function",
         "adap_ctr_uc3:abag_update_previous_bias_with_current_bias_z_axis_left_arm_function",
         "adap_ctr_uc3:abag_update_previous_gain_with_current_gain_z_axis_left_arm_function"
@@ -449,7 +461,8 @@
       ],
       "trigger_chain": [
         "adap_ctr_uc3:error_calculation_lin_pos_p_x_axis_left_arm_function",
-        "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_left_arm_function"
+        "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_left_arm_function",
+        "adap_ctr_uc3:add_p_term_to_ee_force_lin_pos_x_axis_left_arm_function"
       ]
     },
     {
