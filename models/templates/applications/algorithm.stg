@@ -75,6 +75,14 @@ greater_than_lower_limit_monitor(function_node) ::= <<
 greater_than_lower_limit_monitor(&<function_node.quantity_to_compare>, &<function_node.reference_quantity>, &<function_node.tolerance>, &<function_node.flag_name>);
 >>
 
+greater_than_equal_to_monitor(function_node) ::= <<
+greater_than_equal_to_monitor(&<function_node.quantity_to_compare>, &<function_node.reference_quantity>, &<function_node.flag_name>);
+>>
+
+less_than_monitor(function_node) ::= <<
+less_than_monitor(&<function_node.quantity_to_compare>, &<function_node.reference_quantity>, &<function_node.flag_name>);
+>>
+
 lower_than_lower_limit_monitor(function_node) ::= <<
 lower_than_lower_limit_monitor(&<function_node.quantity_to_compare>, &<function_node.reference_quantity>, &<function_node.tolerance>, &<function_node.flag_name>);
 >>
