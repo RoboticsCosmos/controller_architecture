@@ -30,7 +30,7 @@
     ```bash
     sudo apt-get install libkdl-parser-dev libyaml-cpp-dev 
     ```
-- clone and install StringTeplate in the same workspace using https://github.com/antlr/stringtemplate4/tree/master
+- clone and install StringTeplate in the src/controller_architecture/ path using https://github.com/antlr/stringtemplate4/tree/master
 
 
 ## Usage
