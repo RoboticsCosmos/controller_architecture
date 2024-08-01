@@ -23,7 +23,7 @@
     git clone https://github.com/RoboticsCosmos/controller_architecture.git
     ```
 
-### Step 3
+### Step 2
 
 - Install the dependencies: kdl_parser, yaml-cpp
 
