@@ -2,7 +2,7 @@
 
 
 ## OS
-- The code is tested on 22
+- The code is tested on Ubuntu 22
 
 ## Dependencies:
 - rdflib
