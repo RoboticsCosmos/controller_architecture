@@ -2,35 +2,4 @@ WRENCH_THRESHOLD_LINEAR: 50
 WRENCH_THRESHOLD_ROTATIONAL: 40
 JOINT_TORQUE_THRESHOLD: 50.0
 TIMEOUT_DURATION_TASK: 150.0
-TO_LOG_BOOL: true
-WEIGHT_OF_OBJECT: 3.2
-DESIRED_TIME_STEP: 0.001
 SAVE_LOG_EVERY_NTH_STEP: 1000
-
-box_location:
-  x: 0.5
-  y: 0.0
-  z: 0.0
-  roll: 0.0
-  pitch: 0.0
-  yaw: 0.0
-
-arm_1:
-  home: 
-  - 200.27
-  - 307.4
-  - 305.24
-  - 52.45
-  - 278.51
-  - 82.0
-  - 26.35
-
-arm_2:
-  home:
-  - 337.72
-  - 53.8
-  - 56.78
-  - 307.93
-  - 77.39
-  - 262.0
-  - 334.0
