@@ -4,7 +4,7 @@
 ## OS
 - The code is tested on Ubuntu 22
 
-## Dependencies:
+## Dependencies
 - rdflib
 - jinja2
 - kdl_parser
