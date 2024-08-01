@@ -2,7 +2,7 @@
 
 
 ## OS
-- The code is tested on Ubuntu 20 and 22 versions.
+- The code is tested on 22
 
 ## Dependencies:
 - rdflib
@@ -37,7 +37,7 @@
 
 ### Use Case 1
 
-- Run the following commands from src/ folder
+- Run the following commands from the src/controller_architecture/ path
     
     ```bash
     cd gen/
@@ -50,7 +50,7 @@
 
 ### Use Case 2 - PID
 
-- Run the following commands from src/ folder
+- Run the following commands from the src/controller_architecture/ path
     
     ```bash
     cd gen/
@@ -63,7 +63,7 @@
 
 ### Use Case 2 - ABAG
 
-- Run the following commands from src/ folder
+- Run the following commands from the src/controller_architecture/ path
     
     ```bash
     cd gen/
@@ -76,21 +76,21 @@
 
 ### executing generated code
 
-- Compile the workspace (from src/)
+- Compile the workspace (from the src/controller_architecture/ path)
 
     ```bash
     cmake -Bbuild .
 
     ```
 
-- Build the workspace (from src/)
+- Build the workspace (from the src/controller_architecture/ path)
 
     ```
     cmake --build build
 
     ```
 
-- Execute the generated code (from src/)
+- Execute the generated code (from the src/controller_architecture/ path)
   
     ```
     ./build/gen/generated_code_binary
