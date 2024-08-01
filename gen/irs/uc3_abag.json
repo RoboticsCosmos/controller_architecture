@@ -140,7 +140,7 @@
         "abag_saturation_of_bias_term_z_axis_right_arm_function": {
             "function_call": "saturation",
             "signal_to_saturate": "abag_sum_previous_bias_term_and_increment_of_bias_term_z_axis_right_arm_data",
-            "saturated_data": "abag_adaptive_bias_signal_z_axis_right_arm_data",
+            "saturated_data": "abag_sum_previous_bias_term_and_increment_of_bias_term_z_axis_right_arm_data",
             "saturation_limits": [
                 "abag_saturation_lower_limit_z_axis_right_arm_data",
                 "abag_saturation_upper_limit_z_axis_right_arm_data"
@@ -178,7 +178,7 @@
         "abag_saturation_of_gain_z_axis_right_arm_function": {
             "function_call": "saturation",
             "signal_to_saturate": "abag_sum_previous_gain_and_increment_of_gain_z_axis_right_arm_data",
-            "saturated_data": "abag_adaptive_gain_signal_z_axis_right_arm_data",
+            "saturated_data": "abag_sum_previous_gain_and_increment_of_gain_z_axis_right_arm_data",
             "saturation_limits": [
                 "abag_saturation_lower_limit_z_axis_right_arm_data",
                 "abag_saturation_upper_limit_z_axis_right_arm_data"
@@ -187,7 +187,7 @@
         "abag_multiply_gain_by_sign_of_error_z_axis_right_arm_function": {
             "function_call": "multiply2",
             "arguments": [
-                "abag_adaptive_gain_signal_z_axis_right_arm_data",
+                "abag_sum_previous_gain_and_increment_of_gain_z_axis_right_arm_data",
                 "abag_sign_of_error_z_axis_right_arm_data"
             ],
             "product_data": "abag_product_gain_by_sign_of_error_z_axis_right_arm_data"
@@ -195,7 +195,7 @@
         "abag_subtract_bias_and_scaled_error_z_axis_right_arm_function": {
             "function_call": "subtraction",
             "arguments": [
-                "abag_adaptive_bias_signal_z_axis_right_arm_data",
+                "abag_sum_previous_bias_term_and_increment_of_bias_term_z_axis_right_arm_data",
                 "abag_product_gain_by_sign_of_error_z_axis_right_arm_data"
             ],
             "difference_data": "abag_difference_bias_and_scaled_error_z_axis_right_arm_data"
@@ -203,25 +203,41 @@
         "abag_saturation_of_control_command_z_axis_right_arm_function": {
             "function_call": "saturation",
             "signal_to_saturate": "abag_difference_bias_and_scaled_error_z_axis_right_arm_data",
-            "saturated_data": "abag_saturation_of_control_command_z_axis_right_arm_data",
+            "saturated_data": "abag_difference_bias_and_scaled_error_z_axis_right_arm_data",
             "saturation_limits": [
                 "abag_saturation_lower_limit_z_axis_right_arm_data",
                 "abag_saturation_upper_limit_z_axis_right_arm_data"
             ]
         },
+        "scale_abag_output_by_mapping_to_force_factor_data_z_axis_right_arm_function": {
+            "function_call": "multiply2",
+            "arguments": [
+                "abag_difference_bias_and_scaled_error_z_axis_right_arm_data",
+                "abag_mapping_to_force_factor_data"
+            ],
+            "product_data": "apply_ee_force_z_axis_right_arm_data"
+        },
+        "add_weight_of_box_to_ee_force_z_axis_right_arm_function": {
+            "function_call": "summation2",
+            "arguments": [
+                "apply_ee_force_z_axis_right_arm_data",
+                "weight_of_box_data"
+            ],
+            "summed_data": "apply_ee_force_z_axis_right_arm_data"
+        },
         "abag_update_previous_error_with_current_error_z_axis_right_arm_function": {
             "function_call": "set_value_of_first_to_second_variable",
-            "first_variable_to_copy_from": "abag_error_signal_z_axis_right_arm_data",
+            "first_variable_to_copy_from": "abag_filtered_error_signal_z_axis_right_arm_data",
             "second_variable_to_copy_to": "abag_previous_error_signal_z_axis_right_arm_data"
         },
         "abag_update_previous_bias_with_current_bias_z_axis_right_arm_function": {
             "function_call": "set_value_of_first_to_second_variable",
-            "first_variable_to_copy_from": "abag_adaptive_bias_signal_z_axis_right_arm_data",
+            "first_variable_to_copy_from": "abag_sum_previous_bias_term_and_increment_of_bias_term_z_axis_right_arm_data",
             "second_variable_to_copy_to": "abag_previous_adaptive_bias_signal_z_axis_right_arm_data"
         },
         "abag_update_previous_gain_with_current_gain_z_axis_right_arm_function": {
             "function_call": "set_value_of_first_to_second_variable",
-            "first_variable_to_copy_from": "abag_adaptive_gain_signal_z_axis_right_arm_data",
+            "first_variable_to_copy_from": "abag_sum_previous_gain_and_increment_of_gain_z_axis_right_arm_data",
             "second_variable_to_copy_to": "abag_previous_adaptive_gain_signal_z_axis_right_arm_data"
         },
         "measured_lin_pos_z_axis_right_arm_data_lessthanequaltoconstraint_lin_pos_sp_z_axis_right_arm_data_is_flag_False_function": {
@@ -271,7 +287,15 @@
                 "stiffness_lin_z_axis_right_arm_data",
                 "lin_pos_error_stiffness_z_axis_right_arm_data"
             ],
-            "product_data": "apply_ee_force_z_axis_right_arm_data"
+            "product_data": "stiffness_term_lin_z_axis_right_arm_data"
+        },
+        "add_stiffness_term_to_ee_force_lin_z_axis_right_arm_function": {
+            "function_call": "summation2",
+            "arguments": [
+                "stiffness_term_lin_z_axis_right_arm_data",
+                "apply_ee_force_z_axis_right_arm_data"
+            ],
+            "summed_data": "apply_ee_force_z_axis_right_arm_data"
         },
         "measured_lin_pos_z_axis_right_arm_data_outofintervalconstraint_lin_pos_sp_z_axis_right_arm_data_is_flag_False_function": {
             "type_of_function": "OutOfIntervalConstraint",
@@ -295,7 +319,15 @@
                 "p_gain_pos_x_axis_right_arm_data",
                 "lin_pos_error_x_axis_right_arm_data"
             ],
-            "product_data": "apply_ee_force_x_axis_right_arm_data"
+            "product_data": "p_term_lin_pos_x_axis_right_arm_data"
+        },
+        "add_p_term_to_ee_force_lin_pos_x_axis_right_arm_function": {
+            "function_call": "summation2",
+            "arguments": [
+                "p_term_lin_pos_x_axis_right_arm_data",
+                "apply_ee_force_x_axis_right_arm_data"
+            ],
+            "summed_data": "apply_ee_force_x_axis_right_arm_data"
         },
         "measured_lin_pos_x_axis_right_arm_data_outofintervalconstraint_lin_pos_sp_x_axis_right_arm_data_is_flag_False_function": {
             "type_of_function": "OutOfIntervalConstraint",
@@ -436,7 +468,7 @@
         "abag_saturation_of_bias_term_z_axis_left_arm_function": {
             "function_call": "saturation",
             "signal_to_saturate": "abag_sum_previous_bias_term_and_increment_of_bias_term_z_axis_left_arm_data",
-            "saturated_data": "abag_adaptive_bias_signal_z_axis_left_arm_data",
+            "saturated_data": "abag_sum_previous_bias_term_and_increment_of_bias_term_z_axis_left_arm_data",
             "saturation_limits": [
                 "abag_saturation_lower_limit_z_axis_left_arm_data",
                 "abag_saturation_upper_limit_z_axis_left_arm_data"
@@ -474,7 +506,7 @@
         "abag_saturation_of_gain_z_axis_left_arm_function": {
             "function_call": "saturation",
             "signal_to_saturate": "abag_sum_previous_gain_and_increment_of_gain_z_axis_left_arm_data",
-            "saturated_data": "abag_adaptive_gain_signal_z_axis_left_arm_data",
+            "saturated_data": "abag_sum_previous_gain_and_increment_of_gain_z_axis_left_arm_data",
             "saturation_limits": [
                 "abag_saturation_lower_limit_z_axis_left_arm_data",
                 "abag_saturation_upper_limit_z_axis_left_arm_data"
@@ -483,7 +515,7 @@
         "abag_multiply_gain_by_sign_of_error_z_axis_left_arm_function": {
             "function_call": "multiply2",
             "arguments": [
-                "abag_adaptive_gain_signal_z_axis_left_arm_data",
+                "abag_sum_previous_gain_and_increment_of_gain_z_axis_left_arm_data",
                 "abag_sign_of_error_z_axis_left_arm_data"
             ],
             "product_data": "abag_product_gain_by_sign_of_error_z_axis_left_arm_data"
@@ -491,7 +523,7 @@
         "abag_subtract_bias_and_scaled_error_z_axis_left_arm_function": {
             "function_call": "subtraction",
             "arguments": [
-                "abag_adaptive_bias_signal_z_axis_left_arm_data",
+                "abag_sum_previous_bias_term_and_increment_of_bias_term_z_axis_left_arm_data",
                 "abag_product_gain_by_sign_of_error_z_axis_left_arm_data"
             ],
             "difference_data": "abag_difference_bias_and_scaled_error_z_axis_left_arm_data"
@@ -499,25 +531,41 @@
         "abag_saturation_of_control_command_z_axis_left_arm_function": {
             "function_call": "saturation",
             "signal_to_saturate": "abag_difference_bias_and_scaled_error_z_axis_left_arm_data",
-            "saturated_data": "abag_saturation_of_control_command_z_axis_left_arm_data",
+            "saturated_data": "abag_difference_bias_and_scaled_error_z_axis_left_arm_data",
             "saturation_limits": [
                 "abag_saturation_lower_limit_z_axis_left_arm_data",
                 "abag_saturation_upper_limit_z_axis_left_arm_data"
             ]
         },
+        "scale_abag_output_by_mapping_to_force_factor_data_z_axis_left_arm_function": {
+            "function_call": "multiply2",
+            "arguments": [
+                "abag_difference_bias_and_scaled_error_z_axis_left_arm_data",
+                "abag_mapping_to_force_factor_data"
+            ],
+            "product_data": "apply_ee_force_z_axis_left_arm_data"
+        },
+        "add_weight_of_box_to_ee_force_z_axis_left_arm_function": {
+            "function_call": "summation2",
+            "arguments": [
+                "apply_ee_force_z_axis_left_arm_data",
+                "weight_of_box_data"
+            ],
+            "summed_data": "apply_ee_force_z_axis_left_arm_data"
+        },
         "abag_update_previous_error_with_current_error_z_axis_left_arm_function": {
             "function_call": "set_value_of_first_to_second_variable",
-            "first_variable_to_copy_from": "abag_error_signal_z_axis_left_arm_data",
+            "first_variable_to_copy_from": "abag_filtered_error_signal_z_axis_right_arm_data",
             "second_variable_to_copy_to": "abag_previous_error_signal_z_axis_left_arm_data"
         },
         "abag_update_previous_bias_with_current_bias_z_axis_left_arm_function": {
             "function_call": "set_value_of_first_to_second_variable",
-            "first_variable_to_copy_from": "abag_adaptive_bias_signal_z_axis_left_arm_data",
+            "first_variable_to_copy_from": "abag_sum_previous_bias_term_and_increment_of_bias_term_z_axis_left_arm_data",
             "second_variable_to_copy_to": "abag_previous_adaptive_bias_signal_z_axis_left_arm_data"
         },
         "abag_update_previous_gain_with_current_gain_z_axis_left_arm_function": {
             "function_call": "set_value_of_first_to_second_variable",
-            "first_variable_to_copy_from": "abag_adaptive_gain_signal_z_axis_left_arm_data",
+            "first_variable_to_copy_from": "abag_sum_previous_gain_and_increment_of_gain_z_axis_left_arm_data",
             "second_variable_to_copy_to": "abag_previous_adaptive_gain_signal_z_axis_left_arm_data"
         },
         "measured_lin_pos_z_axis_left_arm_data_lessthanequaltoconstraint_lin_pos_sp_z_axis_left_arm_data_is_flag_False_function": {
@@ -560,7 +608,15 @@
                 "stiffness_lin_z_axis_left_arm_data",
                 "lin_pos_error_stiffness_z_axis_left_arm_data"
             ],
-            "product_data": "apply_ee_force_z_axis_left_arm_data"
+            "product_data": "stiffness_term_lin_z_axis_left_arm_data"
+        },
+        "add_stiffness_term_to_ee_force_lin_z_axis_left_arm_function": {
+            "function_call": "summation2",
+            "arguments": [
+                "stiffness_term_lin_z_axis_left_arm_data",
+                "apply_ee_force_z_axis_left_arm_data"
+            ],
+            "summed_data": "apply_ee_force_z_axis_left_arm_data"
         },
         "measured_lin_pos_z_axis_left_arm_data_outofintervalconstraint_lin_pos_sp_z_axis_left_arm_data_is_flag_False_function": {
             "type_of_function": "OutOfIntervalConstraint",
@@ -584,7 +640,15 @@
                 "p_gain_pos_x_axis_left_arm_data",
                 "lin_pos_error_x_axis_left_arm_data"
             ],
-            "product_data": "apply_ee_force_x_axis_left_arm_data"
+            "product_data": "p_term_lin_pos_x_axis_left_arm_data"
+        },
+        "add_p_term_to_ee_force_lin_pos_x_axis_left_arm_function": {
+            "function_call": "summation2",
+            "arguments": [
+                "p_term_lin_pos_x_axis_left_arm_data",
+                "apply_ee_force_x_axis_left_arm_data"
+            ],
+            "summed_data": "apply_ee_force_x_axis_left_arm_data"
         },
         "measured_lin_pos_x_axis_left_arm_data_outofintervalconstraint_lin_pos_sp_x_axis_left_arm_data_is_flag_False_function": {
             "type_of_function": "OutOfIntervalConstraint",
@@ -637,10 +701,6 @@
             "data_type": "double",
             "initial_value": "0.0"
         },
-        "abag_adaptive_bias_signal_z_axis_left_arm_data": {
-            "data_type": "double",
-            "initial_value": "0.0"
-        },
         "abag_filtered_error_signal_z_axis_left_arm_data": {
             "data_type": "double",
             "initial_value": "0.0"
@@ -689,10 +749,6 @@
             "data_type": "double",
             "initial_value": "0.0"
         },
-        "abag_adaptive_gain_signal_z_axis_left_arm_data": {
-            "data_type": "double",
-            "initial_value": "0.0"
-        },
         "abag_previous_adaptive_gain_signal_z_axis_left_arm_data": {
             "data_type": "double",
             "initial_value": "0.0"
@@ -733,10 +789,6 @@
             "data_type": "double",
             "initial_value": "0.0"
         },
-        "abag_saturation_of_control_command_z_axis_left_arm_data": {
-            "data_type": "double",
-            "initial_value": "0.0"
-        },
         "abag_control_command_signal_z_axis_left_arm_data": {
             "data_type": "double",
             "initial_value": "0.0"
@@ -751,7 +803,7 @@
         },
         "stiffness_lin_z_axis_left_arm_data": {
             "data_type": "double",
-            "initial_value": "-100.0"
+            "initial_value": "100.0"
         },
         "lin_pos_error_x_axis_left_arm_data": {
             "data_type": "double",
@@ -759,7 +811,15 @@
         },
         "force_to_apply_to_table_z_axis_left_arm_data": {
             "data_type": "double",
-            "initial_value": "5.0"
+            "initial_value": "-5.0"
+        },
+        "p_term_lin_pos_x_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "stiffness_term_lin_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
         },
         "lin_pos_sp_z_axis_left_arm_data": {
             "data_type": "double",
@@ -791,7 +851,7 @@
         },
         "p_gain_pos_x_axis_left_arm_data": {
             "data_type": "double",
-            "initial_value": "-50.0"
+            "initial_value": "150.0"
         },
         "time_period_of_complete_controller_cycle_data": {
             "data_type": "double",
@@ -839,7 +899,7 @@
         },
         "force_to_apply_inwards_y_axis_left_arm_data": {
             "data_type": "double",
-            "initial_value": "10.0"
+            "initial_value": "-10.0"
         },
         "measured_lin_pos_y_axis_left_arm_data": {
             "data_type": "double",
@@ -909,10 +969,6 @@
             "data_type": "double",
             "initial_value": "0.0"
         },
-        "abag_adaptive_bias_signal_z_axis_right_arm_data": {
-            "data_type": "double",
-            "initial_value": "0.0"
-        },
         "abag_filtered_error_signal_z_axis_right_arm_data": {
             "data_type": "double",
             "initial_value": "0.0"
@@ -961,10 +1017,6 @@
             "data_type": "double",
             "initial_value": "0.0"
         },
-        "abag_adaptive_gain_signal_z_axis_right_arm_data": {
-            "data_type": "double",
-            "initial_value": "0.0"
-        },
         "abag_previous_adaptive_gain_signal_z_axis_right_arm_data": {
             "data_type": "double",
             "initial_value": "0.0"
@@ -1005,10 +1057,6 @@
             "data_type": "double",
             "initial_value": "0.0"
         },
-        "abag_saturation_of_control_command_z_axis_right_arm_data": {
-            "data_type": "double",
-            "initial_value": "0.0"
-        },
         "abag_control_command_signal_z_axis_right_arm_data": {
             "data_type": "double",
             "initial_value": "0.0"
@@ -1023,7 +1071,7 @@
         },
         "stiffness_lin_z_axis_right_arm_data": {
             "data_type": "double",
-            "initial_value": "-100.0"
+            "initial_value": "100.0"
         },
         "lin_pos_error_x_axis_right_arm_data": {
             "data_type": "double",
@@ -1031,7 +1079,15 @@
         },
         "force_to_apply_to_table_z_axis_right_arm_data": {
             "data_type": "double",
-            "initial_value": "5.0"
+            "initial_value": "-5.0"
+        },
+        "p_term_lin_pos_x_axis_right_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "stiffness_term_lin_z_axis_right_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
         },
         "lin_pos_sp_z_axis_right_arm_data": {
             "data_type": "double",
@@ -1063,7 +1119,7 @@
         },
         "p_gain_pos_x_axis_right_arm_data": {
             "data_type": "double",
-            "initial_value": "-200.0"
+            "initial_value": "150.0"
         },
         "pos_constraint_ee_below_desired_height_right_arm_z_axis_event": {
             "data_type": "bool",
@@ -1107,7 +1163,7 @@
         },
         "force_to_apply_inwards_y_axis_right_arm_data": {
             "data_type": "double",
-            "initial_value": "-15.0"
+            "initial_value": "13.0"
         },
         "measured_lin_pos_y_axis_right_arm_data": {
             "data_type": "double",
@@ -1172,6 +1228,14 @@
         "both_arms_not_grasped_box_y_axis_flag": {
             "data_type": "bool",
             "initial_value": "false"
+        },
+        "abag_mapping_to_force_factor_data": {
+            "data_type": "double",
+            "initial_value": "10.0"
+        },
+        "weight_of_box_data": {
+            "data_type": "double",
+            "initial_value": "5.0"
         },
         "states_z_axis_right_arm_is_active": {
             "data_type": "bool",
@@ -1253,6 +1317,8 @@
                                 "abag_multiply_gain_by_sign_of_error_z_axis_right_arm_function",
                                 "abag_subtract_bias_and_scaled_error_z_axis_right_arm_function",
                                 "abag_saturation_of_control_command_z_axis_right_arm_function",
+                                "scale_abag_output_by_mapping_to_force_factor_data_z_axis_right_arm_function",
+                                "add_weight_of_box_to_ee_force_z_axis_right_arm_function",
                                 "abag_update_previous_error_with_current_error_z_axis_right_arm_function",
                                 "abag_update_previous_bias_with_current_bias_z_axis_right_arm_function",
                                 "abag_update_previous_gain_with_current_gain_z_axis_right_arm_function"
@@ -1326,7 +1392,8 @@
                         "stiffness_controller_schedule_to_maintain_pos_at_setpoint_z_axis_right_arm_call": {
                             "trigger_chain": [
                                 "error_calculation_lin_pos_stiffness_z_axis_right_arm_function",
-                                "stiffness_term_calculator_lin_z_axis_right_arm_function"
+                                "stiffness_term_calculator_lin_z_axis_right_arm_function",
+                                "add_stiffness_term_to_ee_force_lin_z_axis_right_arm_function"
                             ],
                             "monitors": {
                                 "function_names": [
@@ -1358,7 +1425,8 @@
                         "p_controller_schedule_x_axis_right_arm_call": {
                             "trigger_chain": [
                                 "error_calculation_lin_pos_p_x_axis_right_arm_function",
-                                "p_term_calculator_lin_pos_x_axis_right_arm_function"
+                                "p_term_calculator_lin_pos_x_axis_right_arm_function",
+                                "add_p_term_to_ee_force_lin_pos_x_axis_right_arm_function"
                             ],
                             "monitors": {
                                 "function_names": [
@@ -1470,6 +1538,8 @@
                                 "abag_multiply_gain_by_sign_of_error_z_axis_left_arm_function",
                                 "abag_subtract_bias_and_scaled_error_z_axis_left_arm_function",
                                 "abag_saturation_of_control_command_z_axis_left_arm_function",
+                                "scale_abag_output_by_mapping_to_force_factor_data_z_axis_left_arm_function",
+                                "add_weight_of_box_to_ee_force_z_axis_left_arm_function",
                                 "abag_update_previous_error_with_current_error_z_axis_left_arm_function",
                                 "abag_update_previous_bias_with_current_bias_z_axis_left_arm_function",
                                 "abag_update_previous_gain_with_current_gain_z_axis_left_arm_function"
@@ -1543,7 +1613,8 @@
                         "stiffness_controller_schedule_to_maintain_pos_at_setpoint_z_axis_left_arm_call": {
                             "trigger_chain": [
                                 "error_calculation_lin_pos_stiffness_z_axis_left_arm_function",
-                                "stiffness_term_calculator_lin_z_axis_left_arm_function"
+                                "stiffness_term_calculator_lin_z_axis_left_arm_function",
+                                "add_stiffness_term_to_ee_force_lin_z_axis_left_arm_function"
                             ],
                             "monitors": {
                                 "function_names": [
@@ -1575,7 +1646,8 @@
                         "p_controller_schedule_x_axis_left_arm_call": {
                             "trigger_chain": [
                                 "error_calculation_lin_pos_p_x_axis_left_arm_function",
-                                "p_term_calculator_lin_pos_x_axis_left_arm_function"
+                                "p_term_calculator_lin_pos_x_axis_left_arm_function",
+                                "add_p_term_to_ee_force_lin_pos_x_axis_left_arm_function"
                             ],
                             "monitors": {
                                 "function_names": [

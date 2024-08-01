@@ -251,7 +251,7 @@
         "Saturation"
       ],
       "signal_to_saturate": "adap_ctr_uc3:abag_sum_previous_bias_term_and_increment_of_bias_term_z_axis_right_arm_data",
-      "saturated_data": "adap_ctr_uc3:abag_adaptive_bias_signal_z_axis_right_arm_data",
+      "saturated_data": "adap_ctr_uc3:abag_sum_previous_bias_term_and_increment_of_bias_term_z_axis_right_arm_data",
       "saturation_limits": [
         "adap_ctr_uc3:abag_saturation_lower_limit_z_axis_right_arm_data",
         "adap_ctr_uc3:abag_saturation_upper_limit_z_axis_right_arm_data"
@@ -309,7 +309,7 @@
         "Saturation"
       ],
       "signal_to_saturate": "adap_ctr_uc3:abag_sum_previous_gain_and_increment_of_gain_z_axis_right_arm_data",
-      "saturated_data": "adap_ctr_uc3:abag_adaptive_gain_signal_z_axis_right_arm_data",
+      "saturated_data": "adap_ctr_uc3:abag_sum_previous_gain_and_increment_of_gain_z_axis_right_arm_data",
       "saturation_limits": [
         "adap_ctr_uc3:abag_saturation_lower_limit_z_axis_right_arm_data",
         "adap_ctr_uc3:abag_saturation_upper_limit_z_axis_right_arm_data"
@@ -322,7 +322,7 @@
         "Scale"
       ],
       "arguments_list": [
-        "adap_ctr_uc3:abag_adaptive_gain_signal_z_axis_right_arm_data",
+        "adap_ctr_uc3:abag_sum_previous_gain_and_increment_of_gain_z_axis_right_arm_data",
         "adap_ctr_uc3:abag_sign_of_error_z_axis_right_arm_data"
       ],
       "product_data": "adap_ctr_uc3:abag_product_gain_by_sign_of_error_z_axis_right_arm_data"
@@ -334,7 +334,7 @@
         "Subtract"
       ],
       "arguments_list": [
-        "adap_ctr_uc3:abag_adaptive_bias_signal_z_axis_right_arm_data",
+        "adap_ctr_uc3:abag_sum_previous_bias_term_and_increment_of_bias_term_z_axis_right_arm_data",
         "adap_ctr_uc3:abag_product_gain_by_sign_of_error_z_axis_right_arm_data"
       ],
       "difference_data": "adap_ctr_uc3:abag_difference_bias_and_scaled_error_z_axis_right_arm_data"
@@ -346,7 +346,7 @@
         "Saturation"
       ],
       "signal_to_saturate": "adap_ctr_uc3:abag_difference_bias_and_scaled_error_z_axis_right_arm_data",
-      "saturated_data": "adap_ctr_uc3:abag_saturation_of_control_command_z_axis_right_arm_data",
+      "saturated_data": "adap_ctr_uc3:abag_difference_bias_and_scaled_error_z_axis_right_arm_data",
       "saturation_limits": [
         "adap_ctr_uc3:abag_saturation_lower_limit_z_axis_right_arm_data",
         "adap_ctr_uc3:abag_saturation_upper_limit_z_axis_right_arm_data"
@@ -359,7 +359,7 @@
         "CopyVariableValue"
       ],
       "variable_to_copy_to": "adap_ctr_uc3:abag_previous_error_signal_z_axis_right_arm_data",
-      "variable_to_copy_from": "adap_ctr_uc3:abag_error_signal_z_axis_right_arm_data"
+      "variable_to_copy_from": "adap_ctr_uc3:abag_filtered_error_signal_z_axis_right_arm_data"
     },
     {
       "@id": "adap_ctr_uc3:abag_update_previous_bias_with_current_bias_z_axis_right_arm_function",
@@ -368,7 +368,7 @@
         "CopyVariableValue"
       ],
       "variable_to_copy_to": "adap_ctr_uc3:abag_previous_adaptive_bias_signal_z_axis_right_arm_data",
-      "variable_to_copy_from": "adap_ctr_uc3:abag_adaptive_bias_signal_z_axis_right_arm_data"
+      "variable_to_copy_from": "adap_ctr_uc3:abag_sum_previous_bias_term_and_increment_of_bias_term_z_axis_right_arm_data"
     },
     {
       "@id": "adap_ctr_uc3:abag_update_previous_gain_with_current_gain_z_axis_right_arm_function",
@@ -377,7 +377,7 @@
         "CopyVariableValue"
       ],
       "variable_to_copy_to": "adap_ctr_uc3:abag_previous_adaptive_gain_signal_z_axis_right_arm_data",
-      "variable_to_copy_from": "adap_ctr_uc3:abag_adaptive_gain_signal_z_axis_right_arm_data"
+      "variable_to_copy_from": "adap_ctr_uc3:abag_sum_previous_gain_and_increment_of_gain_z_axis_right_arm_data"
     },
     {
       "@id": "adap_ctr_uc3:scale_abag_output_by_mapping_to_force_factor_data_z_axis_right_arm_function",
@@ -470,13 +470,6 @@
       "init_value": "0.0"
     },
     {
-      "@id": "adap_ctr_uc3:abag_adaptive_bias_signal_z_axis_right_arm_data",
-      "@type": "Data",
-      "data_name": "adaptive_bias_signal",
-      "data_type": "double",
-      "init_value": "0.0"
-    },
-    {
       "@id": "adap_ctr_uc3:abag_filtered_error_signal_z_axis_right_arm_data",
       "@type": "Data",
       "data_name": "filtered_error_signal",
@@ -561,13 +554,6 @@
       "init_value": "0.0"
     },
     {
-      "@id": "adap_ctr_uc3:abag_adaptive_gain_signal_z_axis_right_arm_data",
-      "@type": "Data",
-      "data_name": "adaptive_gain_signal",
-      "data_type": "double",
-      "init_value": "0.0"
-    },
-    {
       "@id": "adap_ctr_uc3:abag_previous_adaptive_gain_signal_z_axis_right_arm_data",
       "@type": "Data",
       "data_name": "previous_adaptive_gain_signal",
@@ -634,13 +620,6 @@
       "@id": "adap_ctr_uc3:abag_difference_bias_and_scaled_error_z_axis_right_arm_data",
       "@type": "Data",
       "data_name": "difference_bias_and_scaled_error",
-      "data_type": "double",
-      "init_value": "0.0"
-    },
-    {
-      "@id": "adap_ctr_uc3:abag_saturation_of_control_command_z_axis_right_arm_data",
-      "@type": "Data",
-      "data_name": "saturation_of_control_command",
       "data_type": "double",
       "init_value": "0.0"
     },

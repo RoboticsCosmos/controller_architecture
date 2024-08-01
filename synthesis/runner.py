@@ -71,6 +71,7 @@ def main():
     # *** subject; predicate; object ***/
 
     print("--" * 20)
+    # from beginning to up until here, the cod is a slightly modified version of https://github.com/RoboticsCosmos/motion_spec_gen/blob/main/runner.py
 
     data_structures_dict = dict()
     functions_dict = dict()
@@ -319,7 +320,7 @@ def main():
 
         # save in a json file
         with open(
-            "/home/melody-u18/Desktop/Thesis/controller_architecture/gen/irs/uc3_abag_test.json",
+            "/home/melody-u18/Desktop/Thesis/controller_architecture/gen/irs/uc3_abag.json",
             "w",
         ) as f:
             f.write(json_obj)

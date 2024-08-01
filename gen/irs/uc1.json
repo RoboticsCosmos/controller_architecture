@@ -52,30 +52,6 @@
             ],
             "product_data": "d_term_lin_vel_z_axis_right_arm_data"
         },
-        "pd_term_summation_z_axis_right_arm_function": {
-            "function_call": "summation2",
-            "arguments": [
-                "p_term_lin_vel_z_axis_right_arm_data",
-                "d_term_lin_vel_z_axis_right_arm_data"
-            ],
-            "summed_data": "apply_ee_force_z_axis_right_arm_data"
-        },
-        "measured_lin_pos_z_axis_right_arm_data_greaterthanupperlimitconstraint_lin_pos_sp_z_axis_right_arm_data_is_flag_False_function": {
-            "type_of_function": "GreaterThanUpperLimitConstraint",
-            "function_call": "greater_than_upper_limit_monitor",
-            "quantity_to_compare": "measured_lin_pos_z_axis_right_arm_data",
-            "reference_quantity": "lin_pos_sp_z_axis_right_arm_data",
-            "flag_name": "pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_event",
-            "tolerance": "lin_pos_sp_uncertainty_range_z_axis_right_arm_data"
-        },
-        "measured_lin_vel_z_axis_right_arm_data_outofintervalconstraint_lin_vel_sp_z_axis_right_arm_data_is_flag_False_function": {
-            "type_of_function": "OutOfIntervalConstraint",
-            "function_call": "out_of_interval_monitor",
-            "quantity_to_compare": "measured_lin_vel_z_axis_right_arm_data",
-            "reference_quantity": "lin_vel_sp_z_axis_right_arm_data",
-            "flag_name": "error_outside_threshold_to_deactivate_i_block_z_axis_right_arm_event",
-            "tolerance": "lin_vel_sp_threshold_to_activate_i_z_axis_right_arm_data"
-        },
         "integral_calculator_of_lin_vel_error_z_axis_right_arm_function": {
             "function_call": "integrator",
             "time_period": "time_period_of_complete_controller_cycle_data",
@@ -106,6 +82,14 @@
                 "i_term_lin_vel_z_axis_right_arm_data",
                 "d_term_lin_vel_z_axis_right_arm_data"
             ],
+            "summed_data": "pid_term_summation_z_axis_right_arm_data"
+        },
+        "add_pid_term_summation_to_ee_force_z_axis_right_arm_function": {
+            "function_call": "summation2",
+            "arguments": [
+                "pid_term_summation_z_axis_right_arm_data",
+                "apply_ee_force_z_axis_right_arm_data"
+            ],
             "summed_data": "apply_ee_force_z_axis_right_arm_data"
         },
         "measured_lin_vel_z_axis_right_arm_data_inintervalconstraint_lin_vel_sp_z_axis_right_arm_data_is_flag_False_function": {
@@ -115,6 +99,72 @@
             "reference_quantity": "lin_vel_sp_z_axis_right_arm_data",
             "flag_name": "error_within_threshold_to_activate_i_block_z_axis_right_arm_event",
             "tolerance": "lin_vel_sp_threshold_to_activate_i_z_axis_right_arm_data"
+        },
+        "i_term_lin_vel_z_axis_right_arm_data_greaterthanconstraint_i_term_saturation_lower_limit_z_axis_right_arm_data_is_flag_False_function": {
+            "type_of_function": "GreaterThanConstraint",
+            "function_call": "greater_than_monitor",
+            "quantity_to_compare": "i_term_lin_vel_z_axis_right_arm_data",
+            "reference_quantity": "i_term_saturation_lower_limit_z_axis_right_arm_data",
+            "flag_name": "i_term_greater_than_lower_saturation_limit_z_axis_right_arm_event"
+        },
+        "i_term_lin_vel_z_axis_right_arm_data_lessthanconstraint_i_term_saturation_upper_limit_z_axis_right_arm_data_is_flag_False_function": {
+            "type_of_function": "LessThanConstraint",
+            "function_call": "less_than_monitor",
+            "quantity_to_compare": "i_term_lin_vel_z_axis_right_arm_data",
+            "reference_quantity": "i_term_saturation_upper_limit_z_axis_right_arm_data",
+            "flag_name": "i_term_lower_than_upper_saturation_limit_z_axis_right_arm_event"
+        },
+        "pd_term_summation_z_axis_right_arm_function": {
+            "function_call": "summation2",
+            "arguments": [
+                "p_term_lin_vel_z_axis_right_arm_data",
+                "d_term_lin_vel_z_axis_right_arm_data"
+            ],
+            "summed_data": "pd_term_summation_z_axis_right_arm_data"
+        },
+        "add_pd_term_summation_to_ee_force_z_axis_right_arm_function": {
+            "function_call": "summation2",
+            "arguments": [
+                "pd_term_summation_z_axis_right_arm_data",
+                "apply_ee_force_z_axis_right_arm_data"
+            ],
+            "summed_data": "apply_ee_force_z_axis_right_arm_data"
+        },
+        "measured_lin_vel_z_axis_right_arm_data_outofintervalconstraint_lin_vel_sp_z_axis_right_arm_data_is_flag_False_function": {
+            "type_of_function": "OutOfIntervalConstraint",
+            "function_call": "out_of_interval_monitor",
+            "quantity_to_compare": "measured_lin_vel_z_axis_right_arm_data",
+            "reference_quantity": "lin_vel_sp_z_axis_right_arm_data",
+            "flag_name": "error_outside_threshold_to_deactivate_i_block_z_axis_right_arm_event",
+            "tolerance": "lin_vel_sp_threshold_to_activate_i_z_axis_right_arm_data"
+        },
+        "i_term_lin_vel_z_axis_right_arm_data_greaterthanequaltoconstraint_i_term_saturation_upper_limit_z_axis_right_arm_data_is_flag_False_function": {
+            "type_of_function": "GreaterThanEqualToConstraint",
+            "function_call": "greater_than_equal_to_monitor",
+            "quantity_to_compare": "i_term_lin_vel_z_axis_right_arm_data",
+            "reference_quantity": "i_term_saturation_upper_limit_z_axis_right_arm_data",
+            "flag_name": "i_term_greater_than_eq_to_upper_saturation_limit_z_axis_right_arm_event"
+        },
+        "lin_vel_error_pid_z_axis_right_arm_data_greaterthanequaltoconstraint_zero_lin_vel_error_z_axis_right_arm_data_is_flag_False_function": {
+            "type_of_function": "GreaterThanEqualToConstraint",
+            "function_call": "greater_than_equal_to_monitor",
+            "quantity_to_compare": "lin_vel_error_pid_z_axis_right_arm_data",
+            "reference_quantity": "zero_lin_vel_error_z_axis_right_arm_data",
+            "flag_name": "vel_error_is_positive_z_axis_right_arm_event"
+        },
+        "i_term_lin_vel_z_axis_right_arm_data_lessthanequaltoconstraint_i_term_saturation_lower_limit_z_axis_right_arm_data_is_flag_False_function": {
+            "type_of_function": "LessThanEqualToConstraint",
+            "function_call": "less_than_equal_to_monitor",
+            "quantity_to_compare": "i_term_lin_vel_z_axis_right_arm_data",
+            "reference_quantity": "i_term_saturation_lower_limit_z_axis_right_arm_data",
+            "flag_name": "i_term_lower_than_eq_to_lower_saturation_limit_z_axis_right_arm_event"
+        },
+        "lin_vel_error_pid_z_axis_right_arm_data_lessthanconstraint_zero_lin_vel_error_z_axis_right_arm_data_is_flag_False_function": {
+            "type_of_function": "LessThanConstraint",
+            "function_call": "less_than_monitor",
+            "quantity_to_compare": "lin_vel_error_pid_z_axis_right_arm_data",
+            "reference_quantity": "zero_lin_vel_error_z_axis_right_arm_data",
+            "flag_name": "vel_error_is_negative_z_axis_right_arm_event"
         },
         "measured_lin_pos_z_axis_right_arm_data_greaterthanconstraint_lin_pos_sp_z_axis_right_arm_data_is_flag_True_function": {
             "type_of_function": "GreaterThanConstraint",
@@ -168,6 +218,14 @@
                 "stiffness_term_lin_z_axis_right_arm_data",
                 "damping_term_z_axis_right_arm_data"
             ],
+            "summed_data": "stiffness_damping_terms_summation_z_axis_right_arm_data"
+        },
+        "add_stiffness_damping_summation_to_ee_force_z_axis_right_arm_function": {
+            "function_call": "summation2",
+            "arguments": [
+                "stiffness_damping_terms_summation_z_axis_right_arm_data",
+                "apply_ee_force_z_axis_right_arm_data"
+            ],
             "summed_data": "apply_ee_force_z_axis_right_arm_data"
         },
         "measured_lin_pos_z_axis_right_arm_data_inintervalconstraint_lin_pos_sp_z_axis_right_arm_data_is_flag_False_function": {
@@ -211,7 +269,15 @@
                 "p_gain_pos_x_axis_right_arm_data",
                 "lin_pos_error_x_axis_right_arm_data"
             ],
-            "product_data": "apply_ee_force_x_axis_right_arm_data"
+            "product_data": "p_term_calculator_lin_pos_x_axis_right_arm_data"
+        },
+        "add_p_term_to_ee_force_x_axis_right_arm_function": {
+            "function_call": "summation2",
+            "arguments": [
+                "p_term_calculator_lin_pos_x_axis_right_arm_data",
+                "apply_ee_force_x_axis_right_arm_data"
+            ],
+            "summed_data": "apply_ee_force_x_axis_right_arm_data"
         },
         "measured_lin_pos_x_axis_right_arm_data_outofintervalconstraint_lin_pos_sp_x_axis_right_arm_data_is_flag_False_function": {
             "type_of_function": "OutOfIntervalConstraint",
@@ -235,7 +301,15 @@
                 "p_gain_pos_y_axis_right_arm_data",
                 "lin_pos_error_y_axis_right_arm_data"
             ],
-            "product_data": "apply_ee_force_y_axis_right_arm_data"
+            "product_data": "p_term_calculator_lin_pos_y_axis_right_arm_data"
+        },
+        "add_p_term_to_ee_force_y_axis_right_arm_function": {
+            "function_call": "summation2",
+            "arguments": [
+                "p_term_calculator_lin_pos_y_axis_right_arm_data",
+                "apply_ee_force_y_axis_right_arm_data"
+            ],
+            "summed_data": "apply_ee_force_y_axis_right_arm_data"
         },
         "measured_lin_pos_y_axis_right_arm_data_outofintervalconstraint_lin_pos_sp_y_axis_right_arm_data_is_flag_False_function": {
             "type_of_function": "OutOfIntervalConstraint",
@@ -327,6 +401,14 @@
                 "i_term_lin_vel_z_axis_left_arm_data",
                 "d_term_lin_vel_z_axis_left_arm_data"
             ],
+            "summed_data": "pid_term_summation_z_axis_left_arm_data"
+        },
+        "add_pid_term_summation_to_ee_force_z_axis_left_arm_function": {
+            "function_call": "summation2",
+            "arguments": [
+                "pid_term_summation_z_axis_left_arm_data",
+                "apply_ee_force_z_axis_left_arm_data"
+            ],
             "summed_data": "apply_ee_force_z_axis_left_arm_data"
         },
         "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_data_is_flag_False_function": {
@@ -337,19 +419,33 @@
             "flag_name": "error_within_threshold_to_activate_i_block_z_axis_left_arm_event",
             "tolerance": "lin_vel_sp_threshold_to_activate_i_z_axis_left_arm_data"
         },
-        "measured_lin_pos_z_axis_left_arm_data_greaterthanupperlimitconstraint_lin_pos_sp_z_axis_left_arm_data_is_flag_False_function": {
-            "type_of_function": "GreaterThanUpperLimitConstraint",
-            "function_call": "greater_than_upper_limit_monitor",
-            "quantity_to_compare": "measured_lin_pos_z_axis_left_arm_data",
-            "reference_quantity": "lin_pos_sp_z_axis_left_arm_data",
-            "flag_name": "pos_constraint_arm_above_uncertain_contact_region_z_axis_left_arm_event",
-            "tolerance": "lin_pos_sp_uncertainty_range_z_axis_left_arm_data"
+        "i_term_lin_vel_z_axis_left_arm_data_greaterthanconstraint_i_term_saturation_lower_limit_z_axis_left_arm_data_is_flag_False_function": {
+            "type_of_function": "GreaterThanConstraint",
+            "function_call": "greater_than_monitor",
+            "quantity_to_compare": "i_term_lin_vel_z_axis_left_arm_data",
+            "reference_quantity": "i_term_saturation_lower_limit_z_axis_left_arm_data",
+            "flag_name": "i_term_greater_than_lower_saturation_limit_z_axis_left_arm_event"
+        },
+        "i_term_lin_vel_z_axis_left_arm_data_lessthanconstraint_i_term_saturation_upper_limit_z_axis_left_arm_data_is_flag_False_function": {
+            "type_of_function": "LessThanConstraint",
+            "function_call": "less_than_monitor",
+            "quantity_to_compare": "i_term_lin_vel_z_axis_left_arm_data",
+            "reference_quantity": "i_term_saturation_upper_limit_z_axis_left_arm_data",
+            "flag_name": "i_term_lower_than_upper_saturation_limit_z_axis_left_arm_event"
         },
         "pd_term_summation_z_axis_left_arm_function": {
             "function_call": "summation2",
             "arguments": [
                 "p_term_lin_vel_z_axis_left_arm_data",
                 "d_term_lin_vel_z_axis_left_arm_data"
+            ],
+            "summed_data": "pd_term_summation_z_axis_left_arm_data"
+        },
+        "add_pd_term_summation_to_ee_force_z_axis_left_arm_function": {
+            "function_call": "summation2",
+            "arguments": [
+                "pd_term_summation_z_axis_left_arm_data",
+                "apply_ee_force_z_axis_left_arm_data"
             ],
             "summed_data": "apply_ee_force_z_axis_left_arm_data"
         },
@@ -360,6 +456,34 @@
             "reference_quantity": "lin_vel_sp_z_axis_left_arm_data",
             "flag_name": "error_outside_threshold_to_deactivate_i_block_z_axis_left_arm_event",
             "tolerance": "lin_vel_sp_threshold_to_activate_i_z_axis_left_arm_data"
+        },
+        "i_term_lin_vel_z_axis_left_arm_data_greaterthanequaltoconstraint_i_term_saturation_upper_limit_z_axis_left_arm_data_is_flag_False_function": {
+            "type_of_function": "GreaterThanEqualToConstraint",
+            "function_call": "greater_than_equal_to_monitor",
+            "quantity_to_compare": "i_term_lin_vel_z_axis_left_arm_data",
+            "reference_quantity": "i_term_saturation_upper_limit_z_axis_left_arm_data",
+            "flag_name": "i_term_greater_than_eq_to_upper_saturation_limit_z_axis_left_arm_event"
+        },
+        "lin_vel_error_pid_z_axis_left_arm_data_greaterthanequaltoconstraint_zero_lin_vel_error_z_axis_left_arm_data_is_flag_False_function": {
+            "type_of_function": "GreaterThanEqualToConstraint",
+            "function_call": "greater_than_equal_to_monitor",
+            "quantity_to_compare": "lin_vel_error_pid_z_axis_left_arm_data",
+            "reference_quantity": "zero_lin_vel_error_z_axis_left_arm_data",
+            "flag_name": "vel_error_is_positive_z_axis_left_arm_event"
+        },
+        "i_term_lin_vel_z_axis_left_arm_data_lessthanequaltoconstraint_i_term_saturation_lower_limit_z_axis_left_arm_data_is_flag_False_function": {
+            "type_of_function": "LessThanEqualToConstraint",
+            "function_call": "less_than_equal_to_monitor",
+            "quantity_to_compare": "i_term_lin_vel_z_axis_left_arm_data",
+            "reference_quantity": "i_term_saturation_lower_limit_z_axis_left_arm_data",
+            "flag_name": "i_term_lower_than_eq_to_lower_saturation_limit_z_axis_left_arm_event"
+        },
+        "lin_vel_error_pid_z_axis_left_arm_data_lessthanconstraint_zero_lin_vel_error_z_axis_left_arm_data_is_flag_False_function": {
+            "type_of_function": "LessThanConstraint",
+            "function_call": "less_than_monitor",
+            "quantity_to_compare": "lin_vel_error_pid_z_axis_left_arm_data",
+            "reference_quantity": "zero_lin_vel_error_z_axis_left_arm_data",
+            "flag_name": "vel_error_is_negative_z_axis_left_arm_event"
         },
         "measured_lin_pos_z_axis_left_arm_data_greaterthanconstraint_lin_pos_sp_z_axis_left_arm_data_is_flag_True_function": {
             "type_of_function": "GreaterThanConstraint",
@@ -413,6 +537,14 @@
                 "stiffness_term_lin_z_axis_left_arm_data",
                 "damping_term_z_axis_left_arm_data"
             ],
+            "summed_data": "stiffness_damping_terms_summation_z_axis_left_arm_data"
+        },
+        "add_stiffness_damping_summation_to_ee_force_z_axis_left_arm_function": {
+            "function_call": "summation2",
+            "arguments": [
+                "stiffness_damping_terms_summation_z_axis_left_arm_data",
+                "apply_ee_force_z_axis_left_arm_data"
+            ],
             "summed_data": "apply_ee_force_z_axis_left_arm_data"
         },
         "measured_lin_pos_z_axis_left_arm_data_inintervalconstraint_lin_pos_sp_z_axis_left_arm_data_is_flag_False_function": {
@@ -456,7 +588,15 @@
                 "p_gain_pos_x_axis_left_arm_data",
                 "lin_pos_error_x_axis_left_arm_data"
             ],
-            "product_data": "apply_ee_force_x_axis_left_arm_data"
+            "product_data": "p_term_calculator_lin_pos_x_axis_left_arm_data"
+        },
+        "add_p_term_to_ee_force_x_axis_left_arm_function": {
+            "function_call": "summation2",
+            "arguments": [
+                "p_term_calculator_lin_pos_x_axis_left_arm_data",
+                "apply_ee_force_x_axis_left_arm_data"
+            ],
+            "summed_data": "apply_ee_force_x_axis_left_arm_data"
         },
         "measured_lin_pos_x_axis_left_arm_data_outofintervalconstraint_lin_pos_sp_x_axis_left_arm_data_is_flag_False_function": {
             "type_of_function": "OutOfIntervalConstraint",
@@ -480,7 +620,15 @@
                 "p_gain_pos_y_axis_left_arm_data",
                 "lin_pos_error_y_axis_left_arm_data"
             ],
-            "product_data": "apply_ee_force_y_axis_left_arm_data"
+            "product_data": "p_term_calculator_lin_pos_y_axis_left_arm_data"
+        },
+        "add_p_term_to_ee_force_y_axis_left_arm_function": {
+            "function_call": "summation2",
+            "arguments": [
+                "p_term_calculator_lin_pos_y_axis_left_arm_data",
+                "apply_ee_force_y_axis_left_arm_data"
+            ],
+            "summed_data": "apply_ee_force_y_axis_left_arm_data"
         },
         "measured_lin_pos_y_axis_left_arm_data_outofintervalconstraint_lin_pos_sp_y_axis_left_arm_data_is_flag_False_function": {
             "type_of_function": "OutOfIntervalConstraint",
@@ -492,6 +640,30 @@
         }
     },
     "data_structures": {
+        "stiffness_damping_terms_summation_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "p_term_calculator_lin_pos_x_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "p_term_calculator_lin_pos_y_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "pd_term_summation_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "pid_term_summation_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "zero_lin_vel_error_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
         "lin_pos_error_x_axis_left_arm_data": {
             "data_type": "double",
             "initial_value": "0.0"
@@ -500,13 +672,9 @@
             "data_type": "double",
             "initial_value": "0.0"
         },
-        "apply_ee_force_z_axis_left_arm_data": {
-            "data_type": "double",
-            "initial_value": "0.0"
-        },
         "force_to_apply_to_table_z_axis_left_arm_data": {
             "data_type": "double",
-            "initial_value": "5.0"
+            "initial_value": "-5.0"
         },
         "lin_pos_sp_z_axis_left_arm_data": {
             "data_type": "double",
@@ -546,7 +714,7 @@
         },
         "lin_vel_sp_threshold_to_activate_i_z_axis_left_arm_data": {
             "data_type": "double",
-            "initial_value": "0.01"
+            "initial_value": "0.005"
         },
         "lin_pos_sp_uncertainty_range_z_axis_left_arm_data": {
             "data_type": "double",
@@ -554,15 +722,15 @@
         },
         "p_gain_z_axis_left_arm_data": {
             "data_type": "double",
-            "initial_value": "-80.0"
+            "initial_value": "80.0"
         },
         "p_gain_pos_x_axis_left_arm_data": {
             "data_type": "double",
-            "initial_value": "-50.0"
+            "initial_value": "50.0"
         },
         "p_gain_pos_y_axis_left_arm_data": {
             "data_type": "double",
-            "initial_value": "-50.0"
+            "initial_value": "50.0"
         },
         "p_term_lin_vel_z_axis_left_arm_data": {
             "data_type": "double",
@@ -586,7 +754,7 @@
         },
         "d_gain_lin_vel_z_axis_left_arm_data": {
             "data_type": "double",
-            "initial_value": "-2.5"
+            "initial_value": "2.5"
         },
         "d_term_lin_vel_z_axis_left_arm_data": {
             "data_type": "double",
@@ -598,7 +766,7 @@
         },
         "i_gain_lin_vel_z_axis_left_arm_data": {
             "data_type": "double",
-            "initial_value": "-100.0"
+            "initial_value": "100.0"
         },
         "i_term_lin_vel_z_axis_left_arm_data": {
             "data_type": "double",
@@ -618,7 +786,7 @@
         },
         "stiffness_lin_z_axis_left_arm_data": {
             "data_type": "double",
-            "initial_value": "-100.0"
+            "initial_value": "100.0"
         },
         "stiffness_term_lin_z_axis_left_arm_data": {
             "data_type": "double",
@@ -630,7 +798,7 @@
         },
         "damping_lin_z_axis_left_arm_data": {
             "data_type": "double",
-            "initial_value": "-300.0"
+            "initial_value": "300.0"
         },
         "damping_term_z_axis_left_arm_data": {
             "data_type": "double",
@@ -660,6 +828,22 @@
             "data_type": "bool",
             "initial_value": "false"
         },
+        "i_term_greater_than_lower_saturation_limit_z_axis_left_arm_event": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "i_term_lower_than_upper_saturation_limit_z_axis_left_arm_event": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "i_term_greater_than_eq_to_upper_saturation_limit_z_axis_left_arm_event": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "i_term_lower_than_eq_to_lower_saturation_limit_z_axis_left_arm_event": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
         "pos_constraint_arm_above_uncertain_contact_region_z_axis_left_arm_flag": {
             "data_type": "bool",
             "initial_value": "false"
@@ -677,6 +861,14 @@
             "initial_value": "false"
         },
         "error_outside_threshold_to_deactivate_i_block_z_axis_left_arm_event": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "vel_error_is_negative_z_axis_left_arm_event": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "vel_error_is_positive_z_axis_left_arm_event": {
             "data_type": "bool",
             "initial_value": "false"
         },
@@ -720,6 +912,34 @@
             "data_type": "double",
             "initial_value": "0.0"
         },
+        "apply_ee_force_z_axis_left_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "stiffness_damping_terms_summation_z_axis_right_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "p_term_calculator_lin_pos_x_axis_right_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "p_term_calculator_lin_pos_y_axis_right_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "pd_term_summation_z_axis_right_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "pid_term_summation_z_axis_right_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
+        "zero_lin_vel_error_z_axis_right_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
         "lin_pos_error_x_axis_right_arm_data": {
             "data_type": "double",
             "initial_value": "0.0"
@@ -728,13 +948,9 @@
             "data_type": "double",
             "initial_value": "0.0"
         },
-        "apply_ee_force_z_axis_right_arm_data": {
-            "data_type": "double",
-            "initial_value": "0.0"
-        },
         "force_to_apply_to_table_z_axis_right_arm_data": {
             "data_type": "double",
-            "initial_value": "5.0"
+            "initial_value": "-5.0"
         },
         "lin_pos_sp_z_axis_right_arm_data": {
             "data_type": "double",
@@ -774,7 +990,7 @@
         },
         "lin_vel_sp_threshold_to_activate_i_z_axis_right_arm_data": {
             "data_type": "double",
-            "initial_value": "0.01"
+            "initial_value": "0.005"
         },
         "lin_pos_sp_uncertainty_range_z_axis_right_arm_data": {
             "data_type": "double",
@@ -782,15 +998,15 @@
         },
         "p_gain_z_axis_right_arm_data": {
             "data_type": "double",
-            "initial_value": "-80.0"
+            "initial_value": "80.0"
         },
         "p_gain_pos_x_axis_right_arm_data": {
             "data_type": "double",
-            "initial_value": "-50.0"
+            "initial_value": "50.0"
         },
         "p_gain_pos_y_axis_right_arm_data": {
             "data_type": "double",
-            "initial_value": "-50.0"
+            "initial_value": "50.0"
         },
         "p_term_lin_vel_z_axis_right_arm_data": {
             "data_type": "double",
@@ -810,7 +1026,7 @@
         },
         "d_gain_lin_vel_z_axis_right_arm_data": {
             "data_type": "double",
-            "initial_value": "-2.5"
+            "initial_value": "2.5"
         },
         "d_term_lin_vel_z_axis_right_arm_data": {
             "data_type": "double",
@@ -822,7 +1038,7 @@
         },
         "i_gain_lin_vel_z_axis_right_arm_data": {
             "data_type": "double",
-            "initial_value": "-100.0"
+            "initial_value": "100.0"
         },
         "i_term_lin_vel_z_axis_right_arm_data": {
             "data_type": "double",
@@ -842,7 +1058,7 @@
         },
         "stiffness_lin_z_axis_right_arm_data": {
             "data_type": "double",
-            "initial_value": "-100.0"
+            "initial_value": "100.0"
         },
         "stiffness_term_lin_z_axis_right_arm_data": {
             "data_type": "double",
@@ -854,11 +1070,19 @@
         },
         "damping_lin_z_axis_right_arm_data": {
             "data_type": "double",
-            "initial_value": "-300.0"
+            "initial_value": "300.0"
         },
         "damping_term_z_axis_right_arm_data": {
             "data_type": "double",
             "initial_value": "0.0"
+        },
+        "vel_error_is_negative_z_axis_right_arm_event": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "vel_error_is_positive_z_axis_right_arm_event": {
+            "data_type": "bool",
+            "initial_value": "false"
         },
         "pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_event": {
             "data_type": "bool",
@@ -881,6 +1105,22 @@
             "initial_value": "false"
         },
         "pos_constraint_arm_above_pos_sp_z_axis_right_arm_event": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "i_term_greater_than_lower_saturation_limit_z_axis_right_arm_event": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "i_term_lower_than_upper_saturation_limit_z_axis_right_arm_event": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "i_term_greater_than_eq_to_upper_saturation_limit_z_axis_right_arm_event": {
+            "data_type": "bool",
+            "initial_value": "false"
+        },
+        "i_term_lower_than_eq_to_lower_saturation_limit_z_axis_right_arm_event": {
             "data_type": "bool",
             "initial_value": "false"
         },
@@ -944,6 +1184,10 @@
             "data_type": "double",
             "initial_value": "0.0"
         },
+        "apply_ee_force_z_axis_right_arm_data": {
+            "data_type": "double",
+            "initial_value": "0.0"
+        },
         "states_z_axis_right_arm_is_active": {
             "data_type": "bool",
             "initial_value": "false"
@@ -992,26 +1236,6 @@
                         ]
                     },
                     "schedules": {
-                        "pd_controller_schedule_z_axis_right_arm_call": {
-                            "trigger_chain": [
-                                "error_calculation_lin_vel_pid_z_axis_right_arm_function",
-                                "p_term_calculator_lin_vel_z_axis_right_arm_function",
-                                "derivative_calculator_of_lin_vel_error_z_axis_right_arm_function",
-                                "update_previous_vel_error_with_current_vel_error_data_z_axis_right_arm_function",
-                                "d_term_calculator_lin_vel_z_axis_right_arm_function",
-                                "pd_term_summation_z_axis_right_arm_function"
-                            ],
-                            "monitors": {
-                                "function_names": [
-                                    "measured_lin_pos_z_axis_right_arm_data_greaterthanupperlimitconstraint_lin_pos_sp_z_axis_right_arm_data_is_flag_False_function",
-                                    "measured_lin_vel_z_axis_right_arm_data_outofintervalconstraint_lin_vel_sp_z_axis_right_arm_data_is_flag_False_function"
-                                ],
-                                "event_data": [
-                                    "pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_event",
-                                    "error_outside_threshold_to_deactivate_i_block_z_axis_right_arm_event"
-                                ]
-                            }
-                        },
                         "pid_controller_schedule_z_axis_right_arm_call": {
                             "trigger_chain": [
                                 "error_calculation_lin_vel_pid_z_axis_right_arm_function",
@@ -1022,16 +1246,140 @@
                                 "integral_calculator_of_lin_vel_error_z_axis_right_arm_function",
                                 "i_term_calculator_lin_vel_z_axis_right_arm_function",
                                 "saturate_i_term_lin_vel_z_axis_right_arm_function",
-                                "pid_term_summation_z_axis_right_arm_function"
+                                "pid_term_summation_z_axis_right_arm_function",
+                                "add_pid_term_summation_to_ee_force_z_axis_right_arm_function"
                             ],
                             "monitors": {
                                 "function_names": [
                                     "measured_lin_vel_z_axis_right_arm_data_inintervalconstraint_lin_vel_sp_z_axis_right_arm_data_is_flag_False_function",
-                                    "measured_lin_pos_z_axis_right_arm_data_greaterthanupperlimitconstraint_lin_pos_sp_z_axis_right_arm_data_is_flag_False_function"
+                                    "i_term_lin_vel_z_axis_right_arm_data_greaterthanconstraint_i_term_saturation_lower_limit_z_axis_right_arm_data_is_flag_False_function",
+                                    "i_term_lin_vel_z_axis_right_arm_data_lessthanconstraint_i_term_saturation_upper_limit_z_axis_right_arm_data_is_flag_False_function"
                                 ],
                                 "event_data": [
                                     "error_within_threshold_to_activate_i_block_z_axis_right_arm_event",
-                                    "pos_constraint_arm_above_uncertain_contact_region_z_axis_right_arm_event"
+                                    "i_term_greater_than_lower_saturation_limit_z_axis_right_arm_event",
+                                    "i_term_lower_than_upper_saturation_limit_z_axis_right_arm_event"
+                                ]
+                            }
+                        },
+                        "pd_controller_schedule_z_axis_right_arm_call": {
+                            "trigger_chain": [
+                                "error_calculation_lin_vel_pid_z_axis_right_arm_function",
+                                "p_term_calculator_lin_vel_z_axis_right_arm_function",
+                                "derivative_calculator_of_lin_vel_error_z_axis_right_arm_function",
+                                "update_previous_vel_error_with_current_vel_error_data_z_axis_right_arm_function",
+                                "d_term_calculator_lin_vel_z_axis_right_arm_function",
+                                "pd_term_summation_z_axis_right_arm_function",
+                                "add_pd_term_summation_to_ee_force_z_axis_right_arm_function"
+                            ],
+                            "monitors": {
+                                "function_names": [
+                                    "measured_lin_vel_z_axis_right_arm_data_outofintervalconstraint_lin_vel_sp_z_axis_right_arm_data_is_flag_False_function"
+                                ],
+                                "event_data": [
+                                    "error_outside_threshold_to_deactivate_i_block_z_axis_right_arm_event"
+                                ]
+                            }
+                        },
+                        "pid_controller_schedule_i_error_clamped_upper_z_axis_right_arm_call": {
+                            "trigger_chain": [
+                                "error_calculation_lin_vel_pid_z_axis_right_arm_function",
+                                "p_term_calculator_lin_vel_z_axis_right_arm_function",
+                                "derivative_calculator_of_lin_vel_error_z_axis_right_arm_function",
+                                "update_previous_vel_error_with_current_vel_error_data_z_axis_right_arm_function",
+                                "d_term_calculator_lin_vel_z_axis_right_arm_function",
+                                "i_term_calculator_lin_vel_z_axis_right_arm_function",
+                                "saturate_i_term_lin_vel_z_axis_right_arm_function",
+                                "pid_term_summation_z_axis_right_arm_function",
+                                "add_pid_term_summation_to_ee_force_z_axis_right_arm_function"
+                            ],
+                            "monitors": {
+                                "function_names": [
+                                    "i_term_lin_vel_z_axis_right_arm_data_greaterthanequaltoconstraint_i_term_saturation_upper_limit_z_axis_right_arm_data_is_flag_False_function",
+                                    "lin_vel_error_pid_z_axis_right_arm_data_greaterthanequaltoconstraint_zero_lin_vel_error_z_axis_right_arm_data_is_flag_False_function",
+                                    "measured_lin_vel_z_axis_right_arm_data_inintervalconstraint_lin_vel_sp_z_axis_right_arm_data_is_flag_False_function"
+                                ],
+                                "event_data": [
+                                    "i_term_greater_than_eq_to_upper_saturation_limit_z_axis_right_arm_event",
+                                    "vel_error_is_positive_z_axis_right_arm_event",
+                                    "error_within_threshold_to_activate_i_block_z_axis_right_arm_event"
+                                ]
+                            }
+                        },
+                        "pid_controller_schedule_i_error_clamped_lower_z_axis_right_arm_call": {
+                            "trigger_chain": [
+                                "error_calculation_lin_vel_pid_z_axis_right_arm_function",
+                                "p_term_calculator_lin_vel_z_axis_right_arm_function",
+                                "derivative_calculator_of_lin_vel_error_z_axis_right_arm_function",
+                                "update_previous_vel_error_with_current_vel_error_data_z_axis_right_arm_function",
+                                "d_term_calculator_lin_vel_z_axis_right_arm_function",
+                                "i_term_calculator_lin_vel_z_axis_right_arm_function",
+                                "saturate_i_term_lin_vel_z_axis_right_arm_function",
+                                "pid_term_summation_z_axis_right_arm_function",
+                                "add_pid_term_summation_to_ee_force_z_axis_right_arm_function"
+                            ],
+                            "monitors": {
+                                "function_names": [
+                                    "i_term_lin_vel_z_axis_right_arm_data_lessthanequaltoconstraint_i_term_saturation_lower_limit_z_axis_right_arm_data_is_flag_False_function",
+                                    "lin_vel_error_pid_z_axis_right_arm_data_lessthanconstraint_zero_lin_vel_error_z_axis_right_arm_data_is_flag_False_function",
+                                    "measured_lin_vel_z_axis_right_arm_data_inintervalconstraint_lin_vel_sp_z_axis_right_arm_data_is_flag_False_function"
+                                ],
+                                "event_data": [
+                                    "i_term_lower_than_eq_to_lower_saturation_limit_z_axis_right_arm_event",
+                                    "vel_error_is_negative_z_axis_right_arm_event",
+                                    "error_within_threshold_to_activate_i_block_z_axis_right_arm_event"
+                                ]
+                            }
+                        },
+                        "pid_controller_schedule_err_reducing_z_axis_right_arm_call": {
+                            "trigger_chain": [
+                                "error_calculation_lin_vel_pid_z_axis_right_arm_function",
+                                "p_term_calculator_lin_vel_z_axis_right_arm_function",
+                                "derivative_calculator_of_lin_vel_error_z_axis_right_arm_function",
+                                "update_previous_vel_error_with_current_vel_error_data_z_axis_right_arm_function",
+                                "d_term_calculator_lin_vel_z_axis_right_arm_function",
+                                "integral_calculator_of_lin_vel_error_z_axis_right_arm_function",
+                                "i_term_calculator_lin_vel_z_axis_right_arm_function",
+                                "saturate_i_term_lin_vel_z_axis_right_arm_function",
+                                "pid_term_summation_z_axis_right_arm_function",
+                                "add_pid_term_summation_to_ee_force_z_axis_right_arm_function"
+                            ],
+                            "monitors": {
+                                "function_names": [
+                                    "measured_lin_vel_z_axis_right_arm_data_inintervalconstraint_lin_vel_sp_z_axis_right_arm_data_is_flag_False_function",
+                                    "i_term_lin_vel_z_axis_right_arm_data_greaterthanequaltoconstraint_i_term_saturation_upper_limit_z_axis_right_arm_data_is_flag_False_function",
+                                    "lin_vel_error_pid_z_axis_right_arm_data_lessthanconstraint_zero_lin_vel_error_z_axis_right_arm_data_is_flag_False_function"
+                                ],
+                                "event_data": [
+                                    "error_within_threshold_to_activate_i_block_z_axis_right_arm_event",
+                                    "i_term_greater_than_eq_to_upper_saturation_limit_z_axis_right_arm_event",
+                                    "vel_error_is_negative_z_axis_right_arm_event"
+                                ]
+                            }
+                        },
+                        "pid_controller_schedule_err_rising_z_axis_right_arm_call": {
+                            "trigger_chain": [
+                                "error_calculation_lin_vel_pid_z_axis_right_arm_function",
+                                "p_term_calculator_lin_vel_z_axis_right_arm_function",
+                                "derivative_calculator_of_lin_vel_error_z_axis_right_arm_function",
+                                "update_previous_vel_error_with_current_vel_error_data_z_axis_right_arm_function",
+                                "d_term_calculator_lin_vel_z_axis_right_arm_function",
+                                "integral_calculator_of_lin_vel_error_z_axis_right_arm_function",
+                                "i_term_calculator_lin_vel_z_axis_right_arm_function",
+                                "saturate_i_term_lin_vel_z_axis_right_arm_function",
+                                "pid_term_summation_z_axis_right_arm_function",
+                                "add_pid_term_summation_to_ee_force_z_axis_right_arm_function"
+                            ],
+                            "monitors": {
+                                "function_names": [
+                                    "measured_lin_vel_z_axis_right_arm_data_inintervalconstraint_lin_vel_sp_z_axis_right_arm_data_is_flag_False_function",
+                                    "i_term_lin_vel_z_axis_right_arm_data_lessthanequaltoconstraint_i_term_saturation_lower_limit_z_axis_right_arm_data_is_flag_False_function",
+                                    "lin_vel_error_pid_z_axis_right_arm_data_greaterthanequaltoconstraint_zero_lin_vel_error_z_axis_right_arm_data_is_flag_False_function"
+                                ],
+                                "event_data": [
+                                    "error_within_threshold_to_activate_i_block_z_axis_right_arm_event",
+                                    "i_term_lower_than_eq_to_lower_saturation_limit_z_axis_right_arm_event",
+                                    "vel_error_is_positive_z_axis_right_arm_event"
                                 ]
                             }
                         }
@@ -1063,7 +1411,8 @@
                                 "stiffness_term_calculator_lin_z_axis_right_arm_function",
                                 "error_calculation_lin_vel_damping_z_axis_right_arm_function",
                                 "damping_term_calculator_lin_z_axis_right_arm_function",
-                                "stiffness_damping_terms_summation_z_axis_right_arm_function"
+                                "stiffness_damping_terms_summation_z_axis_right_arm_function",
+                                "add_stiffness_damping_summation_to_ee_force_z_axis_right_arm_function"
                             ],
                             "monitors": {
                                 "function_names": [
@@ -1126,7 +1475,8 @@
                         "p_controller_schedule_x_axis_right_arm_call": {
                             "trigger_chain": [
                                 "error_calculation_lin_pos_p_x_axis_right_arm_function",
-                                "p_term_calculator_lin_pos_x_axis_right_arm_function"
+                                "p_term_calculator_lin_pos_x_axis_right_arm_function",
+                                "add_p_term_to_ee_force_x_axis_right_arm_function"
                             ],
                             "monitors": {
                                 "function_names": [
@@ -1158,7 +1508,8 @@
                         "p_controller_schedule_y_axis_right_arm_call": {
                             "trigger_chain": [
                                 "error_calculation_lin_pos_p_y_axis_right_arm_function",
-                                "p_term_calculator_lin_pos_y_axis_right_arm_function"
+                                "p_term_calculator_lin_pos_y_axis_right_arm_function",
+                                "add_p_term_to_ee_force_y_axis_right_arm_function"
                             ],
                             "monitors": {
                                 "function_names": [
@@ -1205,16 +1556,19 @@
                                 "integral_calculator_of_lin_vel_error_z_axis_left_arm_function",
                                 "i_term_calculator_lin_vel_z_axis_left_arm_function",
                                 "saturate_i_term_lin_vel_z_axis_left_arm_function",
-                                "pid_term_summation_z_axis_left_arm_function"
+                                "pid_term_summation_z_axis_left_arm_function",
+                                "add_pid_term_summation_to_ee_force_z_axis_left_arm_function"
                             ],
                             "monitors": {
                                 "function_names": [
                                     "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_data_is_flag_False_function",
-                                    "measured_lin_pos_z_axis_left_arm_data_greaterthanupperlimitconstraint_lin_pos_sp_z_axis_left_arm_data_is_flag_False_function"
+                                    "i_term_lin_vel_z_axis_left_arm_data_greaterthanconstraint_i_term_saturation_lower_limit_z_axis_left_arm_data_is_flag_False_function",
+                                    "i_term_lin_vel_z_axis_left_arm_data_lessthanconstraint_i_term_saturation_upper_limit_z_axis_left_arm_data_is_flag_False_function"
                                 ],
                                 "event_data": [
                                     "error_within_threshold_to_activate_i_block_z_axis_left_arm_event",
-                                    "pos_constraint_arm_above_uncertain_contact_region_z_axis_left_arm_event"
+                                    "i_term_greater_than_lower_saturation_limit_z_axis_left_arm_event",
+                                    "i_term_lower_than_upper_saturation_limit_z_axis_left_arm_event"
                                 ]
                             }
                         },
@@ -1225,16 +1579,117 @@
                                 "derivative_calculator_of_lin_vel_error_z_axis_left_arm_function",
                                 "update_previous_vel_error_with_current_vel_error_data_z_axis_left_arm_function",
                                 "d_term_calculator_lin_vel_z_axis_left_arm_function",
-                                "pd_term_summation_z_axis_left_arm_function"
+                                "pd_term_summation_z_axis_left_arm_function",
+                                "add_pd_term_summation_to_ee_force_z_axis_left_arm_function"
                             ],
                             "monitors": {
                                 "function_names": [
-                                    "measured_lin_pos_z_axis_left_arm_data_greaterthanupperlimitconstraint_lin_pos_sp_z_axis_left_arm_data_is_flag_False_function",
                                     "measured_lin_vel_z_axis_left_arm_data_outofintervalconstraint_lin_vel_sp_z_axis_left_arm_data_is_flag_False_function"
                                 ],
                                 "event_data": [
-                                    "pos_constraint_arm_above_uncertain_contact_region_z_axis_left_arm_event",
                                     "error_outside_threshold_to_deactivate_i_block_z_axis_left_arm_event"
+                                ]
+                            }
+                        },
+                        "pid_controller_schedule_i_error_clamped_upper_z_axis_left_arm_call": {
+                            "trigger_chain": [
+                                "error_calculation_lin_vel_pid_z_axis_left_arm_function",
+                                "p_term_calculator_lin_vel_z_axis_left_arm_function",
+                                "derivative_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                "update_previous_vel_error_with_current_vel_error_data_z_axis_left_arm_function",
+                                "d_term_calculator_lin_vel_z_axis_left_arm_function",
+                                "i_term_calculator_lin_vel_z_axis_left_arm_function",
+                                "saturate_i_term_lin_vel_z_axis_left_arm_function",
+                                "pid_term_summation_z_axis_left_arm_function",
+                                "add_pid_term_summation_to_ee_force_z_axis_left_arm_function"
+                            ],
+                            "monitors": {
+                                "function_names": [
+                                    "i_term_lin_vel_z_axis_left_arm_data_greaterthanequaltoconstraint_i_term_saturation_upper_limit_z_axis_left_arm_data_is_flag_False_function",
+                                    "lin_vel_error_pid_z_axis_left_arm_data_greaterthanequaltoconstraint_zero_lin_vel_error_z_axis_left_arm_data_is_flag_False_function",
+                                    "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_data_is_flag_False_function"
+                                ],
+                                "event_data": [
+                                    "i_term_greater_than_eq_to_upper_saturation_limit_z_axis_left_arm_event",
+                                    "vel_error_is_positive_z_axis_left_arm_event",
+                                    "error_within_threshold_to_activate_i_block_z_axis_left_arm_event"
+                                ]
+                            }
+                        },
+                        "pid_controller_schedule_i_error_clamped_lower_z_axis_left_arm_call": {
+                            "trigger_chain": [
+                                "error_calculation_lin_vel_pid_z_axis_left_arm_function",
+                                "p_term_calculator_lin_vel_z_axis_left_arm_function",
+                                "derivative_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                "update_previous_vel_error_with_current_vel_error_data_z_axis_left_arm_function",
+                                "d_term_calculator_lin_vel_z_axis_left_arm_function",
+                                "i_term_calculator_lin_vel_z_axis_left_arm_function",
+                                "saturate_i_term_lin_vel_z_axis_left_arm_function",
+                                "pid_term_summation_z_axis_left_arm_function",
+                                "add_pid_term_summation_to_ee_force_z_axis_left_arm_function"
+                            ],
+                            "monitors": {
+                                "function_names": [
+                                    "i_term_lin_vel_z_axis_left_arm_data_lessthanequaltoconstraint_i_term_saturation_lower_limit_z_axis_left_arm_data_is_flag_False_function",
+                                    "lin_vel_error_pid_z_axis_left_arm_data_lessthanconstraint_zero_lin_vel_error_z_axis_left_arm_data_is_flag_False_function",
+                                    "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_data_is_flag_False_function"
+                                ],
+                                "event_data": [
+                                    "i_term_lower_than_eq_to_lower_saturation_limit_z_axis_left_arm_event",
+                                    "vel_error_is_negative_z_axis_left_arm_event",
+                                    "error_within_threshold_to_activate_i_block_z_axis_left_arm_event"
+                                ]
+                            }
+                        },
+                        "pid_controller_schedule_err_reducing_z_axis_left_arm_call": {
+                            "trigger_chain": [
+                                "error_calculation_lin_vel_pid_z_axis_left_arm_function",
+                                "p_term_calculator_lin_vel_z_axis_left_arm_function",
+                                "derivative_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                "update_previous_vel_error_with_current_vel_error_data_z_axis_left_arm_function",
+                                "d_term_calculator_lin_vel_z_axis_left_arm_function",
+                                "integral_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                "i_term_calculator_lin_vel_z_axis_left_arm_function",
+                                "saturate_i_term_lin_vel_z_axis_left_arm_function",
+                                "pid_term_summation_z_axis_left_arm_function",
+                                "add_pid_term_summation_to_ee_force_z_axis_left_arm_function"
+                            ],
+                            "monitors": {
+                                "function_names": [
+                                    "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_data_is_flag_False_function",
+                                    "i_term_lin_vel_z_axis_left_arm_data_greaterthanequaltoconstraint_i_term_saturation_upper_limit_z_axis_left_arm_data_is_flag_False_function",
+                                    "lin_vel_error_pid_z_axis_left_arm_data_lessthanconstraint_zero_lin_vel_error_z_axis_left_arm_data_is_flag_False_function"
+                                ],
+                                "event_data": [
+                                    "error_within_threshold_to_activate_i_block_z_axis_left_arm_event",
+                                    "i_term_greater_than_eq_to_upper_saturation_limit_z_axis_left_arm_event",
+                                    "vel_error_is_negative_z_axis_left_arm_event"
+                                ]
+                            }
+                        },
+                        "pid_controller_schedule_err_rising_z_axis_left_arm_call": {
+                            "trigger_chain": [
+                                "error_calculation_lin_vel_pid_z_axis_left_arm_function",
+                                "p_term_calculator_lin_vel_z_axis_left_arm_function",
+                                "derivative_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                "update_previous_vel_error_with_current_vel_error_data_z_axis_left_arm_function",
+                                "d_term_calculator_lin_vel_z_axis_left_arm_function",
+                                "integral_calculator_of_lin_vel_error_z_axis_left_arm_function",
+                                "i_term_calculator_lin_vel_z_axis_left_arm_function",
+                                "saturate_i_term_lin_vel_z_axis_left_arm_function",
+                                "pid_term_summation_z_axis_left_arm_function",
+                                "add_pid_term_summation_to_ee_force_z_axis_left_arm_function"
+                            ],
+                            "monitors": {
+                                "function_names": [
+                                    "measured_lin_vel_z_axis_left_arm_data_inintervalconstraint_lin_vel_sp_z_axis_left_arm_data_is_flag_False_function",
+                                    "i_term_lin_vel_z_axis_left_arm_data_lessthanequaltoconstraint_i_term_saturation_lower_limit_z_axis_left_arm_data_is_flag_False_function",
+                                    "lin_vel_error_pid_z_axis_left_arm_data_greaterthanequaltoconstraint_zero_lin_vel_error_z_axis_left_arm_data_is_flag_False_function"
+                                ],
+                                "event_data": [
+                                    "error_within_threshold_to_activate_i_block_z_axis_left_arm_event",
+                                    "i_term_lower_than_eq_to_lower_saturation_limit_z_axis_left_arm_event",
+                                    "vel_error_is_positive_z_axis_left_arm_event"
                                 ]
                             }
                         }
@@ -1266,7 +1721,8 @@
                                 "stiffness_term_calculator_lin_z_axis_left_arm_function",
                                 "error_calculation_lin_vel_damping_z_axis_left_arm_function",
                                 "damping_term_calculator_lin_z_axis_left_arm_function",
-                                "stiffness_damping_terms_summation_z_axis_left_arm_function"
+                                "stiffness_damping_terms_summation_z_axis_left_arm_function",
+                                "add_stiffness_damping_summation_to_ee_force_z_axis_left_arm_function"
                             ],
                             "monitors": {
                                 "function_names": [
@@ -1329,7 +1785,8 @@
                         "p_controller_schedule_x_axis_left_arm_call": {
                             "trigger_chain": [
                                 "error_calculation_lin_pos_p_x_axis_left_arm_function",
-                                "p_term_calculator_lin_pos_x_axis_left_arm_function"
+                                "p_term_calculator_lin_pos_x_axis_left_arm_function",
+                                "add_p_term_to_ee_force_x_axis_left_arm_function"
                             ],
                             "monitors": {
                                 "function_names": [
@@ -1361,7 +1818,8 @@
                         "p_controller_schedule_y_axis_left_arm_call": {
                             "trigger_chain": [
                                 "error_calculation_lin_pos_p_y_axis_left_arm_function",
-                                "p_term_calculator_lin_pos_y_axis_left_arm_function"
+                                "p_term_calculator_lin_pos_y_axis_left_arm_function",
+                                "add_p_term_to_ee_force_y_axis_left_arm_function"
                             ],
                             "monitors": {
                                 "function_names": [
