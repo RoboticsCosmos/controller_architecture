@@ -6,7 +6,6 @@
 
 ## Dependencies
 - rdflib
-- jinja2
 - kdl_parser
 - orocos_kinematics_dynamics
 - StringTemplate
@@ -25,10 +24,11 @@
 
 ### Step 2
 
-- Install the dependencies: kdl_parser, yaml-cpp
+- Install the dependencies: kdl_parser, yaml-cpp, rdflib
 
     ```bash
-    sudo apt-get install libkdl-parser-dev libyaml-cpp-dev 
+    sudo apt-get install libkdl-parser-dev libyaml-cpp-dev
+    pip install rdflib
     ```
 - clone and install StringTeplate in the src/controller_architecture/ path using https://github.com/antlr/stringtemplate4/tree/master
 
@@ -40,7 +40,7 @@
 - Run the following commands from the src/controller_architecture/ path
     
     ```bash
-    cd gen/
+    cd synthesis/
     python runner_uc1.py
 
     cd ../code_generator
@@ -53,7 +53,7 @@
 - Run the following commands from the src/controller_architecture/ path
     
     ```bash
-    cd gen/
+    cd synthesis/
     python runner_uc2_pid.py
 
     cd ../code_generator
@@ -66,7 +66,7 @@
 - Run the following commands from the src/controller_architecture/ path
     
     ```bash
-    cd gen/
+    cd synthesis/
     python runner_uc2_abag.py
 
     cd ../code_generator
