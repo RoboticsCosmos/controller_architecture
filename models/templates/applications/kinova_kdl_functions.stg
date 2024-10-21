@@ -1,0 +1,268 @@
+
+kinova_kdl_functions() ::= <<
+
+// extern "C"
+// {
+namespace k_api = Kinova::Api;
+
+void kinova_feedback(kinova_mediator &kinova_arm_mediator,
+                     KDL::JntArray &jnt_positions,
+                     KDL::JntArray &jnt_velocities,
+                     KDL::JntArray &jnt_torques)
+{
+    kinova_arm_mediator.get_joint_state(jnt_positions,
+                                        jnt_velocities,
+                                        jnt_torques);
+}
+
+void get_end_effector_pose_and_twist(KDL::JntArrayVel &jnt_velocity,
+                                     const KDL::JntArray &jnt_positions,
+                                     const KDL::JntArray &jnt_velocities,
+                                     KDL::Frame &measured_endEffPose_BL,
+                                     KDL::FrameVel &measured_endEffTwist_BL,
+                                     KDL::Frame &measured_endEffPose_GF,
+                                     KDL::FrameVel &measured_endEffTwist_GF,
+                                     std::shared_ptr\<KDL::ChainFkSolverPos_recursive> &fkSolverPos,
+                                     std::shared_ptr\<KDL::ChainFkSolverVel_recursive> &fkSolverVel,
+                                     const KDL::Frame &BL_wrt_GF_frame)
+{
+    // getting the end effector pose and twist
+    jnt_velocity.q = jnt_positions;
+    jnt_velocity.qdot = jnt_velocities;
+
+    fkSolverPos->JntToCart(jnt_positions, measured_endEffPose_BL);
+    fkSolverVel->JntToCart(jnt_velocity, measured_endEffTwist_BL);
+
+    measured_endEffPose_GF = BL_wrt_GF_frame * measured_endEffPose_BL;
+    measured_endEffTwist_GF = BL_wrt_GF_frame * measured_endEffTwist_BL;
+}
+
+void calculate_joint_torques_RNEA(
+    std::shared_ptr\<KDL::ChainJntToJacDotSolver> &jacobDotSolver,
+    std::shared_ptr\<KDL::ChainIkSolverVel_pinv> &ikSolverAcc,
+    std::shared_ptr\<KDL::ChainIdSolver_RNE> &idSolver,
+    KDL::JntArrayVel &jnt_velocity,
+    KDL::Twist &jd_qd,
+    KDL::Twist &xdd,
+    KDL::Twist &xdd_minus_jd_qd,
+    KDL::JntArray &jnt_accelerations,
+    KDL::JntArray &jnt_positions,
+    KDL::JntArray &jnt_velocities,
+    KDL::Wrenches &linkWrenches_EE,
+    KDL::JntArray &jnt_torques)
+{
+    // get joint torques
+    jacobDotSolver->JntToJacDot(jnt_velocity, jd_qd);
+    xdd_minus_jd_qd = xdd - jd_qd;
+    ikSolverAcc->CartToJnt(jnt_positions, xdd_minus_jd_qd, jnt_accelerations);
+    idSolver->CartToJnt(jnt_positions, jnt_velocities, jnt_accelerations, linkWrenches_EE, jnt_torques);
+}
+
+enum robot_controlled
+{
+    DUAL_KINOVA_GEN3_ARMS = 0,
+    KINOVA_GEN3_1_LEFT = 1,
+    KINOVA_GEN3_2_RIGHT = 2,
+};
+
+enum controller_name
+{
+    NONE = -1,
+    PD_CONTROLLER = 0,
+    PID_CONTROLLER = 1,
+    FORCE_CONTROLLER = 2,
+    IMPEDANCE_CONTROLLER = 3,
+    P_CONTROLLER = 4,
+    STIFFNESS_CONTROLLER = 5,
+    ABAG_CONTROLLER = 6,
+};
+>>
+
+
+get_feedback_and_update_KDL_data() ::= <<
+
+        if (robots_to_control == robot_controlled::DUAL_KINOVA_GEN3_ARMS || robots_to_control == robot_controlled::KINOVA_GEN3_1_LEFT)
+        {
+            kinova_feedback(kinova_left, jnt_positions_left, jnt_velocities_left,
+                            jnt_torques_left_read);
+            get_end_effector_pose_and_twist(
+                jnt_velocity_left, jnt_positions_left, jnt_velocities_left,
+                measured_endEffPose_BL_left_arm, measured_endEffTwist_BL_left_arm,
+                measured_endEffPose_GF_left_arm, measured_endEffTwist_GF_left_arm,
+                fkSolverPos, fkSolverVel, BL_wrt_GF_frame_left);
+        }
+
+        if (robots_to_control == robot_controlled::DUAL_KINOVA_GEN3_ARMS || robots_to_control == robot_controlled::KINOVA_GEN3_2_RIGHT)
+        {
+            kinova_feedback(kinova_right, jnt_positions_right, jnt_velocities_right,
+                            jnt_torques_right_read);
+            get_end_effector_pose_and_twist(
+                jnt_velocity_right, jnt_positions_right, jnt_velocities_right,
+                measured_endEffPose_BL_right_arm, measured_endEffTwist_BL_right_arm,
+                measured_endEffPose_GF_right_arm, measured_endEffTwist_GF_right_arm,
+                fkSolverPos, fkSolverVel, BL_wrt_GF_frame_right);
+        }
+>>
+
+
+transform_ee_force_to_ee_frame_and_calculate_jnt_torques_and_send_to_robot() ::= <<
+
+        // send the torques to the robot
+        if (robots_to_control == robot_controlled::DUAL_KINOVA_GEN3_ARMS || robots_to_control == robot_controlled::KINOVA_GEN3_1_LEFT)
+        {
+            // write the ee torques to to linkWrenches_GF_left
+            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].force(0) = -apply_ee_force_x_axis_left_arm_data;
+            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].force(1) = -apply_ee_force_y_axis_left_arm_data;
+            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].force(2) = -apply_ee_force_z_axis_left_arm_data;
+            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].torque(0) = -stiffness_angular_left_arm[0]*angle_axis_diff_GF_left_arm(0);
+            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].torque(1) = -stiffness_angular_left_arm[1]*angle_axis_diff_GF_left_arm(1);
+            linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].torque(2) = -stiffness_angular_left_arm[2]*angle_axis_diff_GF_left_arm(2);
+
+            apply_ee_force_x_axis_left_arm_data = 0.0;
+            apply_ee_force_y_axis_left_arm_data = 0.0;
+            apply_ee_force_z_axis_left_arm_data = 0.0;
+
+            // thresholding in cartesian space of the end effector
+            for (int i = 0; i \< 3; i++)
+            {
+                if (linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].force(i) > 0.0)
+                {
+                    linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].force(i) = std::min(WRENCH_THRESHOLD_LINEAR, linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].force(i));
+                }
+                else
+                {
+                    linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].force(i) = std::max(-WRENCH_THRESHOLD_LINEAR, linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].force(i));
+                }
+
+                if (linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].torque(i) > 0.0)
+                {
+                    linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].torque(i) = std::min(WRENCH_THRESHOLD_ROTATIONAL, linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].torque(i));
+                }
+                else
+                {
+                    linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].torque(i) = std::max(-WRENCH_THRESHOLD_ROTATIONAL, linkWrenches_GF_left[kinova_constants::NUMBER_OF_JOINTS].torque(i));
+                }
+            }
+
+            // LinkWrenches are calculated in BL frame. As RNE solver requires them in EE frame, the wrenches are transformed from BL to EE frame
+            linkWrenches_EE_left[NUM_LINKS - 1].force = measured_endEffPose_GF_left_arm.M.Inverse() * linkWrenches_GF_left[NUM_LINKS - 1].force;
+            linkWrenches_EE_left[NUM_LINKS - 1].torque = measured_endEffPose_GF_left_arm.M.Inverse() * linkWrenches_GF_left[NUM_LINKS - 1].torque;
+
+            calculate_joint_torques_RNEA(jacobDotSolver, ikSolverAcc, idSolver_left,
+                                         jnt_velocity_left, jd_qd_left, xdd_left,
+                                         xdd_minus_jd_qd_left, jnt_accelerations_left,
+                                         jnt_positions_left, jnt_velocities_left,
+                                         linkWrenches_EE_left, jnt_torques_left_cmd);
+
+            // thresholding the jnt_torques_left_cmd before sending to the robot
+            for (int i = 0; i \< kinova_constants::NUMBER_OF_JOINTS; i++)
+            {
+                if (jnt_torques_left_cmd(i) > 0.0)
+                {
+                    jnt_torques_left_cmd(i) = std::min(JOINT_TORQUE_THRESHOLD, jnt_torques_left_cmd(i));
+                }
+                else
+                {
+                    jnt_torques_left_cmd(i) = std::max(-JOINT_TORQUE_THRESHOLD, jnt_torques_left_cmd(i));
+                }
+            }
+            kinova_left.set_joint_torques(jnt_torques_left_cmd);
+        }
+
+        if (robots_to_control == robot_controlled::DUAL_KINOVA_GEN3_ARMS || robots_to_control == robot_controlled::KINOVA_GEN3_2_RIGHT)
+        {
+            // write the ee torques to to linkWrenches_GF_right
+            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].force(0) = -apply_ee_force_x_axis_right_arm_data;
+            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].force(1) = -apply_ee_force_y_axis_right_arm_data;
+            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].force(2) = -apply_ee_force_z_axis_right_arm_data;
+            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].torque(0) = -stiffness_angular_right_arm[0]*angle_axis_diff_GF_right_arm(0);
+            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].torque(1) = -stiffness_angular_right_arm[1]*angle_axis_diff_GF_right_arm(1);
+            linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].torque(2) = -stiffness_angular_right_arm[2]*angle_axis_diff_GF_right_arm(2);
+
+            apply_ee_force_x_axis_right_arm_data = 0.0;
+            apply_ee_force_y_axis_right_arm_data = 0.0;
+            apply_ee_force_z_axis_right_arm_data = 0.0;
+
+            // thresholding in cartesian space of the end effector
+            for (int i = 0; i \< 3; i++)
+            {
+                if (linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].force(i) > 0.0)
+                {
+                    linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].force(i) = std::min(WRENCH_THRESHOLD_LINEAR, linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].force(i));
+                }
+                else
+                {
+                    linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].force(i) = std::max(-WRENCH_THRESHOLD_LINEAR, linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].force(i));
+                }
+
+                if (linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].torque(i) > 0.0)
+                {
+                    linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].torque(i) = std::min(WRENCH_THRESHOLD_ROTATIONAL, linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].torque(i));
+                }
+                else
+                {
+                    linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].torque(i) = std::max(-WRENCH_THRESHOLD_ROTATIONAL, linkWrenches_GF_right[kinova_constants::NUMBER_OF_JOINTS].torque(i));
+                }
+            }
+
+            // LinkWrenches are calculated in BL frame. As RNE solver requires them in EE frame, the wrenches are transformed from BL to EE frame
+            linkWrenches_EE_right[NUM_LINKS - 1].force = measured_endEffPose_GF_right_arm.M.Inverse() * linkWrenches_GF_right[NUM_LINKS - 1].force;
+            linkWrenches_EE_right[NUM_LINKS - 1].torque = measured_endEffPose_GF_right_arm.M.Inverse() * linkWrenches_GF_right[NUM_LINKS - 1].torque;
+
+            calculate_joint_torques_RNEA(jacobDotSolver, ikSolverAcc, idSolver_right,
+                                         jnt_velocity_right, jd_qd_right, xdd_right,
+                                         xdd_minus_jd_qd_right, jnt_accelerations_right,
+                                         jnt_positions_right, jnt_velocities_right,
+                                         linkWrenches_EE_right, jnt_torques_right_cmd);
+
+            // thresholding the jnt_torques_right_cmd before sending to the robot
+            for (int i = 0; i \< kinova_constants::NUMBER_OF_JOINTS; i++)
+            {
+                if (jnt_torques_right_cmd(i) > 0.0)
+                {
+                    jnt_torques_right_cmd(i) = std::min(JOINT_TORQUE_THRESHOLD, jnt_torques_right_cmd(i));
+                }
+                else
+                {
+                    jnt_torques_right_cmd(i) = std::max(-JOINT_TORQUE_THRESHOLD, jnt_torques_right_cmd(i));
+                }
+            }
+            kinova_right.set_joint_torques(jnt_torques_right_cmd);
+        }
+
+>>
+
+
+initialise_orientation_control_data() ::= <<
+    double measured_quat_GF_left_arm[4];                              
+    double measured_quat_GF_right_arm[4];                             
+    double desired_quat_GF_left_arm[4] = {0.7071, 0.0, 0.0, 0.7071};  
+    double desired_quat_GF_right_arm[4] = {0.0, 0.7071, 0.7071, 0.0}; 
+
+    KDL::Vector angle_axis_diff_GF_right_arm;
+    KDL::Vector angle_axis_diff_GF_left_arm;
+
+    double stiffness_angular_left_arm[3] = {15.0, 15., 15.};
+    double stiffness_angular_right_arm[3] = {15.0, 15., 15.};
+
+    KDL::Frame desired_endEffPose_GF_left_arm;
+    desired_endEffPose_GF_left_arm.M = KDL::Rotation::Quaternion(desired_quat_GF_left_arm[0], desired_quat_GF_left_arm[1], desired_quat_GF_left_arm[2], desired_quat_GF_left_arm[3]);
+    KDL::Frame desired_endEffPose_GF_right_arm;
+    desired_endEffPose_GF_right_arm.M = KDL::Rotation::Quaternion(desired_quat_GF_right_arm[0], desired_quat_GF_right_arm[1], desired_quat_GF_right_arm[2], desired_quat_GF_right_arm[3]);
+
+>>
+
+
+calculate_angle_diff_for_orientation_control() ::= <<
+    if (robots_to_control == robot_controlled::DUAL_KINOVA_GEN3_ARMS || robots_to_control == robot_controlled::KINOVA_GEN3_1_LEFT)
+    {
+        measured_endEffPose_GF_left_arm.M.GetQuaternion(measured_quat_GF_left_arm[0], measured_quat_GF_left_arm[1], measured_quat_GF_left_arm[2], measured_quat_GF_left_arm[3]);
+        angle_axis_diff_GF_left_arm = KDL::diff(measured_endEffPose_GF_left_arm.M, desired_endEffPose_GF_left_arm.M);
+    }
+
+    if (robots_to_control == robot_controlled::DUAL_KINOVA_GEN3_ARMS || robots_to_control == robot_controlled::KINOVA_GEN3_2_RIGHT)
+    {
+        measured_endEffPose_GF_right_arm.M.GetQuaternion(measured_quat_GF_right_arm[0], measured_quat_GF_right_arm[1], measured_quat_GF_right_arm[2], measured_quat_GF_right_arm[3]);
+        angle_axis_diff_GF_right_arm = KDL::diff(measured_endEffPose_GF_right_arm.M, desired_endEffPose_GF_right_arm.M);
+    }
+>>

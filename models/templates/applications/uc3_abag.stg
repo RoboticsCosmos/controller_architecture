@@ -1,0 +1,99 @@
+/*
+Comment outside the template:
+Logic:
+
+<!for each robot [REMOVE] !>
+  <!for each dimension!>
+
+    <!if pre_condition_satisfied is false!>
+      <!execute pre-condition functions of all motion specifications!>
+      <!if desired flag combination fro pre-cond are satisfying, set pre_condition_satisfied to true!>
+
+    <!if pre_condition_satisfied is true!>
+      <!for each motion specification!>
+        <!if pre-cond flags are active!>
+          <!execute all post-condition functions!>
+          <!check if post-condition flags are true!>
+        <!if post-cond flags are true!>
+          <!set pre_condition_satisfied as false!>
+          <!break!>
+        <!else!>
+          <!for each schedule!>
+            <!execute all functions from function_names in the monitors!>
+            <!if events or set of events are received!>
+              <!execute all functions from trigger chain!>
+              <!set all event flags to false!>
+  <!use KDL solvers to perform desired transformations and solve for joint commands!>
+<!now send the joint commands to all robots!>
+*/
+
+import "algorithm.stg"
+import "kinova_kdl_functions.stg"
+import "templates.stg"
+import "helpers.stg"
+import "kinova_kdl_initialisations.stg"
+
+application(controller_architecture, functions, data_structures) ::= <<
+
+// script starts from here ... (not a comment for template, but for c/cpp)
+<!initialising cpp related headers!>
+
+<kdl_imports()>
+<kinova_kdl_functions()>
+
+<append_vector_to_a_file_functions()>
+
+int main() {
+
+<set_robots_to_control()>
+
+<signal_interruption_handling_function()>
+
+
+<read_from_config_file_and_set_variables()>
+
+<set_kinematic_tree()>
+
+<set_kdl_solvers_and_data_structures()>
+
+
+<initialise_robot_to_control_and_set_torque_control_mode()>
+
+
+// initialise all data structures (done)
+<initialise_data_structures(data_structures)>
+
+<initialise_logging_file_and_headers_uc3_abag()>
+
+<initialise_time_variables()>
+
+<initialise_orientation_control_data()>
+
+  while(time_elapsed \< task_time_out) {
+
+<if_interrupt_signal_detected_write_rest_of_data_and_close_files()>
+
+<get_feedback_and_update_KDL_data()>
+
+<update_time_related_variables_in_while_loop()>
+
+<set_robot_feedback_to_corresponding_variables()>
+
+<commented_print_statement_for_abs_distance_bw_both_arms()>
+
+<calculate_angle_diff_for_orientation_control()>
+
+  <loop_through_each_dimension_of_control(controller_architecture, functions)>
+
+<push_collected_data_to_array_uc3_abag()>
+
+<transform_ee_force_to_ee_frame_and_calculate_jnt_torques_and_send_to_robot()>
+
+<update_logging_arrays_and_add_to_file_if_sufficient_data_collected()>
+  }
+
+<save_remaining_data_before_exiting_the_program()>
+  return 0;
+\}
+
+>>

@@ -1,0 +1,475 @@
+{
+  "@context": [
+    "https://controller.org/metamodels/architecture_components/plan.jsonld",
+    "https://controller.org/metamodels/algorithm.jsonld",
+    "https://controller.org/metamodels/controllers/controller.jsonld",
+    "https://controller.org/metamodels/architecture_components/monitor.jsonld",
+    {
+      "adap_ctr_uc3": "https://controller.org/models/adap_ctr_uc3#"
+    }
+  ],
+  "@graph": [
+    {
+      "@id": "adap_ctr_uc3:states_z_axis_left_arm",
+      "@type": "Plan",
+      "set_of_states": [
+        "adap_ctr_uc3:adap_ctr_mo_spec_abag_z_axis_left_arm",
+        "adap_ctr_uc3:adap_ctr_mo_spec_constant_force_z_axis_left_arm",
+        "adap_ctr_uc3:adap_ctr_mo_spec_constant_pos_z_axis_left_arm"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:states_x_axis_left_arm",
+      "@type": "Plan",
+      "set_of_states": [
+        "adap_ctr_uc3:adap_ctr_mo_spec_p_x_axis_left_arm"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:states_y_axis_left_arm",
+      "@type": "Plan",
+      "set_of_states": [
+        "adap_ctr_uc3:adap_ctr_mo_spec_constant_force_y_axis_left_arm"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:adap_ctr_mo_spec_abag_z_axis_left_arm",
+      "@type": "MotionSpecification",
+      "pre_condition": [
+        "adap_ctr_uc3:pos_constraint_both_arms_grasped_box_y_axis",
+        "adap_ctr_uc3:pos_constraint_arm_within_tolerance_of_sp_x_axis_left_arm",
+        "adap_ctr_uc3:pos_constraint_arm_within_tolerance_of_sp_x_axis_right_arm",
+        "adap_ctr_uc3:pos_constraint_ee_below_desired_height_left_arm_z_axis"
+      ],
+      "per_condition": [
+        "adap_ctr_uc3:vel_constraint_setpoint_abag_z_axis_left_arm"
+      ],
+      "post_condition": [
+        "adap_ctr_uc3:pos_constraint_left_arm_reached_desired_height_z_axis",
+        "adap_ctr_uc3:pos_constraint_right_arm_reached_desired_height_z_axis"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:adap_ctr_mo_spec_constant_pos_z_axis_left_arm",
+      "@type": "MotionSpecification",
+      "pre_condition": [
+        "adap_ctr_uc3:pos_constraint_left_arm_reached_desired_height_z_axis",
+        "adap_ctr_uc3:pos_constraint_right_arm_reached_desired_height_z_axis"
+      ],
+      "per_condition": [
+        "adap_ctr_uc3:pos_constraint_to_maintain_pos_at_setpoint_z_axis_left_arm"
+      ],
+      "post_condition": []
+    },
+    {
+      "@id": "adap_ctr_uc3:adap_ctr_mo_spec_constant_force_z_axis_left_arm",
+      "@type": "MotionSpecification",
+      "pre_condition": [
+        "adap_ctr_uc3:pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm",
+        "adap_ctr_uc3:pos_constraint_both_arms_not_grasped_box_y_axis"
+      ],
+      "per_condition": [
+        "adap_ctr_uc3:press_downwards_with_constant_force_z_axis_left_arm"
+      ],
+      "post_condition": [
+        "adap_ctr_uc3:pos_constraint_both_arms_grasped_box_y_axis",
+        "adap_ctr_uc3:pos_constraint_arm_within_tolerance_of_sp_x_axis_left_arm",
+        "adap_ctr_uc3:pos_constraint_arm_within_tolerance_of_sp_x_axis_right_arm"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:adap_ctr_mo_spec_p_x_axis_left_arm",
+      "@type": "MotionSpecification",
+      "pre_condition": [],
+      "per_condition": [
+        "adap_ctr_uc3:pos_constraint_setpoint_x_axis_left_arm"
+      ],
+      "post_condition": []
+    },
+    {
+      "@id": "adap_ctr_uc3:adap_ctr_mo_spec_constant_force_y_axis_left_arm",
+      "@type": "MotionSpecification",
+      "pre_condition": [
+        "adap_ctr_uc3:pos_constraint_arm_within_tolerance_of_sp_x_axis_left_arm",
+        "adap_ctr_uc3:pos_constraint_arm_within_tolerance_of_sp_x_axis_right_arm"
+      ],
+      "per_condition": [
+        "adap_ctr_uc3:press_inwards_with_constant_force_y_axis_left_arm"
+      ],
+      "post_condition": [
+        "adap_ctr_uc3:pos_constraint_limit_on_both_arms_to_avoid_collison_y_axis"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:constant_force_controller_y_axis_left_arm_call",
+      "@type": "ConstraintController",
+      "constraints_controlled": [
+        "adap_ctr_uc3:press_inwards_with_constant_force_y_axis_left_arm"
+      ],
+      "constraint_controller": "adap_ctr_uc3:constant_force_controller_y_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc3:p_controller_x_axis_left_arm_call",
+      "@type": "ConstraintController",
+      "constraints_controlled": [
+        "adap_ctr_uc3:pos_constraint_setpoint_x_axis_left_arm"
+      ],
+      "constraint_controller": "adap_ctr_uc3:p_controller_x_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc3:constant_force_controller_z_axis_left_arm_call",
+      "@type": "ConstraintController",
+      "constraints_controlled": [
+        "adap_ctr_uc3:press_downwards_with_constant_force_z_axis_left_arm"
+      ],
+      "constraint_controller": "adap_ctr_uc3:constant_force_controller_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc3:stiffness_controller_to_maintain_pos_at_setpoint_z_axis_left_arm_call",
+      "@type": "ConstraintController",
+      "constraints_controlled": [
+        "adap_ctr_uc3:pos_constraint_to_maintain_pos_at_setpoint_z_axis_left_arm"
+      ],
+      "constraint_controller": "adap_ctr_uc3:stiffness_controller_to_maintain_pos_at_setpoint_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc3:abag_controller_z_axis_left_arm_call",
+      "@type": "ConstraintController",
+      "constraints_controlled": [
+        "adap_ctr_uc3:vel_constraint_setpoint_abag_z_axis_left_arm"
+      ],
+      "constraint_controller": "adap_ctr_uc3:abag_controller_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc3:abag_controller_activity_z_axis_left_arm",
+      "@type": [
+        "Activity"
+      ],
+      "algorithm_details": "adap_ctr_uc3:abag_controller_z_axis_left_arm",
+      "schedules_of_algorithm": [
+        "adap_ctr_uc3:abag_controller_schedule_z_axis_left_arm"
+      ],
+      "sch_evnt_assn": [
+        "adap_ctr_uc3:abag_controller_schedule_z_axis_left_arm_call"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:force_controller_activity_z_axis_left_arm",
+      "@type": [
+        "Activity"
+      ],
+      "algorithm_details": "adap_ctr_uc3:constant_force_controller_z_axis_left_arm",
+      "schedules_of_algorithm": [
+        "adap_ctr_uc3:press_downwards_with_constant_force_schedule_z_axis_left_arm"
+      ],
+      "sch_evnt_assn": [
+        "adap_ctr_uc3:force_controller_schedule_z_axis_left_arm_call"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:p_controller_activity_x_axis_left_arm",
+      "@type": [
+        "Activity"
+      ],
+      "algorithm_details": "adap_ctr_uc3:p_controller_x_axis_left_arm",
+      "schedules_of_algorithm": [
+        "adap_ctr_uc3:p_controller_schedule_x_axis_left_arm"
+      ],
+      "sch_evnt_assn": [
+        "adap_ctr_uc3:p_controller_schedule_x_axis_left_arm_call"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:constant_force_controller_activity_y_axis_left_arm",
+      "@type": [
+        "Activity"
+      ],
+      "algorithm_details": "adap_ctr_uc3:constant_force_controller_y_axis_left_arm",
+      "schedules_of_algorithm": [
+        "adap_ctr_uc3:constant_force_controller_schedule_y_axis_left_arm"
+      ],
+      "sch_evnt_assn": [
+        "adap_ctr_uc3:constant_force_controller_schedule_y_axis_left_arm_call"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:stiffness_controller_activity_to_maintain_pos_at_setpoint_z_axis_left_arm",
+      "@type": [
+        "Activity"
+      ],
+      "algorithm_details": "adap_ctr_uc3:stiffness_controller_to_maintain_pos_at_setpoint_z_axis_left_arm",
+      "schedules_of_algorithm": [
+        "adap_ctr_uc3:stiffness_controller_schedule_to_maintain_pos_at_setpoint_z_axis_left_arm"
+      ],
+      "sch_evnt_assn": [
+        "adap_ctr_uc3:stiffness_controller_schedule_to_maintain_pos_at_setpoint_z_axis_left_arm_call"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:stiffness_controller_schedule_to_maintain_pos_at_setpoint_z_axis_left_arm_call",
+      "@type": [
+        "ScheduleCallback",
+        "EventBasedScheduleCallback"
+      ],
+      "desired_events": [
+        "adap_ctr_uc3:pos_constraint_not_equal_to_setpoint_z_axis_left_arm_event"
+      ],
+      "schedule_to_call": "adap_ctr_uc3:stiffness_controller_schedule_to_maintain_pos_at_setpoint_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc3:abag_controller_schedule_z_axis_left_arm_call",
+      "@type": [
+        "ScheduleCallback",
+        "EventBasedScheduleCallback"
+      ],
+      "desired_events": [
+        "adap_ctr_uc3:pos_constraint_ee_below_desired_height_left_arm_z_axis_event"
+      ],
+      "schedule_to_call": "adap_ctr_uc3:abag_controller_schedule_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc3:p_controller_schedule_x_axis_left_arm_call",
+      "@type": [
+        "ScheduleCallback",
+        "EventBasedScheduleCallback"
+      ],
+      "desired_events": [
+        "adap_ctr_uc3:pos_out_of_tolerance_about_setpoint_x_axis_left_arm_event"
+      ],
+      "schedule_to_call": "adap_ctr_uc3:p_controller_schedule_x_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc3:constant_force_controller_schedule_y_axis_left_arm_call",
+      "@type": [
+        "ScheduleCallback",
+        "EventBasedScheduleCallback"
+      ],
+      "desired_events": [
+        "adap_ctr_uc3:pos_constraint_arm_within_tolerance_of_sp_x_axis_left_arm_event",
+        "adap_ctr_uc3:pos_constraint_arm_within_tolerance_of_sp_x_axis_right_arm_event"
+      ],
+      "schedule_to_call": "adap_ctr_uc3:constant_force_controller_schedule_y_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc3:force_controller_schedule_z_axis_left_arm_call",
+      "@type": [
+        "ScheduleCallback",
+        "EventBasedScheduleCallback"
+      ],
+      "desired_events": [
+        "adap_ctr_uc3:pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_event"
+      ],
+      "schedule_to_call": "adap_ctr_uc3:press_downwards_with_constant_force_schedule_z_axis_left_arm"
+    },
+    {
+      "@id": "adap_ctr_uc3:stiffness_controller_to_maintain_pos_at_setpoint_z_axis_left_arm",
+      "@type": [
+        "Controller"
+      ],
+      "ctr_functions": [
+        "adap_ctr_uc3:error_calculation_lin_pos_stiffness_z_axis_left_arm_function",
+        "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_left_arm_function",
+        "adap_ctr_uc3:add_stiffness_term_to_ee_force_lin_z_axis_left_arm_function"
+      ],
+      "ctr_signals": [
+        "adap_ctr_uc3:measured_lin_pos_z_axis_left_arm_data",
+        "adap_ctr_uc3:lin_pos_sp_z_axis_left_arm_data",
+        "adap_ctr_uc3:lin_pos_error_stiffness_z_axis_left_arm_data",
+        "adap_ctr_uc3:stiffness_lin_z_axis_left_arm_data",
+        "adap_ctr_uc3:apply_ee_force_z_axis_left_arm_data",
+        "adap_ctr_uc3:stiffness_term_lin_z_axis_left_arm_data"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:abag_controller_z_axis_left_arm",
+      "@type": [
+        "Controller"
+      ],
+      "ctr_functions": [
+        "adap_ctr_uc3:abag_subtract_filtering_factor_by_one_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_multiply_previous_error_by_filtering_factor_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_difference_of_desired_and_measured_lin_vel_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_sign_of_difference_of_desired_and_measured_lin_vel_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_multiply_alpha_minus_one_by_sign_of_error_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_add_scaled_previous_error_and_scaled_current_error_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_subtract_filtered_error_by_threshold_for_bias_adaptation_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_get_sign_of_filtered_error_subtracted_by_threshold_for_bias_adaptation_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_get_absolute_value_of_filtered_error_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_subtract_absolute_value_of_filtered_error_by_threshold_for_bias_adaptation_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_hside_of_absolute_value_of_filtered_error_subtracted_by_threshold_for_bias_adaptation_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_multiply_bias_adaptation_step_hside_function_and_sign_of_error_difference_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_add_previous_bias_term_and_increment_of_bias_term_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_saturation_of_bias_term_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_subtract_absolute_value_of_filtered_error_by_threshold_for_gain_adaptation_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_get_sign_of_difference_of_absolute_value_of_filtered_error_and_threshold_for_gain_adaptation_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_multiply_gain_adaptation_step_and_sign_of_error_difference_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_add_previous_gain_and_increment_of_gain_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_saturation_of_gain_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_multiply_gain_by_sign_of_error_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_subtract_bias_and_scaled_error_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_saturation_of_control_command_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_update_previous_error_with_current_error_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_update_previous_bias_with_current_bias_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_update_previous_gain_with_current_gain_z_axis_left_arm_function",
+        "adap_ctr_uc3:scale_abag_output_by_mapping_to_force_factor_data_z_axis_left_arm_function",
+        "adap_ctr_uc3:add_weight_of_box_to_ee_force_z_axis_left_arm_function"
+      ],
+      "ctr_signals": [
+        "adap_ctr_uc3:number_one_data",
+        "adap_ctr_uc3:abag_error_signal_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_sign_of_error_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_alpha_error_sign_filtering_factor_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_alpha_minus_one_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_product_alpha_minus_one_by_sign_of_error_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_product_alpha_by_previous_error_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_previous_error_signal_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_filtered_error_signal_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_previous_adaptive_bias_signal_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_bias_adaptation_step_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_error_threshold_for_bias_adaptation_signal_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_absolute_value_of_filtered_error_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_difference_absolute_value_of_filtered_error_by_threshold_for_bias_adaptation_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_difference_of_filtered_error_by_threshold_for_bias_adaptation_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_sign_of_difference_of_filtered_error_by_threshold_for_bias_adaptation_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_hside_of_difference_absolute_value_of_filtered_error_by_threshold_for_bias_adaptation_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_product_bias_adaptation_step_hside_function_and_sign_of_error_difference_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_sum_previous_bias_term_and_increment_of_bias_term_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_saturation_of_bias_term_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_previous_adaptive_gain_signal_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_gain_adaptation_step_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_error_threshold_for_gain_adaptation_signal_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_difference_absolute_value_of_filtered_error_by_threshold_for_gain_adaptation_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_saturation_of_gain_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_sum_previous_gain_and_increment_of_gain_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_product_gain_adaptation_step_and_sign_of_error_difference_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_sign_of_difference_of_absolute_value_of_filtered_error_and_threshold_for_gain_adaptation_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_product_gain_by_sign_of_error_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_difference_bias_and_scaled_error_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_control_command_signal_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_saturation_of_control_command_signal_z_axis_left_arm_data",
+        "adap_ctr_uc3:abag_mapping_to_force_factor_data",
+        "adap_ctr_uc3:weight_of_box_data"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:constant_force_controller_z_axis_left_arm",
+      "@type": [
+        "Controller"
+      ],
+      "ctr_functions": [
+        "adap_ctr_uc3:press_downwards_with_constant_force_z_axis_left_arm_function"
+      ],
+      "ctr_signals": [
+        "adap_ctr_uc3:apply_ee_force_z_axis_left_arm_data",
+        "adap_ctr_uc3:force_to_apply_to_table_z_axis_left_arm_data"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:p_controller_x_axis_left_arm",
+      "@type": [
+        "Controller"
+      ],
+      "ctr_functions": [
+        "adap_ctr_uc3:error_calculation_lin_pos_p_x_axis_left_arm_function",
+        "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_left_arm_function",
+        "adap_ctr_uc3:add_p_term_to_ee_force_lin_pos_x_axis_left_arm_function"
+      ],
+      "ctr_signals": [
+        "adap_ctr_uc3:measured_lin_pos_x_axis_left_arm_data",
+        "adap_ctr_uc3:lin_pos_sp_x_axis_left_arm_data",
+        "adap_ctr_uc3:lin_pos_error_x_axis_left_arm_data",
+        "adap_ctr_uc3:p_gain_pos_x_axis_left_arm_data",
+        "adap_ctr_uc3:apply_ee_force_x_axis_left_arm_data",
+        "adap_ctr_uc3:p_term_lin_pos_x_axis_left_arm_data"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:constant_force_controller_y_axis_left_arm",
+      "@type": [
+        "Controller"
+      ],
+      "ctr_functions": [
+        "adap_ctr_uc3:press_inwards_with_constant_force_y_axis_left_arm_function"
+      ],
+      "ctr_signals": [
+        "adap_ctr_uc3:apply_ee_force_y_axis_left_arm_data",
+        "adap_ctr_uc3:force_to_apply_inwards_y_axis_left_arm_data"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:stiffness_controller_schedule_to_maintain_pos_at_setpoint_z_axis_left_arm",
+      "@type": [
+        "Schedule"
+      ],
+      "trigger_chain": [
+        "adap_ctr_uc3:error_calculation_lin_pos_stiffness_z_axis_left_arm_function",
+        "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_left_arm_function",
+        "adap_ctr_uc3:add_stiffness_term_to_ee_force_lin_z_axis_left_arm_function"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:abag_controller_schedule_z_axis_left_arm",
+      "@type": [
+        "Schedule"
+      ],
+      "trigger_chain": [
+        "adap_ctr_uc3:abag_subtract_filtering_factor_by_one_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_multiply_previous_error_by_filtering_factor_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_difference_of_desired_and_measured_lin_vel_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_sign_of_difference_of_desired_and_measured_lin_vel_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_multiply_alpha_minus_one_by_sign_of_error_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_add_scaled_previous_error_and_scaled_current_error_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_subtract_filtered_error_by_threshold_for_bias_adaptation_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_get_sign_of_filtered_error_subtracted_by_threshold_for_bias_adaptation_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_get_absolute_value_of_filtered_error_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_subtract_absolute_value_of_filtered_error_by_threshold_for_bias_adaptation_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_hside_of_absolute_value_of_filtered_error_subtracted_by_threshold_for_bias_adaptation_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_multiply_bias_adaptation_step_hside_function_and_sign_of_error_difference_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_add_previous_bias_term_and_increment_of_bias_term_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_saturation_of_bias_term_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_subtract_absolute_value_of_filtered_error_by_threshold_for_gain_adaptation_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_get_sign_of_difference_of_absolute_value_of_filtered_error_and_threshold_for_gain_adaptation_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_multiply_gain_adaptation_step_and_sign_of_error_difference_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_add_previous_gain_and_increment_of_gain_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_saturation_of_gain_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_multiply_gain_by_sign_of_error_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_subtract_bias_and_scaled_error_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_saturation_of_control_command_z_axis_left_arm_function",
+        "adap_ctr_uc3:scale_abag_output_by_mapping_to_force_factor_data_z_axis_left_arm_function",
+        "adap_ctr_uc3:add_weight_of_box_to_ee_force_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_update_previous_error_with_current_error_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_update_previous_bias_with_current_bias_z_axis_left_arm_function",
+        "adap_ctr_uc3:abag_update_previous_gain_with_current_gain_z_axis_left_arm_function"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:press_downwards_with_constant_force_schedule_z_axis_left_arm",
+      "@type": [
+        "Schedule"
+      ],
+      "trigger_chain": [
+        "adap_ctr_uc3:press_downwards_with_constant_force_z_axis_left_arm_function"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:p_controller_schedule_x_axis_left_arm",
+      "@type": [
+        "Schedule"
+      ],
+      "trigger_chain": [
+        "adap_ctr_uc3:error_calculation_lin_pos_p_x_axis_left_arm_function",
+        "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_left_arm_function",
+        "adap_ctr_uc3:add_p_term_to_ee_force_lin_pos_x_axis_left_arm_function"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:constant_force_controller_schedule_y_axis_left_arm",
+      "@type": [
+        "Schedule"
+      ],
+      "trigger_chain": [
+        "adap_ctr_uc3:press_inwards_with_constant_force_y_axis_left_arm_function"
+      ]
+    }
+  ]
+}

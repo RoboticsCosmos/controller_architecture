@@ -1,0 +1,753 @@
+{
+  "@context": [
+    "https://controller.org/metamodels/algorithm.jsonld",
+    "https://controller.org/metamodels/controllers/functions.jsonld",
+    "https://controller.org/metamodels/controllers/error.jsonld",
+    "https://controller.org/metamodels/controllers/controller.jsonld",
+    "https://comp-rob2b.github.io/metamodels/qudt.json",
+    {
+      "adap_ctr_uc3": "https://controller.org/models/adap_ctr_uc3#",
+      "QuantityKind": "qudt-schema:QuantityKind",
+      "Quantity": "qudt-schema:Quantity"
+    }
+  ],
+  "@graph": [
+    {
+      "@id": "adap_ctr_uc3:error_calculation_lin_vel_pid_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "ErrorFunction",
+        "InstantaneousError"
+      ],
+      "measured_quantity": "adap_ctr_uc3:measured_lin_vel_z_axis_right_arm_data",
+      "reference_quantity": "adap_ctr_uc3:lin_vel_sp_z_axis_right_arm_data",
+      "error_data": "adap_ctr_uc3:lin_vel_error_pid_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:error_calculation_lin_pos_p_x_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "ErrorFunction",
+        "InstantaneousError"
+      ],
+      "measured_quantity": "adap_ctr_uc3:measured_lin_pos_x_axis_right_arm_data",
+      "reference_quantity": "adap_ctr_uc3:lin_pos_sp_x_axis_right_arm_data",
+      "error_data": "adap_ctr_uc3:lin_pos_error_x_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:p_term_calculator_lin_vel_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Scale"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:p_gain_z_axis_right_arm_data",
+        "adap_ctr_uc3:lin_vel_error_pid_z_axis_right_arm_data"
+      ],
+      "product_data": "adap_ctr_uc3:p_term_lin_vel_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Scale"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:p_gain_pos_x_axis_right_arm_data",
+        "adap_ctr_uc3:lin_pos_error_x_axis_right_arm_data"
+      ],
+      "product_data": "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:add_p_term_to_ee_force_lin_pos_x_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Sum"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:apply_ee_force_x_axis_right_arm_data",
+        "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_right_arm_data"
+      ],
+      "summed_data": "adap_ctr_uc3:apply_ee_force_x_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:derivative_calculator_of_lin_vel_error_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "DerivativeFromError"
+      ],
+      "time_period": "adap_ctr_uc3:time_period_of_complete_controller_cycle_data",
+      "current_value": "adap_ctr_uc3:lin_vel_error_pid_z_axis_right_arm_data",
+      "previous_value": "adap_ctr_uc3:previous_lin_vel_error_z_axis_right_arm_data",
+      "differentiated_data": "adap_ctr_uc3:d_term_lin_vel_error_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:d_term_calculator_lin_vel_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Scale"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:d_gain_lin_vel_z_axis_right_arm_data",
+        "adap_ctr_uc3:d_term_lin_vel_error_z_axis_right_arm_data"
+      ],
+      "product_data": "adap_ctr_uc3:d_term_lin_vel_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:high_i_gain_integral_calculator_of_lin_vel_error_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "IntegralFromStartError"
+      ],
+      "time_period": "adap_ctr_uc3:time_period_of_complete_controller_cycle_data",
+      "quantity_to_integrate": "adap_ctr_uc3:i_gain_high_times_error_lin_vel_z_axis_right_arm_data",
+      "integrated_data": "adap_ctr_uc3:i_term_lin_vel_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:low_i_gain_integral_calculator_of_lin_vel_error_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "IntegralFromStartError"
+      ],
+      "time_period": "adap_ctr_uc3:time_period_of_complete_controller_cycle_data",
+      "quantity_to_integrate": "adap_ctr_uc3:i_gain_low_times_error_lin_vel_z_axis_right_arm_data",
+      "integrated_data": "adap_ctr_uc3:i_term_lin_vel_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:i_gain_low_times_error_calculator_lin_vel_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Scale"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:i_gain_low_lin_vel_z_axis_right_arm_data",
+        "adap_ctr_uc3:lin_vel_error_pid_z_axis_right_arm_data"
+      ],
+      "product_data": "adap_ctr_uc3:i_gain_low_times_error_lin_vel_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:i_gain_high_times_error_calculator_lin_vel_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Scale"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:i_gain_high_lin_vel_z_axis_right_arm_data",
+        "adap_ctr_uc3:lin_vel_error_pid_z_axis_right_arm_data"
+      ],
+      "product_data": "adap_ctr_uc3:i_gain_high_times_error_lin_vel_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:saturate_i_term_lin_vel_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Saturation"
+      ],
+      "signal_to_saturate": "adap_ctr_uc3:i_term_lin_vel_z_axis_right_arm_data",
+      "saturated_data": "adap_ctr_uc3:i_term_lin_vel_z_axis_right_arm_data",
+      "saturation_limits": [
+        "adap_ctr_uc3:i_term_saturation_lower_limit_z_axis_right_arm_data",
+        "adap_ctr_uc3:i_term_saturation_upper_limit_z_axis_right_arm_data"
+      ]
+    },
+    {
+      "@id": "adap_ctr_uc3:pid_term_summation_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Sum"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:p_term_lin_vel_z_axis_right_arm_data",
+        "adap_ctr_uc3:i_term_lin_vel_z_axis_right_arm_data",
+        "adap_ctr_uc3:d_term_lin_vel_z_axis_right_arm_data"
+      ],
+      "summed_data": "adap_ctr_uc3:pid_term_summation_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:add_pid_term_summation_to_ee_force_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Sum"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data",
+        "adap_ctr_uc3:pid_term_summation_z_axis_right_arm_data"
+      ],
+      "summed_data": "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:update_previous_vel_error_with_current_vel_error_data_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "CopyVariableValue"
+      ],
+      "variable_to_copy_to": "adap_ctr_uc3:previous_lin_vel_error_z_axis_right_arm_data",
+      "variable_to_copy_from": "adap_ctr_uc3:lin_vel_error_pid_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:press_downwards_with_constant_force_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "CopyVariableValue"
+      ],
+      "variable_to_copy_to": "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data",
+      "variable_to_copy_from": "adap_ctr_uc3:force_to_apply_to_table_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:press_inwards_with_constant_force_y_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "CopyVariableValue"
+      ],
+      "variable_to_copy_to": "adap_ctr_uc3:apply_ee_force_y_axis_right_arm_data",
+      "variable_to_copy_from": "adap_ctr_uc3:force_to_apply_inwards_y_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:error_calculation_lin_pos_stiffness_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "ErrorFunction",
+        "InstantaneousError"
+      ],
+      "measured_quantity": "adap_ctr_uc3:measured_lin_pos_z_axis_right_arm_data",
+      "reference_quantity": "adap_ctr_uc3:lin_pos_sp_z_axis_right_arm_data",
+      "error_data": "adap_ctr_uc3:lin_pos_error_stiffness_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Scale"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:stiffness_lin_z_axis_right_arm_data",
+        "adap_ctr_uc3:lin_pos_error_stiffness_z_axis_right_arm_data"
+      ],
+      "product_data": "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:add_stiffness_term_to_ee_force_lin_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Sum"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data",
+        "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_right_arm_data"
+      ],
+      "summed_data": "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:append_weight_of_box_to_ee_force_z_axis_right_arm_function",
+      "@type": [
+        "Functions",
+        "Sum"
+      ],
+      "arguments_list": [
+        "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data",
+        "adap_ctr_uc3:weight_of_box_data"
+      ],
+      "summed_data": "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data"
+    },
+    {
+      "@id": "adap_ctr_uc3:i_gain_low_times_error_lin_vel_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "i_gain_times_error",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:pid_term_summation_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "pid_term_summation",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:p_term_calculator_lin_pos_x_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "p_term",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:stiffness_term_calculator_lin_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "stiffness_term_output",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:lin_pos_error_stiffness_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "lin_pos_error_stiffness",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:stiffness_lin_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "stiffness",
+      "data_type": "double",
+      "init_value": "100.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:lin_pos_error_x_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "ErrorSignal",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "lin_pos_error",
+      "data_type": "double",
+      "init_value": "0.0",
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc3:force_to_apply_to_table_z_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "ControlCommand"
+      ],
+      "data_name": "ee_force_value",
+      "data_type": "double",
+      "init_value": "-15.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:lin_pos_error_stiffness_z_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "ErrorSignal",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "lin_pos_error",
+      "data_type": "double",
+      "init_value": "0.0",
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc3:lin_pos_sp_z_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "Setpoint",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "lin_pos_sp",
+      "data_type": "double",
+      "init_value": "0.3",
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc3:lin_pos_sp_equality_tolerance_z_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "lin_pos_sp_tolerance",
+      "data_type": "double",
+      "init_value": "0.001",
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc3:lin_pos_sp_x_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "Setpoint",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "lin_pos_sp",
+      "data_type": "double",
+      "init_value": "0.7",
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc3:lin_pos_sp_tolerance_x_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "lin_pos_sp_tolerance",
+      "data_type": "double",
+      "init_value": "0.025",
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc3:lin_vel_sp_z_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "Setpoint",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "lin_vel_sp",
+      "data_type": "double",
+      "init_value": "0.025",
+      "quantity_kind": "Velocity",
+      "unit": "M-PER-SEC"
+    },
+    {
+      "@id": "adap_ctr_uc3:lin_vel_sp_equality_tolerance_z_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "lin_vel_sp_tolerance",
+      "data_type": "double",
+      "init_value": "0.005",
+      "quantity_kind": "Velocity",
+      "unit": "M-PER-SEC"
+    },
+    {
+      "@id": "adap_ctr_uc3:lin_pos_sp_equality_tolerance_x_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "lin_pos_sp_tolerance",
+      "data_type": "double",
+      "init_value": "0.025",
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc3:lin_vel_sp_threshold_z_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "QuantityKind",
+        "Quantity"
+      ],
+      "data_name": "lin_vel_sp",
+      "data_type": "double",
+      "init_value": "0.025",
+      "quantity_kind": "Velocity",
+      "unit": "M-PER-SEC"
+    },
+    {
+      "@id": "adap_ctr_uc3:p_gain_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "p_gain",
+      "data_type": "double",
+      "init_value": "100.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:p_gain_pos_x_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "p_gain",
+      "data_type": "double",
+      "init_value": "400.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:p_term_lin_vel_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "p_term",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:time_period_of_complete_controller_cycle_data",
+      "@type": "Data",
+      "data_name": "time_period",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:lin_vel_error_pid_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "difference_from_reference_value",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:previous_lin_vel_error_z_axis_right_arm_data",
+      "@type": [
+        "Data"
+      ],
+      "data_name": "previous_difference_from_reference_value",
+      "data_type": "double",
+      "init_value": "0.025"
+    },
+    {
+      "@id": "adap_ctr_uc3:d_term_lin_vel_error_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "vel_error_derivative",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:d_gain_lin_vel_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "d_gain",
+      "data_type": "double",
+      "init_value": "2.5"
+    },
+    {
+      "@id": "adap_ctr_uc3:d_term_lin_vel_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "d_term",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:i_gain_high_lin_vel_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "i_gain",
+      "data_type": "double",
+      "init_value": "100.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:i_gain_low_lin_vel_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "i_gain",
+      "data_type": "double",
+      "init_value": "20.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:i_gain_high_times_error_lin_vel_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "i_term",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:i_term_lin_vel_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "i_term",
+      "data_type": "double",
+      "init_value": "0.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:i_term_saturation_lower_limit_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "i_term_saturation_lower_limit",
+      "data_type": "double",
+      "init_value": "-5.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:i_term_saturation_upper_limit_z_axis_right_arm_data",
+      "@type": "Data",
+      "data_name": "i_term_saturation_upper_limit",
+      "data_type": "double",
+      "init_value": "5.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_event",
+      "@type": "Data",
+      "data_name": "pos_constraint_arm_below_setpoint_contact_region",
+      "data_type": "bool",
+      "init_value": "false"
+    },
+    {
+      "@id": "adap_ctr_uc3:pos_out_of_tolerance_about_setpoint_x_axis_right_arm_event",
+      "@type": "Data",
+      "data_name": "pos_constraint_setpoint",
+      "data_type": "bool",
+      "init_value": "false"
+    },
+    {
+      "@id": "adap_ctr_uc3:error_within_threshold_z_axis_right_arm_event",
+      "@type": "Data",
+      "data_name": "error_within_threshold",
+      "data_type": "bool",
+      "init_value": "false"
+    },
+    {
+      "@id": "adap_ctr_uc3:error_outside_threshold_z_axis_right_arm_event",
+      "@type": "Data",
+      "data_name": "error_outside_threshold",
+      "data_type": "bool",
+      "init_value": "false"
+    },
+    {
+      "@id": "adap_ctr_uc3:pos_constraint_arm_within_tolerance_of_sp_x_axis_right_arm_event",
+      "@type": "Data",
+      "data_name": "pos_constraint_arm_within_tolerance_of_sp_event",
+      "data_type": "bool",
+      "init_value": "false"
+    },
+    {
+      "@id": "adap_ctr_uc3:pos_constraint_not_equal_to_setpoint_z_axis_right_arm_event",
+      "@type": "Data",
+      "data_name": "pos_constraint_not_equal_to_setpoint_event",
+      "data_type": "bool",
+      "init_value": "false"
+    },
+    {
+      "@id": "adap_ctr_uc3:ee_below_desired_height_right_arm_z_axis_flag",
+      "@type": "Data",
+      "data_name": "ee_below_desired_height_flag",
+      "data_type": "bool",
+      "init_value": "false"
+    },
+    {
+      "@id": "adap_ctr_uc3:pos_constraint_arm_within_tolerance_of_sp_x_axis_right_arm_flag",
+      "@type": "Data",
+      "data_name": "pos_constraint_arm_within_tolerance_of_sp_flag",
+      "data_type": "bool",
+      "init_value": "false"
+    },
+    {
+      "@id": "adap_ctr_uc3:pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_flag",
+      "@type": "Data",
+      "data_name": "pos_constraint_arm_below_setpoint_contact_region_flag",
+      "data_type": "bool",
+      "init_value": "false"
+    },
+    {
+      "@id": "adap_ctr_uc3:pos_constraint_right_arm_reached_desired_height_z_axis_flag",
+      "@type": "Data",
+      "data_name": "pos_constraint_reached_desired_height_flag",
+      "data_type": "bool",
+      "init_value": "false"
+    },
+    {
+      "@id": "adap_ctr_uc3:measured_lin_pos_x_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "Feedback",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "measured_lin_pos",
+      "data_type": "double",
+      "init_value": "0.0",
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc3:force_to_apply_inwards_y_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "ControlCommand"
+      ],
+      "data_name": "ee_force_value",
+      "data_type": "double",
+      "init_value": "15.0"
+    },
+    {
+      "@id": "adap_ctr_uc3:measured_lin_pos_y_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "Feedback",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "measured_lin_pos",
+      "data_type": "double",
+      "init_value": "0.0",
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc3:measured_lin_pos_z_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "Feedback",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "measured_lin_pos",
+      "data_type": "double",
+      "init_value": "0.0",
+      "quantity_kind": "Length",
+      "unit": "M"
+    },
+    {
+      "@id": "adap_ctr_uc3:measured_lin_vel_x_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "Feedback",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "measured_lin_vel",
+      "data_type": "double",
+      "init_value": "0.0",
+      "quantity_kind": "Velocity",
+      "unit": "M-PER-SEC"
+    },
+    {
+      "@id": "adap_ctr_uc3:measured_lin_vel_y_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "Feedback",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "measured_lin_vel",
+      "data_type": "double",
+      "init_value": "0.0",
+      "quantity_kind": "Velocity",
+      "unit": "M-PER-SEC"
+    },
+    {
+      "@id": "adap_ctr_uc3:measured_lin_vel_z_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "Feedback",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "measured_lin_vel",
+      "data_type": "double",
+      "init_value": "0.0",
+      "quantity_kind": "Velocity",
+      "unit": "M-PER-SEC"
+    },
+    {
+      "@id": "adap_ctr_uc3:apply_ee_force_x_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "ControlCommand",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "apply_ee_force",
+      "data_type": "double",
+      "init_value": "0.0",
+      "quantity_kind": "Force",
+      "unit": "N"
+    },
+    {
+      "@id": "adap_ctr_uc3:apply_ee_force_y_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "ControlCommand",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "apply_ee_force",
+      "data_type": "double",
+      "init_value": "0.0",
+      "quantity_kind": "Force",
+      "unit": "N"
+    },
+    {
+      "@id": "adap_ctr_uc3:apply_ee_force_z_axis_right_arm_data",
+      "@type": [
+        "Data",
+        "ControlCommand",
+        "Quantity",
+        "QuantityKind"
+      ],
+      "data_name": "apply_ee_force",
+      "data_type": "double",
+      "init_value": "0.0",
+      "quantity_kind": "Force",
+      "unit": "N"
+    }
+  ]
+}

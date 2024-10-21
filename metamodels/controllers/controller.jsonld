@@ -1,0 +1,58 @@
+{
+    "@context": {
+        "controller": "https://controller.org/metamodels/controllers/controller#",
+        "Controller": "controller:Controller",
+        "Plant": "controller:Plant",
+        "Signal": "controller:Signal",
+        "ControlCommand": "controller:ControlCommand",
+        "Setpoint": "controller:Setpoint",
+        "Feedback": "controller:Feedback",
+        "TimePeriod": "controller:TimePeriod",
+        "ctr_functions": {
+            "@id": "controller:ctr_functions",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "ctr_signals": {
+            "@id": "controller:ctr_signals",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "controller_name": {
+            "@id": "controller:controller_name",
+            "@type": "xsd:string"
+        },
+        "controller_output": {
+            "@id": "controller:controller_output",
+            "@type": "@id"
+        },
+        "desired_time_period_val": {
+            "@id": "controller:desired_time_period_val",
+            "@type": "@id"
+        },
+        "measured_time_period_val": {
+            "@id": "controller:measured_time_period_val",
+            "@type": "@id"
+        },
+        "measured_pos": {
+            "@id": "controller:measured_pos",
+            "@type": "@id"
+        },
+        "measured_vel": {
+            "@id": "controller:measured_vel",
+            "@type": "@id"
+        },
+        "control_mode": {
+            "@id": "controller:control_mode",
+            "@type": "@id"
+        },
+        "servoing_mode": {
+            "@id": "controller:servoing_mode",
+            "@type": "@id"
+        },
+        "actuation_signal": {
+            "@id": "controller:actuation_signal",
+            "@type": "@id"
+        }
+    }
+}

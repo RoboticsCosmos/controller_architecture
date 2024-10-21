@@ -1,0 +1,72 @@
+{
+    "@context": {
+        "monitor": "https://controller.org/metamodels/architecture_components/monitor#",
+        "Monitor": "monitor:Monitor",
+        "Constraint": "monitor:Constraint",
+        "LessThanConstraint": "monitor:LessThanConstraint",
+        "LessThanEqualToConstraint": "monitor:LessThanEqualToConstraint",
+        "GreaterThanConstraint": "monitor:GreaterThanConstraint",
+        "GreaterThanEqualToConstraint": "monitor:GreaterThanEqualToConstraint",
+        "InIntervalConstraint": "monitor:InIntervalConstraint",
+        "OutOfIntervalConstraint": "monitor:OutOfIntervalConstraint",
+        "EqualConstraint": "monitor:EqualConstraint",
+        "ConstraintMonitor": "monitor:ConstraintMonitor",
+        "GreaterThanUpperLimitConstraint": "monitor:GreaterThanUpperLimitConstraint",
+        "GreaterThanLowerLimitConstraint": "monitor:GreaterThanLowerLimitConstraint",
+        "LowerThanLowerLimitConstraint": "monitor:LowerThanLowerLimitConstraint",
+        "LowerThanUpperLimitConstraint": "monitor:LowerThanUpperLimitConstraint",
+        "ConstraintToEvent": "monitor:ConstraintToEvent",
+        "ConstraintToFlag": "monitor:ConstraintToFlag",
+        "EventMonitor": "monitor:EventMonitor",
+        "ConstraintController": "monitor:ConstraintController",
+        "constraints_controlled": {
+            "@id": "monitor:constraints_controlled",
+            "@type": "@id",
+            "@container": "@set"
+        },
+        "constraint_controller": {
+            "@id": "monitor:constraint_controller",
+            "@type": "@id"
+        },
+        "in_interval_lower_bound": {
+            "@id": "monitor:in_interval_lower_bound",
+            "@type": "@id"
+        },
+        "in_interval_upper_bound": {
+            "@id": "monitor:in_interval_upper_bound",
+            "@type": "@id"
+        },
+        "tolerance": {
+            "@id": "monitor:tolerance",
+            "@type": "@id"
+        },
+        "constraint_to_monitor": {
+            "@id": "monitor:constraint_to_monitor",
+            "@type": "@id"
+        },
+        "quantity_to_compare": {
+            "@id": "monitor:quantity_to_compare",
+            "@type": "@id"
+        },
+        "quantity_to_compare_with": {
+            "@id": "monitor:quantity_to_compare_with",
+            "@type": "@id"
+        },
+        "flag_or_event_to_check": {
+            "@id": "monitor:flag_or_event_to_check",
+            "@type": "@id"
+        },
+        "flag_set": {
+            "@id": "monitor:flag_set",
+            "@type": "@id"
+        },
+        "event_emitted": {
+            "@id": "monitor:event_emitted",
+            "@type": "@id"
+        },
+        "operator": {
+            "@id": "monitor:operator",
+            "@type": "xsd:string"
+        }
+    }
+}

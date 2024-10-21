@@ -1,0 +1,38 @@
+
+import "../models/templates/fragments/p_controller.stg"
+
+increment(lhs, rhs) ::= <<
+<lhs> += <rhs>
+
+>>
+
+adapter(signals) ::= <<
+<signals:{ s| <increment(s.lhs, s.rhs)>}>
+>>
+
+application(functions, data_structures) ::= <<
+
+// script starts from here ...
+
+#include \<stdio.h>
+
+<functions:{ p| 
+void <functions.(p).name>(<data_structures.(functions.(p).name).error_term.d_type> *<data_structures.(functions.(p).name).error_term.name>, <data_structures.(functions.(p).name).gain.d_type> *<data_structures.(functions.(p).name).gain.name>, <data_structures.(functions.(p).name).output.d_type> *<data_structures.(functions.(p).name).output.name>){
+    *<data_structures.(functions.(p).name).output.name> = *<data_structures.(functions.(p).name).gain.name> * *<data_structures.(functions.(p).name).error_term.name>;<\n>\}};separator="\n">
+
+void adapter(<functions:{ p| <data_structures.(functions.(p).name).gain.d_type> *<functions.(p).param_prefix><data_structures.(functions.(p).name).gain.name>}; separator=", ">){
+    <functions:{ p| *<functions.(p).param_prefix><data_structures.(functions.(p).name).gain.name> += <data_structures.(functions.(p).name).gain.increment>;
+}>}
+
+void main(void){
+<functions:{ p|
+    <data_structures.(functions.(p).name).error_term.d_type> <functions.(p).param_prefix><data_structures.(functions.(p).name).error_term.name> = <data_structures.(functions.(p).name).error_term.init>;
+    <data_structures.(functions.(p).name).output.d_type> <functions.(p).param_prefix><data_structures.(functions.(p).name).output.name><if(data_structures.(p).output.init)> = <data_structures.(p).output.init>;<else>;<endif>
+    <data_structures.(functions.(p).name).gain.d_type> <functions.(p).param_prefix><data_structures.(functions.(p).name).gain.name> = <data_structures.(functions.(p).name).gain.init>;
+    <functions.(p).name>(&<functions.(p).param_prefix><data_structures.(functions.(p).name).error_term.name>, &<functions.(p).param_prefix><data_structures.(functions.(p).name).gain.name>, &<functions.(p).param_prefix><data_structures.(functions.(p).name).output.name>);
+    };separator="\n">   
+    adapter(<functions:{ p| &<functions.(p).param_prefix><data_structures.(functions.(p).name).gain.name>};separator=", ">);
+    signal = <functions:{ p| <functions.(p).param_prefix><data_structures.(functions.(p).name).output.name>};separator=" + ">;
+}   
+
+>>
