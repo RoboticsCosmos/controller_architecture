@@ -713,7 +713,7 @@
       ],
       "data_name": "lin_pos_sp",
       "data_type": "double",
-      "init_value": "0.3",
+      "init_value": "0.35",
       "quantity_kind": "Length",
       "unit": "M"
     },
@@ -753,7 +753,7 @@
       ],
       "data_name": "lin_pos_sp_tolerance",
       "data_type": "double",
-      "init_value": "0.025",
+      "init_value": "0.03",
       "quantity_kind": "Length",
       "unit": "M"
     },
@@ -802,7 +802,7 @@
       "@type": "Data",
       "data_name": "p_gain",
       "data_type": "double",
-      "init_value": "400.0"
+      "init_value": "750.0"
     },
     {
       "@id": "adap_ctr_uc3:time_period_of_complete_controller_cycle_data",
@@ -896,7 +896,7 @@
       ],
       "data_name": "ee_force_value",
       "data_type": "double",
-      "init_value": "15.0"
+      "init_value": "25.0"
     },
     {
       "@id": "adap_ctr_uc3:measured_lin_pos_y_axis_right_arm_data",

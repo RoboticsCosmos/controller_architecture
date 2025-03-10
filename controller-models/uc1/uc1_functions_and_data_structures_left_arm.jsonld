@@ -427,7 +427,7 @@
       ],
       "data_name": "lin_pos_sp",
       "data_type": "double",
-      "init_value": "0.03",
+      "init_value": "0.065",
       "quantity_kind": "Length",
       "unit": "M"
     },
@@ -455,7 +455,7 @@
       ],
       "data_name": "lin_pos_sp",
       "data_type": "double",
-      "init_value": "0.3",
+      "init_value": "0.1",
       "quantity_kind": "Length",
       "unit": "M"
     },

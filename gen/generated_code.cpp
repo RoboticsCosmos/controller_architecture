@@ -321,7 +321,7 @@ int main() {
             std::cout << "jnt_torques_right_cmd: [" << i << "]  " << rne_output_jnt_torques_vector_to_set_control_mode_right[i] << std::endl;
         }
         kinova_right.set_control_mode(control_mode::TORQUE, rne_output_jnt_torques_vector_to_set_control_mode_right.data());
-    }
+    };
 
 
 
@@ -345,7 +345,7 @@ double apply_ee_force_x_axis_right_arm_data = 0.0;
 double abag_mapping_to_force_factor_data = 10.0;
 double abag_product_gain_by_sign_of_error_z_axis_left_arm_data = 0.0;
 double lin_pos_sp_equality_tolerance_x_axis_right_arm_data = 0.025;
-double width_of_box_data = 0.34;
+double width_of_box_data = 0.28;
 double stiffness_lin_z_axis_left_arm_data = 100.0;
 double stiffness_term_lin_z_axis_left_arm_data = 0.0;
 double abag_filtered_error_signal_z_axis_right_arm_data = 0.0;
@@ -365,14 +365,14 @@ bool both_arms_grasped_box_y_axis_flag = false;
 double abag_previous_adaptive_bias_signal_z_axis_right_arm_data = 0.0;
 double abag_product_alpha_by_previous_error_z_axis_left_arm_data = 0.0;
 double apply_ee_force_z_axis_right_arm_data = 0.0;
-double lin_pos_sp_tolerance_x_axis_left_arm_data = 0.025;
+double lin_pos_sp_tolerance_x_axis_left_arm_data = 0.03;
 double abag_error_threshold_for_gain_adaptation_signal_z_axis_left_arm_data = 0.3;
 double time_period_of_complete_controller_cycle_data = 0.0;
 double abag_saturation_of_bias_term_z_axis_right_arm_data = 0.0;
 double p_term_lin_pos_x_axis_right_arm_data = 0.0;
 double apply_ee_force_x_axis_left_arm_data = 0.0;
 double abag_saturation_of_control_command_signal_z_axis_right_arm_data = 0.0;
-double force_to_apply_inwards_y_axis_left_arm_data = -15.0;
+double force_to_apply_inwards_y_axis_left_arm_data = -25.0;
 bool states_z_axis_left_arm_is_active = false;
 double measured_lin_pos_y_axis_left_arm_data = 0.0;
 double abag_filtered_error_signal_z_axis_left_arm_data = 0.0;
@@ -380,14 +380,14 @@ double abag_sign_of_difference_of_absolute_value_of_filtered_error_and_threshold
 double apply_ee_force_z_axis_left_arm_data = 0.0;
 double abag_control_command_signal_z_axis_left_arm_data = 0.0;
 double abag_sign_of_difference_of_filtered_error_by_threshold_for_bias_adaptation_z_axis_left_arm_data = 1.0;
-double force_to_apply_inwards_y_axis_right_arm_data = 15.0;
+double force_to_apply_inwards_y_axis_right_arm_data = 25.0;
 double abag_saturation_lower_limit_z_axis_left_arm_data = 0.0;
 double abag_error_threshold_for_bias_adaptation_signal_z_axis_right_arm_data = 0.3;
 double abag_gain_adaptation_step_z_axis_right_arm_data = 0.5;
 bool pos_constraint_arm_within_tolerance_of_sp_x_axis_left_arm_event = false;
 double lin_pos_sp_x_axis_right_arm_data = 0.7;
 double abag_sum_previous_bias_term_and_increment_of_bias_term_z_axis_left_arm_data = 0.0;
-double lin_pos_sp_z_axis_left_arm_data = 0.3;
+double lin_pos_sp_z_axis_left_arm_data = 0.35;
 bool pos_constraint_not_equal_to_setpoint_z_axis_left_arm_event = false;
 bool pos_constraint_arm_within_tolerance_of_sp_x_axis_right_arm_event = false;
 bool states_x_axis_right_arm_is_active = false;
@@ -409,7 +409,7 @@ double abag_gain_adaptation_step_z_axis_left_arm_data = 0.5;
 bool ee_below_desired_height_left_arm_z_axis_flag = false;
 bool pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_flag = false;
 double abag_product_gain_by_sign_of_error_z_axis_right_arm_data = 0.0;
-double p_gain_pos_x_axis_right_arm_data = 400.0;
+double p_gain_pos_x_axis_right_arm_data = 750.0;
 double abag_saturation_of_gain_z_axis_left_arm_data = 0.0;
 double measured_lin_vel_z_axis_right_arm_data = 0.0;
 bool pos_constraint_limit_on_both_arms_to_avoid_collison_y_axis_flag = false;
@@ -420,7 +420,7 @@ double measured_lin_pos_z_axis_left_arm_data = 0.0;
 bool pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_event = false;
 double lin_vel_sp_z_axis_right_arm_data = 0.025;
 double lin_pos_sp_equality_tolerance_z_axis_left_arm_data = 0.001;
-double lin_pos_sp_z_axis_right_arm_data = 0.3;
+double lin_pos_sp_z_axis_right_arm_data = 0.35;
 double measured_lin_vel_y_axis_right_arm_data = 0.0;
 double abag_product_alpha_minus_one_by_sign_of_error_z_axis_left_arm_data = 0.0;
 double apply_ee_force_y_axis_left_arm_data = 0.0;
@@ -446,23 +446,23 @@ double measured_lin_pos_z_axis_right_arm_data = 0.0;
 bool pos_constraint_arm_within_tolerance_of_sp_x_axis_right_arm_flag = false;
 double abag_sum_previous_bias_term_and_increment_of_bias_term_z_axis_right_arm_data = 0.0;
 bool both_arms_not_grasped_box_y_axis_flag = false;
-double lin_pos_sp_tolerance_x_axis_right_arm_data = 0.025;
+double lin_pos_sp_tolerance_x_axis_right_arm_data = 0.03;
 double measured_lin_pos_y_axis_right_arm_data = 0.0;
 double lin_pos_limit_to_avoid_collision_y_axis_data = 0.2;
-double lin_pos_table_height_z_axis_data = 0.063;
+double lin_pos_table_height_z_axis_data = 0.17;
 double abag_absolute_value_of_filtered_error_z_axis_left_arm_data = 0.0;
 double abag_product_alpha_by_previous_error_z_axis_right_arm_data = 0.0;
 double abag_product_bias_adaptation_step_hside_function_and_sign_of_error_difference_z_axis_left_arm_data = 0.0;
 double abag_difference_bias_and_scaled_error_z_axis_left_arm_data = 0.0;
 bool pos_constraint_arm_within_tolerance_of_sp_x_axis_left_arm_flag = false;
 double p_term_lin_pos_x_axis_left_arm_data = 0.0;
-double p_gain_pos_x_axis_left_arm_data = 400.0;
+double p_gain_pos_x_axis_left_arm_data = 750.0;
 double abag_previous_adaptive_bias_signal_z_axis_left_arm_data = 0.0;
 bool pos_constraint_ee_below_desired_height_right_arm_z_axis_event = false;
 bool pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_flag = false;
 double abag_bias_adaptation_step_z_axis_left_arm_data = 0.5;
 double abag_difference_of_filtered_error_by_threshold_for_bias_adaptation_z_axis_left_arm_data = 0.0;
-double weight_of_box_data = 5.0;
+double weight_of_box_data = 3.0;
 double abag_product_alpha_minus_one_by_sign_of_error_z_axis_right_arm_data = 0.0;
 double lin_vel_sp_equality_tolerance_z_axis_right_arm_data = 0.005;
 double measured_lin_pos_x_axis_right_arm_data = 0.0;
@@ -512,14 +512,14 @@ double abag_error_threshold_for_gain_adaptation_signal_z_axis_right_arm_data = 0
 
     double measured_quat_GF_left_arm[4];                              
     double measured_quat_GF_right_arm[4];                             
-    double desired_quat_GF_left_arm[4] = {0.7071, 0.0, 0.0, 0.7071};  
+    double desired_quat_GF_left_arm[4] = {0.74, -0.07, 0.05, 0.67};  
     double desired_quat_GF_right_arm[4] = {0.0, 0.7071, 0.7071, 0.0}; 
 
     KDL::Vector angle_axis_diff_GF_right_arm;
     KDL::Vector angle_axis_diff_GF_left_arm;
 
-    double stiffness_angular_left_arm[3] = {15.0, 15., 15.};
-    double stiffness_angular_right_arm[3] = {15.0, 15., 15.};
+    double stiffness_angular_left_arm[3] = {35.0, 35., 35.};
+    double stiffness_angular_right_arm[3] = {35.0, 35., 35.};
 
     KDL::Frame desired_endEffPose_GF_left_arm;
     desired_endEffPose_GF_left_arm.M = KDL::Rotation::Quaternion(desired_quat_GF_left_arm[0], desired_quat_GF_left_arm[1], desired_quat_GF_left_arm[2], desired_quat_GF_left_arm[3]);
@@ -588,7 +588,6 @@ double abag_error_threshold_for_gain_adaptation_signal_z_axis_right_arm_data = 0
         time_elapsed = std::chrono::duration<double>(current_time - start_time_of_task);
         previous_time = current_time;
         time_period_of_complete_controller_cycle_data = time_period.count();
-        // std::cout << "time_period: " << time_period_of_complete_controller_cycle_data << std::endl;
 
         measured_lin_pos_x_axis_left_arm_data = measured_endEffPose_GF_left_arm.p.x();
         measured_lin_vel_x_axis_left_arm_data = measured_endEffTwist_GF_left_arm.GetTwist().vel.x();
@@ -607,9 +606,9 @@ double abag_error_threshold_for_gain_adaptation_signal_z_axis_right_arm_data = 0
 
     abs_distance_between_both_arms_y_axis_data = std::abs(measured_lin_pos_y_axis_left_arm_data - measured_lin_pos_y_axis_right_arm_data);
 
-    std::cout << "x-left: " << measured_lin_pos_x_axis_left_arm_data << " y-left: " << measured_lin_pos_y_axis_left_arm_data << " z-left: " << measured_lin_pos_z_axis_left_arm_data << std::endl;
-    std::cout << "x-right: " << measured_lin_pos_x_axis_right_arm_data << " y-right: " << measured_lin_pos_y_axis_right_arm_data << " z-right: " << measured_lin_pos_z_axis_right_arm_data << std::endl;
-    std::cout << "diff-y: " << abs_distance_between_both_arms_y_axis_data << std::endl;
+    // std::cout << "x-left: " << measured_lin_pos_x_axis_left_arm_data << " y-left: " << measured_lin_pos_y_axis_left_arm_data << " z-left: " << measured_lin_pos_z_axis_left_arm_data << std::endl;
+    // std::cout << "x-right: " << measured_lin_pos_x_axis_right_arm_data << " y-right: " << measured_lin_pos_y_axis_right_arm_data << " z-right: " << measured_lin_pos_z_axis_right_arm_data << std::endl;
+    // std::cout << "diff-y: " << abs_distance_between_both_arms_y_axis_data << std::endl;
 
     if (robots_to_control == robot_controlled::DUAL_KINOVA_GEN3_ARMS || robots_to_control == robot_controlled::KINOVA_GEN3_1_LEFT)
     {
@@ -640,6 +639,7 @@ double abag_error_threshold_for_gain_adaptation_signal_z_axis_right_arm_data = 0
       if (both_arms_grasped_box_y_axis_flag && pos_constraint_arm_within_tolerance_of_sp_x_axis_right_arm_flag && pos_constraint_arm_within_tolerance_of_sp_x_axis_left_arm_flag && ee_below_desired_height_right_arm_z_axis_flag) 
       {
         states_z_axis_right_arm_is_active = true;
+        std::cout << " [Lift Box - right] " << std::endl;
       }
       // executing all functions of the pre-condition and checking if any set of flags are true
       less_than_equal_to_monitor(&measured_lin_pos_z_axis_right_arm_data, &lin_pos_table_height_z_axis_data, &pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_flag);
@@ -650,6 +650,7 @@ double abag_error_threshold_for_gain_adaptation_signal_z_axis_right_arm_data = 0
       if (pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_flag && both_arms_not_grasped_box_y_axis_flag) 
       {
         states_z_axis_right_arm_is_active = true;
+        std::cout << " [Grasp box - right] " << std::endl;
       }
       // executing all functions of the pre-condition and checking if any set of flags are true
       greater_than_monitor(&measured_lin_pos_z_axis_right_arm_data, &lin_pos_sp_z_axis_right_arm_data, &pos_constraint_right_arm_reached_desired_height_z_axis_flag);
@@ -660,6 +661,7 @@ double abag_error_threshold_for_gain_adaptation_signal_z_axis_right_arm_data = 0
       if (pos_constraint_right_arm_reached_desired_height_z_axis_flag && pos_constraint_left_arm_reached_desired_height_z_axis_flag) 
       {
         states_z_axis_right_arm_is_active = true;
+        std::cout << " [Hold box in place - right] " << std::endl;
       }
     }
     // if a pre-condition is satisfied, then execute the motion specification
@@ -686,8 +688,6 @@ double abag_error_threshold_for_gain_adaptation_signal_z_axis_right_arm_data = 0
           // check if all flags in the schedule are true
 
           if (pos_constraint_ee_below_desired_height_right_arm_z_axis_event) {
-
-            std::cout << "ABAG running" << std::endl;
             // execute all functions in the trigger chain
             subtraction(&abag_alpha_error_sign_filtering_factor_z_axis_right_arm_data, &number_one_data, &abag_alpha_minus_one_z_axis_right_arm_data);
 
@@ -773,7 +773,6 @@ double abag_error_threshold_for_gain_adaptation_signal_z_axis_right_arm_data = 0
 
           if (pos_constraint_arm_below_setpoint_contact_region_z_axis_right_arm_event) {
             // execute all functions in the trigger chain
-            std::cout << "applying force to table" << std::endl;
             set_value_of_first_to_second_variable(&force_to_apply_to_table_z_axis_right_arm_data, &apply_ee_force_z_axis_right_arm_data);
 
             // set all flags in the schedule to false
@@ -800,7 +799,6 @@ double abag_error_threshold_for_gain_adaptation_signal_z_axis_right_arm_data = 0
 
           if (pos_constraint_not_equal_to_setpoint_z_axis_right_arm_event) {
             // execute all functions in the trigger chain
-            std::cout << "Desired height reached. Applying stiffness" << std::endl;
             subtraction(&lin_pos_sp_z_axis_right_arm_data, &measured_lin_pos_z_axis_right_arm_data, &lin_pos_error_stiffness_z_axis_right_arm_data);
 
             multiply2(&stiffness_lin_z_axis_right_arm_data, &lin_pos_error_stiffness_z_axis_right_arm_data, &stiffness_term_lin_z_axis_right_arm_data);
@@ -929,6 +927,7 @@ double abag_error_threshold_for_gain_adaptation_signal_z_axis_right_arm_data = 0
       if (both_arms_grasped_box_y_axis_flag && pos_constraint_arm_within_tolerance_of_sp_x_axis_left_arm_flag && pos_constraint_arm_within_tolerance_of_sp_x_axis_right_arm_flag && ee_below_desired_height_left_arm_z_axis_flag) 
       {
         states_z_axis_left_arm_is_active = true;
+        std::cout << " [Lift Box - left] " << std::endl;
       }
       // executing all functions of the pre-condition and checking if any set of flags are true
       less_than_equal_to_monitor(&measured_lin_pos_z_axis_left_arm_data, &lin_pos_table_height_z_axis_data, &pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_flag);
@@ -939,6 +938,7 @@ double abag_error_threshold_for_gain_adaptation_signal_z_axis_right_arm_data = 0
       if (pos_constraint_arm_below_setpoint_contact_region_z_axis_left_arm_flag && both_arms_not_grasped_box_y_axis_flag) 
       {
         states_z_axis_left_arm_is_active = true;
+        std::cout << " [Grasp box - left] " << std::endl;
       }
       // executing all functions of the pre-condition and checking if any set of flags are true
       greater_than_monitor(&measured_lin_pos_z_axis_left_arm_data, &lin_pos_sp_z_axis_left_arm_data, &pos_constraint_left_arm_reached_desired_height_z_axis_flag);
@@ -949,6 +949,7 @@ double abag_error_threshold_for_gain_adaptation_signal_z_axis_right_arm_data = 0
       if (pos_constraint_left_arm_reached_desired_height_z_axis_flag && pos_constraint_right_arm_reached_desired_height_z_axis_flag) 
       {
         states_z_axis_left_arm_is_active = true;
+        std::cout << " [Hold box in place - left] " << std::endl;
       }
     }
     // if a pre-condition is satisfied, then execute the motion specification
@@ -1186,7 +1187,6 @@ double abag_error_threshold_for_gain_adaptation_signal_z_axis_right_arm_data = 0
 
           if (pos_constraint_arm_within_tolerance_of_sp_x_axis_left_arm_event && pos_constraint_arm_within_tolerance_of_sp_x_axis_right_arm_event) {
             // execute all functions in the trigger chain
-            std::cout << "applying force INWARDS............" << std::endl;
             set_value_of_first_to_second_variable(&force_to_apply_inwards_y_axis_left_arm_data, &apply_ee_force_y_axis_left_arm_data);
 
             // set all flags in the schedule to false

@@ -201,7 +201,7 @@ initialise_robot_to_control_and_set_torque_control_mode() ::= <<
             std::cout \<\< "jnt_torques_right_cmd: [" \<\< i \<\< "]  " \<\< rne_output_jnt_torques_vector_to_set_control_mode_right[i] \<\< std::endl;
         }
         kinova_right.set_control_mode(control_mode::TORQUE, rne_output_jnt_torques_vector_to_set_control_mode_right.data());
-    }
+    };
 
 
 >>

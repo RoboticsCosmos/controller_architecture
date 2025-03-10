@@ -208,7 +208,6 @@ update_time_related_variables_in_while_loop() ::= <<
         time_elapsed = std::chrono::duration\<double>(current_time - start_time_of_task);
         previous_time = current_time;
         time_period_of_complete_controller_cycle_data = time_period.count();
-        std::cout \<\< "time_period: " \<\< time_period_of_complete_controller_cycle_data \<\< std::endl;
 >>
 
 

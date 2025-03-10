@@ -823,7 +823,7 @@
         },
         "lin_pos_sp_z_axis_left_arm_data": {
             "data_type": "double",
-            "initial_value": "0.3"
+            "initial_value": "0.5"
         },
         "lin_pos_sp_equality_tolerance_z_axis_left_arm_data": {
             "data_type": "double",
@@ -835,7 +835,7 @@
         },
         "lin_pos_sp_tolerance_x_axis_left_arm_data": {
             "data_type": "double",
-            "initial_value": "0.02"
+            "initial_value": "0.025"
         },
         "lin_vel_sp_z_axis_left_arm_data": {
             "data_type": "double",
@@ -847,7 +847,7 @@
         },
         "lin_pos_sp_equality_tolerance_x_axis_left_arm_data": {
             "data_type": "double",
-            "initial_value": "0.02"
+            "initial_value": "0.025"
         },
         "p_gain_pos_x_axis_left_arm_data": {
             "data_type": "double",
@@ -1091,7 +1091,7 @@
         },
         "lin_pos_sp_z_axis_right_arm_data": {
             "data_type": "double",
-            "initial_value": "0.3"
+            "initial_value": "0.5"
         },
         "lin_pos_sp_equality_tolerance_z_axis_right_arm_data": {
             "data_type": "double",
@@ -1103,7 +1103,7 @@
         },
         "lin_pos_sp_tolerance_x_axis_right_arm_data": {
             "data_type": "double",
-            "initial_value": "0.02"
+            "initial_value": "0.025"
         },
         "lin_vel_sp_z_axis_right_arm_data": {
             "data_type": "double",
@@ -1115,7 +1115,7 @@
         },
         "lin_pos_sp_equality_tolerance_x_axis_right_arm_data": {
             "data_type": "double",
-            "initial_value": "0.02"
+            "initial_value": "0.025"
         },
         "p_gain_pos_x_axis_right_arm_data": {
             "data_type": "double",
@@ -1207,7 +1207,7 @@
         },
         "width_of_box_data": {
             "data_type": "double",
-            "initial_value": "0.36"
+            "initial_value": "0.25"
         },
         "pos_constraint_limit_on_both_arms_to_avoid_collison_y_axis_flag": {
             "data_type": "bool",
@@ -1215,7 +1215,7 @@
         },
         "lin_pos_table_height_z_axis_data": {
             "data_type": "double",
-            "initial_value": "0.067"
+            "initial_value": "0.095"
         },
         "both_arms_grasped_box_y_axis_flag": {
             "data_type": "bool",
